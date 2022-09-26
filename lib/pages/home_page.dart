@@ -2,8 +2,8 @@ import 'package:bezier_chart/bezier_chart.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:supabase/supabase.dart';
-import 'package:supabase_quickstart/components/auth_required_state.dart';
-import 'package:supabase_quickstart/utils/constants.dart';
+import 'package:ysave/components/auth_required_state.dart';
+import 'package:ysave/utils/constants.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 
