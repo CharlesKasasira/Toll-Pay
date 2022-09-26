@@ -69,13 +69,19 @@ class _SignupPageState extends AuthState<SignupPage> {
           const SizedBox(height: 18),
           TextFormField(
             controller: _emailController,
-            decoration: const InputDecoration(labelText: 'Email'),
+            decoration: const InputDecoration(labelText: 'Email',
+            border: OutlineInputBorder(
+                    borderRadius: BorderRadius.all(Radius.circular(12)),
+                  ),),
           ),
           const SizedBox(height: 18),
           TextFormField(
             controller: _passwordController,
             obscureText: true,
-            decoration: const InputDecoration(labelText: 'Password'),
+            decoration: const InputDecoration(labelText: 'Password',
+            border: OutlineInputBorder(
+                    borderRadius: BorderRadius.all(Radius.circular(12)),
+                  ),),
           ),
           const SizedBox(height: 18),
           ElevatedButton(
@@ -83,10 +89,20 @@ class _SignupPageState extends AuthState<SignupPage> {
             child: Text(_isLoading ? 'Loading' : 'Sign Up'),
           ),
           const SizedBox(height: 18),
-          ElevatedButton(
-            onPressed: moveToLogin,
-            child: Text('Login'),
-          ),
+          Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const Text("Already have an account,"),
+                  TextButton(
+                    style: ButtonStyle(
+                      foregroundColor:
+                          MaterialStateProperty.all<Color>(Colors.blue),
+                    ),
+                    onPressed: moveToLogin,
+                    child: Text('Login'),
+                  ),
+                ],
+              )
         ],
       ),
     );

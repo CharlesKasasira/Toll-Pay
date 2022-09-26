@@ -80,7 +80,6 @@ class _HomePageState extends AuthRequiredState<HomePage> {
     }
 
     return Scaffold(
-      backgroundColor: Colors.black,
       body: Padding(
         padding: const EdgeInsets.only(
           left: 15.0,
@@ -121,7 +120,8 @@ class _HomePageState extends AuthRequiredState<HomePage> {
                   ],
                   config: BezierChartConfig(
                     verticalIndicatorStrokeWidth: 3.0,
-                    verticalIndicatorColor: Colors.black26,
+                    verticalIndicatorColor: Colors.black,
+                    backgroundColor: Colors.black,
                     showVerticalIndicator: true,
                     snap: false,
                   ),

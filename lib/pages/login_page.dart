@@ -65,6 +65,7 @@ class _LoginPageState extends AuthState<LoginPage> {
       body: Container(
         // mainAxisAlignment: MainAxisAlignment.center,
         alignment: Alignment.center,
+        height: MediaQuery.of(context).size.height,
         child: Center(
           child: ListView(
             padding: const EdgeInsets.symmetric(vertical: 18, horizontal: 12),
@@ -76,18 +77,23 @@ class _LoginPageState extends AuthState<LoginPage> {
               const SizedBox(height: 18),
               TextFormField(
                 controller: _emailController,
-                decoration: const InputDecoration(labelText: 'Email',
-                border: OutlineInputBorder(
-                        borderRadius: BorderRadius.all(Radius.circular(12)),
-                      ),),
+                decoration: const InputDecoration(
+                  labelText: 'Email',
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.all(Radius.circular(12)),
+                  ),
+                ),
               ),
               const SizedBox(height: 18),
               TextFormField(
                 controller: _passwordController,
                 obscureText: true,
-                decoration: const InputDecoration(labelText: 'Password', border: OutlineInputBorder(
-                        borderRadius: BorderRadius.all(Radius.circular(12)),
-                      ),),
+                decoration: const InputDecoration(
+                  labelText: 'Password',
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.all(Radius.circular(12)),
+                  ),
+                ),
               ),
               const SizedBox(height: 18),
               ElevatedButton(
@@ -95,10 +101,20 @@ class _LoginPageState extends AuthState<LoginPage> {
                 child: Text(_isLoading ? 'Loading' : 'Login'),
               ),
               const SizedBox(height: 18),
-              ElevatedButton(
-                onPressed: moveToSignup,
-                child: Text('Sign Up'),
-              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const Text("Don't have an account,"),
+                  TextButton(
+                    style: ButtonStyle(
+                      foregroundColor:
+                          MaterialStateProperty.all<Color>(Colors.blue),
+                    ),
+                    onPressed: moveToSignup,
+                    child: Text('Sign Up'),
+                  ),
+                ],
+              )
             ],
           ),
         ),
