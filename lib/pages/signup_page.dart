@@ -25,21 +25,17 @@ class _SignupPageState extends AuthState<SignupPage> {
       _isLoading = true;
     });
 
-    final response = await supabase.auth.signUp(_emailController.text,
-      _passwordController.text,
-    );
-
-    // final response = await supabase.auth.signUp(
-    //   phone: _emailController.text,
-    //   password: _passwordController.text,
-    // );
+    
+    final response = await supabase.auth
+        .signUp(_emailController.text, _passwordController.text);
 
     final error = response.error;
     if (error != null) {
       context.showErrorSnackBar(message: error.message);
     } else {
       context.showSnackBar(message: 'You have created your account');
-      Navigator.of(context).pushNamedAndRemoveUntil('/signup', (route) => false);
+      Navigator.of(context)
+          .pushNamedAndRemoveUntil('/signup', (route) => false);
       _emailController.clear();
       _passwordController.clear();
     }
@@ -74,7 +70,7 @@ class _SignupPageState extends AuthState<SignupPage> {
           const SizedBox(height: 18),
           TextFormField(
             controller: _emailController,
-            decoration: const InputDecoration(labelText: 'Phone Number'),
+            decoration: const InputDecoration(labelText: 'Email'),
           ),
           const SizedBox(height: 18),
           TextFormField(

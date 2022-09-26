@@ -76,7 +76,7 @@ class _LoginPageState extends AuthState<LoginPage> {
           const SizedBox(height: 18),
           TextFormField(
             controller: _emailController,
-            decoration: const InputDecoration(labelText: 'Phone Number'),
+            decoration: const InputDecoration(labelText: 'Email'),
           ),
           const SizedBox(height: 18),
           TextFormField(

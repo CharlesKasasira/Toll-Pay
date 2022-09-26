@@ -12,8 +12,8 @@ class AccountPage extends StatefulWidget {
 }
 
 class _AccountPageState extends AuthRequiredState<AccountPage> {
-  final _usernameController = TextEditingController();
-  final _websiteController = TextEditingController();
+  final _firstNameController = TextEditingController();
+  final _lastNameController = TextEditingController();
   String? _userId;
   String? _avatarUrl;
   var _loading = false;
@@ -34,9 +34,10 @@ class _AccountPageState extends AuthRequiredState<AccountPage> {
       context.showErrorSnackBar(message: error.message);
     }
     final data = response.data;
+    print(data);
     if (data != null) {
-      _usernameController.text = (data['username'] ?? '') as String;
-      _websiteController.text = (data['website'] ?? '') as String;
+      _firstNameController.text = (data['first_name'] ?? '') as String;
+      _lastNameController.text = (data['last_name'] ?? '') as String;
       _avatarUrl = (data['avatar_url'] ?? '') as String;
     }
     setState(() {
@@ -49,13 +50,13 @@ class _AccountPageState extends AuthRequiredState<AccountPage> {
     setState(() {
       _loading = true;
     });
-    final userName = _usernameController.text;
-    final website = _websiteController.text;
+    final firstName = _firstNameController.text;
+    final lastName = _lastNameController.text;
     final user = supabase.auth.currentUser;
     final updates = {
       'id': user!.id,
-      'username': userName,
-      'website': website,
+      'first_name': firstName,
+      'last_name': lastName,
       'updated_at': DateTime.now().toIso8601String(),
     };
     final response = await supabase.from('profiles').upsert(updates).execute();
@@ -105,8 +106,8 @@ class _AccountPageState extends AuthRequiredState<AccountPage> {
 
   @override
   void dispose() {
-    _usernameController.dispose();
-    _websiteController.dispose();
+    _firstNameController.dispose();
+    _lastNameController.dispose();
     super.dispose();
   }
 
@@ -123,13 +124,13 @@ class _AccountPageState extends AuthRequiredState<AccountPage> {
           ),
           const SizedBox(height: 18),
           TextFormField(
-            controller: _usernameController,
-            decoration: const InputDecoration(labelText: 'User Name'),
+            controller: _firstNameController,
+            decoration: const InputDecoration(labelText: 'First Name'),
           ),
           const SizedBox(height: 18),
           TextFormField(
-            controller: _websiteController,
-            decoration: const InputDecoration(labelText: 'Website'),
+            controller: _lastNameController,
+            decoration: const InputDecoration(labelText: 'Last Name'),
           ),
           const SizedBox(height: 18),
           ElevatedButton(
