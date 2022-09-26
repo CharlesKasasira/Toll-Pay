@@ -9,11 +9,14 @@ environment:
   sdk: ">=2.12.0 <3.0.0"
 
 dependencies:
+  bezier_chart: "^1.0.16"
   flutter:
     sdk: flutter
 
   flutter_dotenv: ^5.0.2
   flutter_sparkline: ^0.1.0
+  font_awesome_flutter: ^8.8.1
+  google_fonts: ^3.0.1
   image_picker: ^0.8.4
   supabase_flutter: ^0.2.9
 
