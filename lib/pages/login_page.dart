@@ -25,13 +25,6 @@ class _LoginPageState extends AuthState<LoginPage> {
       _isLoading = true;
     });
 
-    // final response = await supabase.auth.signIn(
-    //     email: _emailController.text,
-    //     options: AuthOptions(
-    //         redirectTo: kIsWeb
-    //             ? null
-    //             : 'io.supabase.flutterquickstart://login-callback/'));
-
     final response = await supabase.auth.signIn(
       email: _emailController.text,
       password: _passwordController.text,
@@ -68,32 +61,47 @@ class _LoginPageState extends AuthState<LoginPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: ListView(
-        padding: const EdgeInsets.symmetric(vertical: 18, horizontal: 12),
-        children: [
-          const Text('Sign in'),
-          const SizedBox(height: 18),
-          TextFormField(
-            controller: _emailController,
-            decoration: const InputDecoration(labelText: 'Email'),
+      backgroundColor: Colors.white,
+      body: Container(
+        // mainAxisAlignment: MainAxisAlignment.center,
+        alignment: Alignment.center,
+        child: Center(
+          child: ListView(
+            padding: const EdgeInsets.symmetric(vertical: 18, horizontal: 12),
+            children: [
+              SizedBox(height: 18),
+              const Text("Y-save"),
+              SizedBox(height: 18),
+              const Text('Sign in'),
+              const SizedBox(height: 18),
+              TextFormField(
+                controller: _emailController,
+                decoration: const InputDecoration(labelText: 'Email',
+                border: OutlineInputBorder(
+                        borderRadius: BorderRadius.all(Radius.circular(12)),
+                      ),),
+              ),
+              const SizedBox(height: 18),
+              TextFormField(
+                controller: _passwordController,
+                obscureText: true,
+                decoration: const InputDecoration(labelText: 'Password', border: OutlineInputBorder(
+                        borderRadius: BorderRadius.all(Radius.circular(12)),
+                      ),),
+              ),
+              const SizedBox(height: 18),
+              ElevatedButton(
+                onPressed: _isLoading ? null : _signIn,
+                child: Text(_isLoading ? 'Loading' : 'Login'),
+              ),
+              const SizedBox(height: 18),
+              ElevatedButton(
+                onPressed: moveToSignup,
+                child: Text('Sign Up'),
+              ),
+            ],
           ),
-          const SizedBox(height: 18),
-          TextFormField(
-            controller: _passwordController,
-            obscureText: true,
-            decoration: const InputDecoration(labelText: 'Password'),
-          ),
-          const SizedBox(height: 18),
-          ElevatedButton(
-            onPressed: _isLoading ? null : _signIn,
-            child: Text(_isLoading ? 'Loading' : 'Login'),
-          ),
-          const SizedBox(height: 18),
-          ElevatedButton(
-            onPressed: moveToSignup,
-            child: Text('Sign Up'),
-          ),
-        ],
+        ),
       ),
     );
   }
