@@ -3,6 +3,7 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:supabase_quickstart/pages/account_page.dart';
 import 'package:supabase_quickstart/pages/login_page.dart';
+import 'package:supabase_quickstart/pages/signup_page.dart';
 import 'package:supabase_quickstart/pages/splash_page.dart';
 
 Future<void> main() async {
@@ -40,6 +41,7 @@ class MyApp extends StatelessWidget {
       routes: <String, WidgetBuilder>{
         '/': (_) => const SplashPage(),
         '/login': (_) => const LoginPage(),
+        '/signup': (_) => const SignupPage(),
         '/account': (_) => const AccountPage(),
       },
     );

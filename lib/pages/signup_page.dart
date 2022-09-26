@@ -4,20 +4,20 @@ import 'package:supabase/supabase.dart';
 import 'package:supabase_quickstart/components/auth_state.dart';
 import 'package:supabase_quickstart/utils/constants.dart';
 
-class LoginPage extends StatefulWidget {
-  const LoginPage({Key? key}) : super(key: key);
+class SignupPage extends StatefulWidget {
+  const SignupPage({Key? key}) : super(key: key);
 
   @override
-  _LoginPageState createState() => _LoginPageState();
+  _SignupPageState createState() => _SignupPageState();
 }
 
-class _LoginPageState extends AuthState<LoginPage> {
+class _SignupPageState extends AuthState<SignupPage> {
   bool _isLoading = false;
   late final TextEditingController _emailController;
   late final TextEditingController _passwordController;
 
-  void moveToSignup() {
-    Navigator.of(context).pushNamedAndRemoveUntil('/signup', (route) => false);
+  void moveToLogin() {
+    Navigator.of(context).pushNamedAndRemoveUntil('/login', (route) => false);
   }
 
   Future<void> _signIn() async {
@@ -25,25 +25,23 @@ class _LoginPageState extends AuthState<LoginPage> {
       _isLoading = true;
     });
 
-    // final response = await supabase.auth.signIn(
-    //     email: _emailController.text,
-    //     options: AuthOptions(
-    //         redirectTo: kIsWeb
-    //             ? null
-    //             : 'io.supabase.flutterquickstart://login-callback/'));
-
-    final response = await supabase.auth.signIn(
-      email: _emailController.text,
-      password: _passwordController.text,
+    final response = await supabase.auth.signUp(_emailController.text,
+      _passwordController.text,
     );
+
+    // final response = await supabase.auth.signUp(
+    //   phone: _emailController.text,
+    //   password: _passwordController.text,
+    // );
 
     final error = response.error;
     if (error != null) {
       context.showErrorSnackBar(message: error.message);
     } else {
-      Navigator.of(context)
-          .pushNamedAndRemoveUntil('/account', (route) => false);
+      context.showSnackBar(message: 'You have created your account');
+      Navigator.of(context).pushNamedAndRemoveUntil('/signup', (route) => false);
       _emailController.clear();
+      _passwordController.clear();
     }
 
     setState(() {
@@ -68,11 +66,11 @@ class _LoginPageState extends AuthState<LoginPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Sign In')),
+      appBar: AppBar(title: const Text('Sign Up')),
       body: ListView(
         padding: const EdgeInsets.symmetric(vertical: 18, horizontal: 12),
         children: [
-          const Text('Sign in'),
+          const Text('Sign Up'),
           const SizedBox(height: 18),
           TextFormField(
             controller: _emailController,
@@ -87,12 +85,12 @@ class _LoginPageState extends AuthState<LoginPage> {
           const SizedBox(height: 18),
           ElevatedButton(
             onPressed: _isLoading ? null : _signIn,
-            child: Text(_isLoading ? 'Loading' : 'Login'),
+            child: Text(_isLoading ? 'Loading' : 'Sign Up'),
           ),
           const SizedBox(height: 18),
           ElevatedButton(
-            onPressed: moveToSignup,
-            child: Text('Sign Up'),
+            onPressed: moveToLogin,
+            child: Text('Login'),
           ),
         ],
       ),
