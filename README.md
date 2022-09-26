@@ -21,5 +21,6 @@ The traditional methods of savings and loan management (use of pens, and manual 
 ---
 
 We have a solution of building out a simple yet effective mobile application that will make it easy to carry out the day-to-day activities of a **SACCO**, automating the different tasks for example the calculation of the members total contribution and the eligibility of a member for a loan.
+
 With the mobile app, Members will also be able to make some of the utility payments using the mobile app with an offer to borrow for utilities payment.
 The **SACCO** mobile app will automate the sacco activites while eliminating the need for physical gather.
