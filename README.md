@@ -5,7 +5,7 @@
 | 1 | Kasasira Charles Derrick | - |
 | 2 | Lukyamuzi Akram | - |
 | 3 | N. Hellen Bridget | - |
-| 4 | Langalafa Gideon | - |
+| 4 | Langalafa Gideon Ohure | - |
 | 5 | Daphine | - |
 
 

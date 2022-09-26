@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:supabase_quickstart/pages/account_page.dart';
+import 'package:supabase_quickstart/pages/home_page.dart';
 import 'package:supabase_quickstart/pages/login_page.dart';
 import 'package:supabase_quickstart/pages/signup_page.dart';
 import 'package:supabase_quickstart/pages/splash_page.dart';
@@ -43,6 +44,7 @@ class MyApp extends StatelessWidget {
         '/login': (_) => const LoginPage(),
         '/signup': (_) => const SignupPage(),
         '/account': (_) => const AccountPage(),
+        '/dashboard': (_) => const HomePage(),
       },
     );
   }

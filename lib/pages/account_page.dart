@@ -34,7 +34,6 @@ class _AccountPageState extends AuthRequiredState<AccountPage> {
       context.showErrorSnackBar(message: error.message);
     }
     final data = response.data;
-    print(data);
     if (data != null) {
       _firstNameController.text = (data['first_name'] ?? '') as String;
       _lastNameController.text = (data['last_name'] ?? '') as String;

@@ -42,7 +42,7 @@ class _LoginPageState extends AuthState<LoginPage> {
       context.showErrorSnackBar(message: error.message);
     } else {
       Navigator.of(context)
-          .pushNamedAndRemoveUntil('/account', (route) => false);
+          .pushNamedAndRemoveUntil('/dashboard', (route) => false);
       _emailController.clear();
     }
 
