@@ -1,11 +1,9 @@
-import 'package:bezier_chart/bezier_chart.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:supabase/supabase.dart';
 import 'package:ysave/components/auth_required_state.dart';
 import 'package:ysave/utils/constants.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:intl/intl.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -18,6 +16,7 @@ class _HomePageState extends AuthRequiredState<HomePage> {
   String? _userId;
   String? _avatarUrl;
   String? firstName;
+  String? lastName;
   var _loading = false;
 
   //get users Profile
@@ -37,7 +36,8 @@ class _HomePageState extends AuthRequiredState<HomePage> {
     }
     final data = response.data;
     firstName = (data['first_name'] ?? '') as String;
-    print(firstName);
+    lastName = (data['last_name'] ?? '') as String;
+
     setState(() {
       _loading = false;
     });
@@ -52,8 +52,7 @@ class _HomePageState extends AuthRequiredState<HomePage> {
   }
 
   void moveToProfile() async {
-    Navigator.of(context)
-          .pushNamedAndRemoveUntil('/account', (route) => false);
+    Navigator.of(context).pushNamedAndRemoveUntil('/account', (route) => false);
   }
 
   @override
@@ -89,43 +88,49 @@ class _HomePageState extends AuthRequiredState<HomePage> {
         child: ListView(
           padding: const EdgeInsets.symmetric(vertical: 18, horizontal: 12),
           children: [
-            Text('Welcome $firstName'),
+            const Text(
+              'Welcome back,',
+              style: TextStyle(fontWeight: FontWeight.normal),
+            ),
+            Text('$firstName $lastName',
+                style:
+                    const TextStyle(fontWeight: FontWeight.bold, fontSize: 30)),
             const SizedBox(height: 18),
-            Text(
-              'UGX 2000',
-              style: GoogleFonts.roboto(
-                textStyle: TextStyle(letterSpacing: .5),
-                fontSize: 35,
-                fontWeight: FontWeight.bold,
+            Container(
+              padding: const EdgeInsets.all(10),
+              decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(10.0),
+                  color: Colors.black),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    'No current QR code',
+                    style: GoogleFonts.roboto(
+                        textStyle: const TextStyle(letterSpacing: .5),
+                        fontSize: 18,
+                        color: Colors.white),
+                  ),
+                  SizedBox(height: 18,),
+                  ElevatedButton(
+                    onPressed: () {}, 
+                    child: const Text("Get new >", style: TextStyle(color: Colors.black),),
+                    style: ButtonStyle(
+                      backgroundColor: MaterialStateProperty.all(Colors.white)
+                    ),
+                  )
+                ],
               ),
             ),
-            Container(
-                height: MediaQuery.of(context).size.height / 2,
-                width: MediaQuery.of(context).size.width,
-                child: BezierChart(
-                  bezierChartScale: BezierChartScale.CUSTOM,
-                  xAxisCustomValues: const [0, 5, 10, 15, 20, 25, 30],
-                  series: const [
-                    BezierLine(
-                      data: const [
-                        DataPoint<double>(value: 10, xAxis: 0),
-                        DataPoint<double>(value: 130, xAxis: 5),
-                        DataPoint<double>(value: 50, xAxis: 10),
-                        DataPoint<double>(value: 150, xAxis: 15),
-                        DataPoint<double>(value: 75, xAxis: 20),
-                        DataPoint<double>(value: 0, xAxis: 25),
-                        DataPoint<double>(value: 5, xAxis: 30)
-                      ],
-                    ),
-                  ],
-                  config: BezierChartConfig(
-                    verticalIndicatorStrokeWidth: 3.0,
-                    verticalIndicatorColor: Colors.black,
-                    backgroundColor: Colors.black,
-                    showVerticalIndicator: true,
-                    snap: false,
-                  ),
-                )),
+            SizedBox(
+              height: MediaQuery.of(context).size.height / 2,
+              width: MediaQuery.of(context).size.width,
+              child: const Text("You made it."),
+            ),
+            TextButton(
+                onPressed: moveToProfile, child: const Text('Generate QR Code')),
+            TextButton(
+                onPressed: moveToProfile, child: const Text('Scan QR Code')),
             TextButton(onPressed: _signOut, child: const Text('Sign Out')),
             TextButton(
                 onPressed: moveToProfile, child: const Text('Go to Profile')),

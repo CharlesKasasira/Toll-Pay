@@ -3,21 +3,22 @@ import 'package:flutter/material.dart';
 import 'package:supabase/supabase.dart';
 import 'package:ysave/components/auth_state.dart';
 import 'package:ysave/utils/constants.dart';
+import 'package:flutter/services.dart';
 
-class SignupPage extends StatefulWidget {
-  const SignupPage({Key? key}) : super(key: key);
+class ForgotPage extends StatefulWidget {
+  const ForgotPage({Key? key}) : super(key: key);
 
   @override
-  _SignupPageState createState() => _SignupPageState();
+  _ForgotPageState createState() => _ForgotPageState();
 }
 
-class _SignupPageState extends AuthState<SignupPage> {
+class _ForgotPageState extends AuthState<ForgotPage> {
   bool _isLoading = false;
   late final TextEditingController _emailController;
   late final TextEditingController _passwordController;
 
-  void moveToLogin() {
-    Navigator.of(context).pushNamedAndRemoveUntil('/login', (route) => false);
+  void moveToSignup() {
+    Navigator.of(context).pushNamedAndRemoveUntil('/signup', (route) => false);
   }
 
   Future<void> _signIn() async {
@@ -25,18 +26,18 @@ class _SignupPageState extends AuthState<SignupPage> {
       _isLoading = true;
     });
 
-    final response = await supabase.auth
-        .signUp(_emailController.text, _passwordController.text);
+    final response = await supabase.auth.signIn(
+      email: _emailController.text,
+      password: _passwordController.text,
+    );
 
     final error = response.error;
     if (error != null) {
       context.showErrorSnackBar(message: error.message);
     } else {
-      context.showSnackBar(message: 'You have created your account');
       Navigator.of(context)
-          .pushNamedAndRemoveUntil('/signup', (route) => false);
+          .pushNamedAndRemoveUntil('/dashboard', (route) => false);
       _emailController.clear();
-      _passwordController.clear();
     }
 
     setState(() {
@@ -60,17 +61,27 @@ class _SignupPageState extends AuthState<SignupPage> {
 
   @override
   Widget build(BuildContext context) {
+    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.dark.copyWith(
+            statusBarColor: Colors.white,
+            /* set Status bar color in Android devices. */
+            statusBarIconBrightness: Brightness.dark,
+            /* set Status bar icons color in Android devices.*/
+            statusBarBrightness:
+                Brightness.dark) /* set Status bar icon color in iOS. */
+        );
     return Scaffold(
+      backgroundColor: Colors.white,
       body: Container(
         padding: EdgeInsets.only(left: 18, right: 18),
         alignment: Alignment.center,
         height: MediaQuery.of(context).size.height,
-        child: Column(
+        child: Center(
+            child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             const Text(
-              'Sign Up',
+              'Forgot Password',
               style: TextStyle(fontWeight: FontWeight.bold, fontSize: 40),
             ),
             const SizedBox(height: 18),
@@ -84,17 +95,9 @@ class _SignupPageState extends AuthState<SignupPage> {
               ),
             ),
             const SizedBox(height: 18),
-            TextFormField(
-              controller: _passwordController,
-              obscureText: true,
-              decoration: const InputDecoration(
-                labelText: 'Password',
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.all(Radius.circular(12)),
-                ),
-              ),
-            ),
+            
             const SizedBox(height: 18),
+            
             Row(
               children: [
                 Container(
@@ -104,7 +107,7 @@ class _SignupPageState extends AuthState<SignupPage> {
                     // style: ButtonStyle(
                       // padding: EdgeInsetsGeometry),
                 onPressed: _isLoading ? null : _signIn,
-                child: Text(_isLoading ? 'Loading' : 'Sign Up'),
+                child: Text(_isLoading ? 'Loading' : 'Login'),
               ),
                 ),
               
@@ -114,19 +117,19 @@ class _SignupPageState extends AuthState<SignupPage> {
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                const Text("Already have an account,"),
+                const Text("Remember password,"),
                 TextButton(
                   style: ButtonStyle(
                     foregroundColor:
                         MaterialStateProperty.all<Color>(Colors.blue),
                   ),
-                  onPressed: moveToLogin,
+                  onPressed: moveToSignup,
                   child: Text('Login'),
                 ),
               ],
-            )
+            ),
           ],
-        ),
+        )),
       ),
     );
   }

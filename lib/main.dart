@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:ysave/pages/account_page.dart';
+import 'package:ysave/pages/forgot_password.dart';
 import 'package:ysave/pages/home_page.dart';
 import 'package:ysave/pages/login_page.dart';
 import 'package:ysave/pages/signup_page.dart';
@@ -24,6 +25,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'YSAVE',
+      debugShowCheckedModeBanner: false,
       theme: ThemeData.light().copyWith(
         elevatedButtonTheme: ElevatedButtonThemeData(
           style: ElevatedButton.styleFrom(
@@ -39,6 +41,7 @@ class MyApp extends StatelessWidget {
         '/signup': (_) => const SignupPage(),
         '/account': (_) => const AccountPage(),
         '/dashboard': (_) => const HomePage(),
+        '/forgot': (_) => const ForgotPage(),
       },
     );
   }
