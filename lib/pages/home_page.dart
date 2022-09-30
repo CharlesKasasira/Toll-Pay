@@ -2,6 +2,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:supabase/supabase.dart';
 import 'package:ysave/components/auth_required_state.dart';
+import 'package:ysave/pages/generate.dart';
 import 'package:ysave/utils/constants.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -55,6 +56,14 @@ class _HomePageState extends AuthRequiredState<HomePage> {
     Navigator.of(context).pushNamedAndRemoveUntil('/account', (route) => false);
   }
 
+  void moveToGenerate() async {
+    Navigator.of(context).pushNamedAndRemoveUntil('/generate', (route) => false);
+  }
+
+  void moveToMap() async {
+    Navigator.of(context).pushNamedAndRemoveUntil('/map', (route) => false);
+  }
+
   @override
   void onAuthenticated(Session session) {
     final user = session.user;
@@ -104,20 +113,35 @@ class _HomePageState extends AuthRequiredState<HomePage> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
-                    'No current QR code',
-                    style: GoogleFonts.roboto(
-                        textStyle: const TextStyle(letterSpacing: .5),
-                        fontSize: 18,
-                        color: Colors.white),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        'No current QR code',
+                        style: GoogleFonts.roboto(
+                            textStyle: const TextStyle(letterSpacing: .5),
+                            fontSize: 18,
+                            color: Colors.white),
+                      ),
+                      Image.asset(
+                        "assets/images/qr-code.png",
+                        width: 100,
+                      )
+                    ],
                   ),
-                  SizedBox(height: 18,),
+                  const SizedBox(
+                    height: 18,
+                  ),
                   ElevatedButton(
-                    onPressed: () {}, 
-                    child: const Text("Get new >", style: TextStyle(color: Colors.black),),
-                    style: ButtonStyle(
-                      backgroundColor: MaterialStateProperty.all(Colors.white)
+                    onPressed: () {},
+                    child: const Text(
+                      "Generate new >",
+                      style: TextStyle(color: Colors.black),
                     ),
+                    style: ButtonStyle(
+                        backgroundColor:
+                            MaterialStateProperty.all(Colors.white)),
                   )
                 ],
               ),
@@ -128,7 +152,11 @@ class _HomePageState extends AuthRequiredState<HomePage> {
               child: const Text("You made it."),
             ),
             TextButton(
-                onPressed: moveToProfile, child: const Text('Generate QR Code')),
+                onPressed: moveToGenerate,
+                child: const Text('Generate QR Code')),
+            TextButton(
+                onPressed: moveToMap,
+                child: const Text('See Map')),
             TextButton(
                 onPressed: moveToProfile, child: const Text('Scan QR Code')),
             TextButton(onPressed: _signOut, child: const Text('Sign Out')),

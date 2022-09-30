@@ -3,8 +3,10 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:ysave/pages/account_page.dart';
 import 'package:ysave/pages/forgot_password.dart';
+import 'package:ysave/pages/generate.dart';
 import 'package:ysave/pages/home_page.dart';
 import 'package:ysave/pages/login_page.dart';
+import 'package:ysave/pages/maps_page.dart';
 import 'package:ysave/pages/signup_page.dart';
 import 'package:ysave/pages/splash_page.dart';
 
@@ -42,6 +44,8 @@ class MyApp extends StatelessWidget {
         '/account': (_) => const AccountPage(),
         '/dashboard': (_) => const HomePage(),
         '/forgot': (_) => const ForgotPage(),
+        '/generate': (_) => GeneratePage(),
+        '/map': (_) => MyMap(),
       },
     );
   }

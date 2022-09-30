@@ -4,6 +4,7 @@ import 'package:supabase/supabase.dart';
 import 'package:ysave/components/auth_state.dart';
 import 'package:ysave/utils/constants.dart';
 import 'package:flutter/services.dart';
+import 'package:ysave/utils/validator.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
@@ -42,6 +43,7 @@ class _LoginPageState extends AuthState<LoginPage> {
       Navigator.of(context)
           .pushNamedAndRemoveUntil('/dashboard', (route) => false);
       _emailController.clear();
+      _passwordController.clear();
     }
 
     setState(() {
@@ -91,6 +93,10 @@ class _LoginPageState extends AuthState<LoginPage> {
             const SizedBox(height: 18),
             TextFormField(
               controller: _emailController,
+              keyboardType: TextInputType.emailAddress,
+              validator: (value) => Validator.validateEmail(
+                email: value,
+              ),
               decoration: const InputDecoration(
                 labelText: 'Email',
                 border: OutlineInputBorder(
@@ -102,6 +108,9 @@ class _LoginPageState extends AuthState<LoginPage> {
             TextFormField(
               controller: _passwordController,
               obscureText: true,
+              validator: (value) => Validator.validatePassword(
+                password: value,
+              ),
               decoration: const InputDecoration(
                 labelText: 'Password',
                 border: OutlineInputBorder(
@@ -130,12 +139,11 @@ class _LoginPageState extends AuthState<LoginPage> {
                   height: 50,
                   child: ElevatedButton(
                     // style: ButtonStyle(
-                      // padding: EdgeInsetsGeometry),
-                onPressed: _isLoading ? null : _signIn,
-                child: Text(_isLoading ? 'Loading' : 'Login'),
-              ),
+                    // padding: EdgeInsetsGeometry),
+                    onPressed: _isLoading ? null : _signIn,
+                    child: Text(_isLoading ? 'Loading' : 'Login'),
+                  ),
                 ),
-              
               ],
             ),
             const SizedBox(height: 18),

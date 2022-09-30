@@ -11,14 +11,29 @@ class SplashPage extends StatefulWidget {
 class _SplashPageState extends AuthState<SplashPage> {
   @override
   void initState() {
-    recoverSupabaseSession();
+    Future.delayed(const Duration(seconds: 5), () {
+      // Navigator.pushNamedAndRemoveUntil(
+      //     context, LoginScreen.routeName, (route) => false);
+      recoverSupabaseSession();
+    });
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(
-      body: Center(child: CircularProgressIndicator()),
+    // Future.delayed(const Duration(seconds: 5), () {
+      // Navigator.pushNamedAndRemoveUntil(
+      //     context, LoginScreen.routeName, (route) => false);
+    // });
+    return Scaffold(
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          CircularProgressIndicator(),
+        ],
+      ),),
     );
   }
 }

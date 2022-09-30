@@ -9,19 +9,21 @@ environment:
   sdk: ">=2.12.0 <3.0.0"
 
 dependencies:
+  barcode_scan2: ^4.2.1
+  cupertino_icons: ^0.1.2
   flutter:
     sdk: flutter
-
-  barcode_scan2: ^4.2.1
   flutter_dotenv: ^5.0.2
   flutter_sparkline: ^0.1.0
   font_awesome_flutter: ^8.8.1
   google_fonts: ^3.0.1
+  google_maps_flutter: ^2.2.1
+  google_maps_flutter_web: ^0.4.0+3
+  http: ^0.13.5
   image_picker: ^0.8.4
+  path_provider: ^2.0.1
+  qr_flutter: ^4.0.0
   supabase_flutter: ^0.2.9
-  cupertino_icons: ^0.1.2
-  qr_flutter: ^3.2.0
-  path_provider: ^1.6.5
 
 dev_dependencies:
   flutter_test:
@@ -33,3 +35,4 @@ flutter:
 
   assets:
     - .env
+    - assets/images/qr-code.png
