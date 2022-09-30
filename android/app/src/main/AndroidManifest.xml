@@ -2,14 +2,15 @@
     package="com.example.supabase_flutter_quickstart">
     <uses-permission android:name="android.permission.INTERNET"/>
     <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
    <application
-        android:label="ysave"
+        android:label="Toll Pay"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
 
         <!-- TODO: Add your Google Maps API key here -->
         <meta-data android:name="com.google.android.geo.API_KEY"
-               android:value="GOOGLE_MAPS_APIKEY"/>
+               android:value="AIzaSyDNv-vBlnBCTBeLRjxhJpPzw6tb9oAkKGc"/>
 
         <activity
             android:name=".MainActivity"
