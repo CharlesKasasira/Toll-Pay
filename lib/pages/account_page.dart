@@ -113,6 +113,17 @@ class _AccountPageState extends AuthRequiredState<AccountPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Color(0xffF6F6F6),
+      appBar: AppBar(
+        backgroundColor: Colors.white,
+        elevation: 0,
+        foregroundColor: Colors.black,
+        title: Text("Profile"),
+        leading: new IconButton(
+          icon: new Icon(Icons.arrow_back, color: Colors.black),
+          onPressed: () => Navigator.of(context).pop(),
+        ),
+      ),
       body: ListView(
         padding: const EdgeInsets.symmetric(vertical: 18, horizontal: 12),
         children: [
@@ -135,7 +146,6 @@ class _AccountPageState extends AuthRequiredState<AccountPage> {
               onPressed: _updateProfile,
               child: Text(_loading ? 'Saving...' : 'Update')),
           const SizedBox(height: 18),
-          TextButton(onPressed: _signOut, child: const Text('Sign Out')),
         ],
       ),
     );

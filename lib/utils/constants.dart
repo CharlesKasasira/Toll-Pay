@@ -3,6 +3,11 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 
 final supabase = Supabase.instance.client;
 
+class ApiConstants {
+  static String baseUrl = 'http://localhost:4000';
+}
+
+
 extension ShowSnackBar on BuildContext {
   void showSnackBar({
     required String message,

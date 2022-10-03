@@ -6,9 +6,12 @@ import 'package:ysave/pages/forgot_password.dart';
 import 'package:ysave/pages/generate.dart';
 import 'package:ysave/pages/home_page.dart';
 import 'package:ysave/pages/login_page.dart';
+import 'package:ysave/pages/make_payment.dart';
 import 'package:ysave/pages/maps_page.dart';
+import 'package:ysave/pages/payment_page.dart';
 import 'package:ysave/pages/signup_page.dart';
 import 'package:ysave/pages/splash_page.dart';
+import 'package:flutter/services.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -25,10 +28,19 @@ Future<void> main() async {
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.dark.copyWith(
+            statusBarColor: Colors.black,
+            /* set Status bar color in Android devices. */
+            statusBarIconBrightness: Brightness.light,
+            /* set Status bar icons color in Android devices.*/
+            statusBarBrightness:
+                Brightness.light) /* set Status bar icon color in iOS. */
+        );
     return MaterialApp(
-      title: 'YSAVE',
+      title: 'Toll Pay',
       debugShowCheckedModeBanner: false,
       theme: ThemeData.light().copyWith(
+        primaryColor: Colors.black,
         elevatedButtonTheme: ElevatedButtonThemeData(
           style: ElevatedButton.styleFrom(
             onPrimary: Colors.white,
@@ -46,6 +58,8 @@ class MyApp extends StatelessWidget {
         '/forgot': (_) => const ForgotPage(),
         '/generate': (_) => GeneratePage(),
         '/map': (_) => MyMap(),
+        '/payment': (_) => PaymentPage(),
+        '/make-payment': (_) => MakePaymentPage(),
       },
     );
   }

@@ -14,6 +14,8 @@ dependencies:
   flutter:
     sdk: flutter
   flutter_dotenv: ^5.0.2
+  flutter_launcher_icons: ^0.10.0
+  flutter_polyline_points: ^1.0.0
   flutter_sparkline: ^0.1.0
   font_awesome_flutter: ^8.8.1
   google_fonts: ^3.0.1
@@ -21,6 +23,7 @@ dependencies:
   google_maps_flutter_web: ^0.4.0+3
   http: ^0.13.5
   image_picker: ^0.8.4
+  location: ^4.4.0
   path_provider: ^2.0.1
   qr_flutter: ^4.0.0
   supabase_flutter: ^0.2.9
@@ -30,9 +33,15 @@ dev_dependencies:
     sdk: flutter
   lint: ^1.5.3
 
+flutter_icons:
+  android: "launcher_icon"
+  ios: true
+  image_path: "assets/icon/icon.png"
+
 flutter:
   uses-material-design: true
 
   assets:
     - .env
+    - assets/images/Toll-Pay.png
     - assets/images/qr-code.png

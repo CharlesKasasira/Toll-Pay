@@ -11,9 +11,7 @@ class SplashPage extends StatefulWidget {
 class _SplashPageState extends AuthState<SplashPage> {
   @override
   void initState() {
-    Future.delayed(const Duration(seconds: 5), () {
-      // Navigator.pushNamedAndRemoveUntil(
-      //     context, LoginScreen.routeName, (route) => false);
+    Future.delayed(const Duration(seconds: 2), () {
       recoverSupabaseSession();
     });
     super.initState();
@@ -21,17 +19,18 @@ class _SplashPageState extends AuthState<SplashPage> {
 
   @override
   Widget build(BuildContext context) {
-    // Future.delayed(const Duration(seconds: 5), () {
-      // Navigator.pushNamedAndRemoveUntil(
-      //     context, LoginScreen.routeName, (route) => false);
-    // });
     return Scaffold(
+      backgroundColor: Colors.black,
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          CircularProgressIndicator(),
+          Image.asset(
+            "assets/images/Toll-Pay.png",
+            width: 100,
+          ),
+          Text("Toll Pay", style: TextStyle(fontSize: 30, color: Colors.white),),
         ],
       ),),
     );

@@ -27,17 +27,20 @@ class _AvatarState extends State<Avatar> {
           Container(
             width: 150,
             height: 150,
-            color: Colors.grey,
-            child: const Center(
-              child: Text('No Image'),
+            decoration: BoxDecoration(
+              color: Colors.grey,
+              borderRadius: BorderRadius.circular(75.0),
             ),
           )
         else
-          Image.network(
-            widget.imageUrl!,
-            width: 150,
-            height: 150,
-            fit: BoxFit.cover,
+          ClipRRect(
+            borderRadius: BorderRadius.circular(75.0),
+            child: Image.network(
+              widget.imageUrl!,
+              width: 150,
+              height: 150,
+              fit: BoxFit.cover,
+            ),
           ),
         ElevatedButton(
           onPressed: _isLoading ? null : _upload,
