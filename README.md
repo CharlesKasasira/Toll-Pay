@@ -25,6 +25,7 @@ According to UNRA, The payment method adopted shall be custom friendly and this 
 
 Table B: Road Toll User Fees
 | Vehicle Type | Vehicle Class Descript | Toll Fees Per Trip |
+| --- | --- | --- |
 | Class 1 | Motorcycles with 400cc and above | 3,000 |
 | Class 2 | Light Vehicles with or without tailes | 5,000 |
 | Class 3 | Medium Goods vehicles 2 or 3 axles | 10,000 |
