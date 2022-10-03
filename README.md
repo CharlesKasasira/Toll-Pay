@@ -5,9 +5,9 @@ Table A: Group Members
 | :--- | --- | --- |
 | 1 | Kasasira Charles Derrick | - |
 | 2 | Lukyamuzi Akram | - |
-| 3 | N. Hellen Bridget | - |
+| 3 | Nakuwanda Hellen Bridget | - |
 | 4 | Langalafa Gideon Ohure | - |
-| 5 | Daphine | - |
+| 5 | Tangaya Daphine Damalie | - |
 
 
 ## Problem Statement
