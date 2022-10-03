@@ -21,3 +21,14 @@ TRoad tolling is a method of raising revenue form transport infrastructure throu
 ## Our Solution (Toll Pay)
 ---
 According to UNRA, The payment method adopted shall be custom friendly and this is why we have built an easy to use mobile application which shall help in the collection of toll payment. The system will be accessible via a simple mobile application Toll Pay which has an ease to use interface and a great user interface. The system also uses dynamic QR codes which are secure and cannot be reused once expired. We are happy to say that the system will increase the willingness to Pay at the Entebbe Express Highway.
+
+
+Table B: Road Toll User Fees
+| Vehicle Type | Vehicle Class Descript | Toll Fees Per Trip |
+| Class 1 | Motorcycles with 400cc and above | 3,000 |
+| Class 2 | Light Vehicles with or without tailes | 5,000 |
+| Class 3 | Medium Goods vehicles 2 or 3 axles | 10,000 |
+| Class 4 | Large Goods vehicles and large buses with 4 or 5 axles | 15,000 |
+| Class 5 | Large Goods vehicles with 6 and more axles | 18,000 |
+
+
