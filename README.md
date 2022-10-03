@@ -1,5 +1,7 @@
 # Toll Pay
 
+![Toll Pay Banner](Toll-Pay-Banner.png)
+
 Table A: Group Members
 | # | Names | Role |
 | :--- | --- | --- |
