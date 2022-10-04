@@ -15,7 +15,7 @@ Future<void> main() async {
 
   await dotenv.load();
   await Supabase.initialize(
-    // TODO: Replace credentials with your own
+    // TODO: Replace credentials with your
     url: dotenv.env['YOUR_SUPABASE_URL'],
     anonKey: dotenv.env['YOUR_SUPABASE_ANNON_KEY'],
   );
