@@ -75,128 +75,130 @@ class _LoginPageState extends AuthState<LoginPage> {
         _focusPassword.unfocus();
       },
       child: Scaffold(
-        resizeToAvoidBottomInset: false,
-        backgroundColor: Colors.white,
-        body: Container(
-          padding: EdgeInsets.only(left: 18, right: 18),
-          alignment: Alignment.center,
-          height: MediaQuery.of(context).size.height,
-          child: Center(
-              child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              const SizedBox(height: 50),
-              Image.asset(
-                        "assets/images/Toll-Pay.png",
-                        width: 100,
-                      ),
-              // const Text(
-              //   'Login',
-              //   style: TextStyle(fontWeight: FontWeight.bold, fontSize: 40),
-              // ),
-              const SizedBox(height: 50),
-              const SizedBox(height: 18),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const Text('Email'),
-                  const SizedBox(height: 5),
-                  TextFormField(
-                    controller: _emailController,
-                    focusNode: _focusEmail,
-                    keyboardType: TextInputType.emailAddress,
-                    validator: (value) => Validator.validateEmail(
-                      email: value,
-                    ),
-                    decoration: const InputDecoration(
-                      floatingLabelBehavior: FloatingLabelBehavior.never,
-                      labelText: 'Email',
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.all(Radius.circular(12)),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-              const SizedBox(height: 18),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const Text('Password'),
-                  const SizedBox(height: 5),
-                  TextFormField(
-                    controller: _passwordController,
-                    obscureText: true,
-                    focusNode: _focusPassword,
-                    validator: (value) => Validator.validatePassword(
-                      password: value,
-                    ),
-                    decoration: const InputDecoration(
-                      floatingLabelBehavior: FloatingLabelBehavior.never,
-                      labelText: 'Password',
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.all(Radius.circular(12)),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-              const SizedBox(height: 18),
-              Container(
-                width: MediaQuery.of(context).size.width - 36,
-                height: 40,
-                decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(8),
-                    color: _isLoading ? Color(0xFFe5e5e5) : Colors.black),
-                child: TextButton(
-                  // style: ButtonStyle(
-                  // padding: EdgeInsetsGeometry),
-                  onPressed: _isLoading ? null : _signIn,
-                  child: _isLoading
-                      ? Text('Loading', style: TextStyle(color: Color(0xFFa3a3a3)))
-                      : Text(
-                          "Login",
-                          style: TextStyle(color: Colors.white),
+        resizeToAvoidBottomInset: true,
+        backgroundColor: Color.fromRGBO(255, 255, 255, 1),
+        body: SingleChildScrollView(
+          physics: NeverScrollableScrollPhysics(),
+          child: Container(
+            padding: EdgeInsets.only(left: 18, right: 18),
+            alignment: Alignment.center,
+            // height: MediaQuery.of(context).size.height,
+            width: MediaQuery.of(context).size.width,
+            child: Center(
+                child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                const SizedBox(height: 50),
+                Image.asset(
+                          "assets/images/Toll-Pay.png",
+                          width: 100,
                         ),
+                const SizedBox(height: 50),
+                const SizedBox(height: 18),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Text('Email'),
+                    const SizedBox(height: 5),
+                    TextFormField(
+                      controller: _emailController,
+                      focusNode: _focusEmail,
+                      keyboardType: TextInputType.emailAddress,
+                      validator: (value) => Validator.validateEmail(
+                        email: value,
+                      ),
+                      decoration: const InputDecoration(
+                        isDense: true,
+                        floatingLabelBehavior: FloatingLabelBehavior.never,
+                        labelText: 'Email',
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(8)),
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
-              ),
-              const SizedBox(
-                height: 10,
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  TextButton(
-                    style: ButtonStyle(
-                      foregroundColor:
-                          MaterialStateProperty.all<Color>(Colors.blue),
+                const SizedBox(height: 18),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Text('Password'),
+                    const SizedBox(height: 5),
+                    TextFormField(
+                      controller: _passwordController,
+                      obscureText: true,
+                      focusNode: _focusPassword,
+                      validator: (value) => Validator.validatePassword(
+                        password: value,
+                      ),
+                      decoration: const InputDecoration(
+                        isDense: true,
+                        floatingLabelBehavior: FloatingLabelBehavior.never,
+                        labelText: 'Password',
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(8)),
+                        ),
+                      ),
                     ),
-                    onPressed: moveToForgot,
-                    child: Text(
-                      'Forgot Password?',
-                      style: TextStyle(fontSize: 16),
-                    ),
+                  ],
+                ),
+                const SizedBox(height: 18),
+                Container(
+                  width: MediaQuery.of(context).size.width - 36,
+                  height: 40,
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(8),
+                      color: _isLoading ? Color(0xFFe5e5e5) : Colors.black),
+                  child: TextButton(
+                    // style: ButtonStyle(
+                    // padding: EdgeInsetsGeometry),
+                    onPressed: _isLoading ? null : _signIn,
+                    child: _isLoading
+                        ? Text('Loading', style: TextStyle(color: Color(0xFFa3a3a3)))
+                        : Text(
+                            "Login",
+                            style: TextStyle(color: Colors.white),
+                          ),
                   ),
-                ],
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  const Text("Don't have an account,",
-                      style: TextStyle(fontSize: 16)),
-                  TextButton(
-                    style: ButtonStyle(
-                      foregroundColor:
-                          MaterialStateProperty.all<Color>(Colors.blue),
+                ),
+                const SizedBox(
+                  height: 10,
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    TextButton(
+                      style: ButtonStyle(
+                        foregroundColor:
+                            MaterialStateProperty.all<Color>(Colors.blue),
+                      ),
+                      onPressed: moveToForgot,
+                      child: Text(
+                        'Forgot Password?',
+                        style: TextStyle(fontSize: 16),
+                      ),
                     ),
-                    onPressed: moveToSignup,
-                    child: Text('Sign Up'),
-                  ),
-                ],
-              ),
-            ],
-          )),
+                  ],
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    const Text("Don't have an account,",
+                        style: TextStyle(fontSize: 16)),
+                    TextButton(
+                      style: ButtonStyle(
+                        foregroundColor:
+                            MaterialStateProperty.all<Color>(Colors.blue),
+                      ),
+                      onPressed: moveToSignup,
+                      child: Text('Sign Up'),
+                    ),
+                  ],
+                ),
+              ],
+            )),
+          ),
         ),
       ),
     );

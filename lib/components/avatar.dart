@@ -24,12 +24,20 @@ class _AvatarState extends State<Avatar> {
     return Column(
       children: [
         if (widget.imageUrl == null || widget.imageUrl!.isEmpty)
-          Container(
-            width: 150,
-            height: 150,
-            decoration: BoxDecoration(
-              color: Colors.grey,
-              borderRadius: BorderRadius.circular(75.0),
+          ClipRRect(
+            borderRadius: BorderRadius.circular(75.0),
+            child: Container(
+              width: 120,
+              height: 120,
+              alignment: Alignment.bottomCenter,
+              decoration: BoxDecoration(
+                color: Color.fromARGB(255, 200, 200, 200),
+                // borderRadius: BorderRadius.circular(75.0),
+              ),
+              child: Icon(Icons.person,
+              size: 150,
+              color: Colors.white,
+              ),
             ),
           )
         else

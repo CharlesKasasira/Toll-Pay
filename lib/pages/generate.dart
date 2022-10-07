@@ -8,61 +8,99 @@ class GeneratePage extends StatefulWidget {
 
 class GeneratePageState extends State<GeneratePage> {
   String qrData =
-      "https://github.com/neon97";  // already generated qr code when the page opens
+      "https://github.com/CharlesKasasira"; // already generated qr code when the page opens
 
   @override
   Widget build(BuildContext context) {
+    int count = 0;
     return Scaffold(
+      backgroundColor: Color(0xffF6F6F6),
+      appBar: AppBar(
+        backgroundColor: Color(0x00000000),
+        elevation: 0,
+        foregroundColor: Colors.black,
+        leading: Builder(builder: (context) {
+            return Container(
+              width: 25,
+              height: 25,
+              margin: const EdgeInsets.only(left: 10.0, top: 10.0, bottom: 4),
+              decoration: BoxDecoration(
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.grey.withOpacity(0.2),
+                      spreadRadius: 2,
+                      blurRadius: 3,
+                      offset: Offset(0, 3), // changes position of shadow
+                    ),
+                  ],
+                  color: Colors.white,
+                  borderRadius: BorderRadius.all(Radius.circular(25))),
+              child: new IconButton(
+                icon: new Icon(Icons.arrow_back, color: Colors.black),
+                onPressed: () => Navigator.of(context).pop(),
+              ),
+            );
+          }),
+        title: const Text("QR Code"),
+      ),
       body: Container(
-        padding: EdgeInsets.all(20.0),
+        padding: const EdgeInsets.all(20.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            QrImage(
-              //plce where the QR Image will be shown
-              data: qrData,
+            Container(
+              padding: EdgeInsets.all(12),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                boxShadow: [
+                    BoxShadow(
+                      color: Colors.grey.withOpacity(0.2),
+                      spreadRadius: 2,
+                      blurRadius: 3,
+                      offset: Offset(0, 3), // changes position of shadow
+                    ),
+                  ],
+                  borderRadius: BorderRadius.all(Radius.circular(12)),
+              ),
+              child: QrImage(
+                //plce where the QR Image will be shown
+                data: qrData,
+              ),
             ),
             SizedBox(
               height: 40.0,
             ),
             Text(
-              "New QR Link Generator",
-              style: TextStyle(fontSize: 20.0),
+              "* Your QR code is private, if you share it with someone, they can try to scan and use it.",
+              style: TextStyle(fontSize: 15.0),
             ),
-            TextField(
-              controller: qrdataFeed,
-              decoration: InputDecoration(
-                hintText: "Input your link or data",
-              ),
-            ),
-            Padding(
-              padding: EdgeInsets.fromLTRB(40, 20, 40, 0),
-              child: FlatButton(
-                padding: EdgeInsets.all(15.0),
-                onPressed: () async {
-
-                  if (qrdataFeed.text.isEmpty) {        //a little validation for the textfield
-                    setState(() {
-                      qrData = "";
-                    });
-                  } else {
-                    setState(() {
-                      qrData = qrdataFeed.text;
-                    });
-                  }
-
-                },
-                child: Text(
-                  "Generate QR",
-                  style: TextStyle(
-                      color: Colors.blue, fontWeight: FontWeight.bold),
-                ),
-                shape: RoundedRectangleBorder(
-                    side: BorderSide(color: Colors.blue, width: 3.0),
-                    borderRadius: BorderRadius.circular(20.0)),
-              ),
-            )
+            // Padding(
+            //   padding: EdgeInsets.fromLTRB(40, 20, 40, 0),
+            //   child: TextButton(
+            //     // padding: EdgeInsets.all(15.0),
+            //     onPressed: () async {
+            //       if (qrdataFeed.text.isEmpty) {
+            //         //a little validation for the textfield
+            //         setState(() {
+            //           qrData = "";
+            //         });
+            //       } else {
+            //         setState(() {
+            //           qrData = qrdataFeed.text;
+            //         });
+            //       }
+            //     },
+            //     child: Text(
+            //       "Generate QR",
+            //       style: TextStyle(
+            //           color: Colors.blue, fontWeight: FontWeight.bold),
+            //     ),
+            //     // shape: RoundedRectangleBorder(
+            //     //     side: BorderSide(color: Colors.blue, width: 3.0),
+            //     //     borderRadius: BorderRadius.circular(20.0)),
+            //   ),
+            // )
           ],
         ),
       ),

@@ -28,8 +28,8 @@ Future<void> main() async {
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.dark.copyWith(
-            statusBarColor: Colors.black,
+    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.light.copyWith(
+            statusBarColor: Color(0xff1a1a1a),
             /* set Status bar color in Android devices. */
             statusBarIconBrightness: Brightness.light,
             /* set Status bar icons color in Android devices.*/
@@ -40,13 +40,17 @@ class MyApp extends StatelessWidget {
       title: 'Toll Pay',
       debugShowCheckedModeBanner: false,
       theme: ThemeData.light().copyWith(
+        appBarTheme: AppBarTheme(
+          systemOverlayStyle: SystemUiOverlayStyle.light
+        ),
         primaryColor: Colors.black,
         elevatedButtonTheme: ElevatedButtonThemeData(
           style: ElevatedButton.styleFrom(
             onPrimary: Colors.white,
             primary: Colors.black,
           ),
-        ),
+        ), 
+        colorScheme: ColorScheme.fromSwatch().copyWith(secondary: Colors.black),
       ),
       initialRoute: '/',
       routes: <String, WidgetBuilder>{
@@ -57,8 +61,8 @@ class MyApp extends StatelessWidget {
         '/dashboard': (_) => const HomePage(),
         '/forgot': (_) => const ForgotPage(),
         '/generate': (_) => GeneratePage(),
-        '/map': (_) => MyMap(),
-        '/payment': (_) => PaymentPage(),
+        '/map': (_) => const MyMap(),
+        '/payment': (_) => const PaymentPage(),
         '/make-payment': (_) => MakePaymentPage(),
       },
     );

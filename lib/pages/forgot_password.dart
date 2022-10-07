@@ -15,10 +15,10 @@ class ForgotPage extends StatefulWidget {
 class _ForgotPageState extends AuthState<ForgotPage> {
   bool _isLoading = false;
   late final TextEditingController _emailController;
-  late final TextEditingController _passwordController;
+  final _focusEmail = FocusNode();
 
-  void moveToSignup() {
-    Navigator.of(context).pushNamedAndRemoveUntil('/signup', (route) => false);
+  void moveToLogin() {
+    Navigator.of(context).pushNamedAndRemoveUntil('/login', (route) => false);
   }
 
   Future<void> _signIn() async {
@@ -26,19 +26,19 @@ class _ForgotPageState extends AuthState<ForgotPage> {
       _isLoading = true;
     });
 
-    final response = await supabase.auth.signIn(
-      email: _emailController.text,
-      password: _passwordController.text,
-    );
+    // final response = await supabase.auth.signIn(
+    //   email: _emailController.text,
+    //   password: _passwordController.text,
+    // );
 
-    final error = response.error;
-    if (error != null) {
-      context.showErrorSnackBar(message: error.message);
-    } else {
-      Navigator.of(context)
-          .pushNamedAndRemoveUntil('/dashboard', (route) => false);
-      _emailController.clear();
-    }
+    // final error = response.error;
+    // if (error != null) {
+    //   context.showErrorSnackBar(message: error.message);
+    // } else {
+    //   Navigator.of(context)
+    //       .pushNamedAndRemoveUntil('/dashboard', (route) => false);
+    //   _emailController.clear();
+    // }
 
     setState(() {
       _isLoading = false;
@@ -48,14 +48,12 @@ class _ForgotPageState extends AuthState<ForgotPage> {
   @override
   void initState() {
     _emailController = TextEditingController();
-    _passwordController = TextEditingController();
     super.initState();
   }
 
   @override
   void dispose() {
     _emailController.dispose();
-    _passwordController.dispose();
     super.dispose();
   }
 
@@ -69,67 +67,81 @@ class _ForgotPageState extends AuthState<ForgotPage> {
             statusBarBrightness:
                 Brightness.dark) /* set Status bar icon color in iOS. */
         );
-    return Scaffold(
-      backgroundColor: Colors.white,
-      body: Container(
-        padding: EdgeInsets.only(left: 18, right: 18),
-        alignment: Alignment.center,
-        height: MediaQuery.of(context).size.height,
-        child: Center(
-            child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            const Text(
-              'Forgot Password',
-              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 40),
-            ),
-            const SizedBox(height: 18),
-            TextFormField(
-              controller: _emailController,
-              decoration: const InputDecoration(
-                labelText: 'Email',
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.all(Radius.circular(12)),
-                ),
+    return GestureDetector(
+      onTap: () {
+        _focusEmail.unfocus();
+      },
+      child: Scaffold(
+        backgroundColor: Colors.white,
+        body: Container(
+          padding: EdgeInsets.only(left: 18, right: 18),
+          alignment: Alignment.center,
+          height: MediaQuery.of(context).size.height,
+          child: Center(
+              child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const Text(
+                'Forgot Password',
+                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 40),
               ),
-            ),
-            const SizedBox(height: 18),
-            
-            const SizedBox(height: 18),
-            
-            Row(
-              children: [
-                Container(
-                  width: MediaQuery.of(context).size.width - 36,
-                  height: 50,
-                  child: ElevatedButton(
-                    // style: ButtonStyle(
-                      // padding: EdgeInsetsGeometry),
-                onPressed: _isLoading ? null : _signIn,
-                child: Text(_isLoading ? 'Loading' : 'Login'),
-              ),
-                ),
-              
-              ],
-            ),
-            const SizedBox(height: 18),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                const Text("Remember password,"),
-                TextButton(
-                  style: ButtonStyle(
-                    foregroundColor:
-                        MaterialStateProperty.all<Color>(Colors.blue),
+              const SizedBox(height: 18),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const Text('Email'),
+                    const SizedBox(height: 5),
+                  TextFormField(
+                  controller: _emailController,
+                  focusNode: _focusEmail,
+                  decoration: const InputDecoration(
+                    isDense: true,
+                    labelText: 'Enter email',
+                    floatingLabelBehavior: FloatingLabelBehavior.never,
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.all(Radius.circular(8)),
+                    ),
                   ),
-                  onPressed: moveToSignup,
-                  child: Text('Login'),
+                )],
+              ),
+              const SizedBox(height: 18),
+              
+              const SizedBox(height: 18),
+              
+              Row(
+                children: [
+                  Container(
+                    width: MediaQuery.of(context).size.width - 36,
+                    height: 50,
+                    child: ElevatedButton(
+                      // style: ButtonStyle(
+                        // padding: EdgeInsetsGeometry),
+                  onPressed: _isLoading ? null : _signIn,
+                  child: Text(_isLoading ? 'Loading' : 'Login'),
                 ),
-              ],
-            ),
-          ],
-        )),
+                  ),
+                
+                ],
+              ),
+              const SizedBox(height: 18),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const Text("Remember password,"),
+                  TextButton(
+                    style: ButtonStyle(
+                      foregroundColor:
+                          MaterialStateProperty.all<Color>(Colors.blue),
+                    ),
+                    onPressed: moveToLogin,
+                    child: Text('Login'),
+                  ),
+                ],
+              ),
+            ],
+          )),
+        ),
       ),
     );
   }

@@ -5,6 +5,7 @@ import 'package:ysave/components/auth_required_state.dart';
 import 'package:ysave/pages/account_page.dart';
 import 'package:ysave/pages/maps_page.dart';
 import 'package:ysave/pages/payment_page.dart';
+import 'package:ysave/pages/scan_qr.dart';
 import 'package:ysave/utils/constants.dart';
 
 class MyDrawer extends StatefulWidget {
@@ -52,28 +53,30 @@ class _MyDrawerState extends State<MyDrawer> {
   Widget build(BuildContext context) {
     return Drawer(
       child: ListView(
-        // Important: Remove any padding from the ListView.
         padding: EdgeInsets.zero,
         children: [
           DrawerHeader(
             decoration: BoxDecoration(
-              color: Colors.black,
+              color: Color(0xff1A1A1A),
             ),
             child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 if (_avatarUrl == null || _avatarUrl!.isEmpty)
                   Container(
-                    width: 100,
-                    height: 100,
+                    width: 80,
+                    height: 80,
+                    alignment: Alignment.center,
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.all(Radius.circular(50.0)),
-                      color: Colors.grey,
+                      color: Color(0xffF5F5F5),
                     ),
+                    child: const Text("C", style: TextStyle(fontWeight: FontWeight.bold, color: Color(0xff1a1a1a), fontSize: 30),),
                   )
                 else
                   Container(
-                    width: 100.0,
-                    height: 100.0,
+                    width: 80.0,
+                    height: 80.0,
                     decoration: BoxDecoration(
                       image: DecorationImage(
                           fit: BoxFit.cover, image: NetworkImage(_avatarUrl!)),
@@ -81,23 +84,40 @@ class _MyDrawerState extends State<MyDrawer> {
                       color: Colors.grey,
                     ),
                   ),
-                Text(
-                  '${_firstNameController.text}',
-                  style: TextStyle(color: Colors.white),
+                  const SizedBox(height: 12,),
+                const Text(
+                  'Charles Kasasira',
+                  style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 17),
+                ),
+                const Text(
+                  'charleskasasira01@gmail.com',
+                  style: TextStyle(color: Colors.white, fontWeight: FontWeight.normal),
                 ),
               ],
             ),
           ),
           ListTile(
-            title: const Text('QR Scanner'),
+            leading: const Icon(Icons.payment_outlined),
+            title: const Text('Make Payment'),
             onTap: () {
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => const MyMap()),
+                MaterialPageRoute(builder: (context) => const PaymentPage()),
               );
             },
           ),
           ListTile(
+            leading: const Icon(Icons.qr_code_scanner_outlined),
+            title: const Text('QR Scanner'),
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => ScanPage()),
+              );
+            },
+          ),
+          ListTile(
+            leading: const Icon(Icons.map_outlined),
             title: const Text('Map'),
             onTap: () {
               Navigator.push(
@@ -107,6 +127,7 @@ class _MyDrawerState extends State<MyDrawer> {
             },
           ),
           ListTile(
+            leading: const Icon(Icons.person_outline),
             title: const Text('Profile'),
             onTap: () {
               Navigator.push(
@@ -115,7 +136,23 @@ class _MyDrawerState extends State<MyDrawer> {
               );
             },
           ),
+          const SizedBox(height: 20,),
+          const Divider(
+            thickness: 3,
+          ),
           ListTile(
+            leading: const Icon(Icons.settings_outlined),
+            title: const Text('Settings'),
+            onTap: ()async {
+              final response = await supabase.auth.signOut();
+            final error = response.error;
+            if (error != null) {
+              context.showErrorSnackBar(message: error.message);
+            }
+            },
+          ),
+          ListTile(
+            leading: const Icon(Icons.logout),
             title: const Text('Log Out'),
             onTap: ()async {
               final response = await supabase.auth.signOut();
@@ -125,6 +162,7 @@ class _MyDrawerState extends State<MyDrawer> {
             }
             },
           ),
+          
         ],
       ),
     );

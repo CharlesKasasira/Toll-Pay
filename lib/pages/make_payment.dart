@@ -38,27 +38,30 @@ class _MakePaymentPageState extends State<MakePaymentPage> {
     super.dispose();
   }
 
-  Future<http.Response> makePayment(String phone, String amount, String secretCode, String companyID) {
-    print("reached here too");
-    return http.post(
-      Uri.parse('https://kasasira.herokuapp.com/make-payment'),
-      headers: <String, String>{
-        'Content-Type': 'application/json; charset=UTF-8',
-      },
-      body: jsonEncode(
-          <String, String>{
-            "amount": amount,
-            "phone": phone,
-            "secret_code": secretCode,
-            "mobile_money_company_id": companyID,
-            "reason": "Entebbe Express Toll Payment",
-            "metadata": "Entebbe Express Toll Payment"
-          }),
-    );
+  Future<http.Response>? makePayment(
+      String phone, String amount, String secretCode, String companyID) {
+    // return http.post(
+    //   Uri.parse('https://app.shineafrika.com/make-payment'),
+    //   headers: <String, String>{
+    //     'Content-Type': 'application/json; charset=UTF-8',
+    //   },
+    //   body: jsonEncode(<String, String>{
+    //     "amount": amount,
+    //     "phone": phone,
+    //     "secret_code": secretCode,
+    //     "mobile_money_company_id": companyID,
+    //     "reason": "Entebbe Express Toll Payment",
+    //     "metadata": "Entebbe Express Toll Payment"
+    //   }),
+    // ).then((value) => value);
+    Navigator.of(context)
+        .pushNamedAndRemoveUntil('/generate', (route) => false);
+    return null;
   }
 
   @override
   Widget build(BuildContext context) {
+    int count = 0;
     return GestureDetector(
       onTap: () {
         _focusPhoneNumber.unfocus();
@@ -67,6 +70,29 @@ class _MakePaymentPageState extends State<MakePaymentPage> {
         _focusCompanyID.unfocus();
       },
       child: Scaffold(
+        appBar: AppBar(
+          backgroundColor: Color(0x00000000),
+          elevation: 0,
+          foregroundColor: Colors.black,
+          title: Text("Make Payment"),
+          leading: Builder(
+            builder: (context) {
+              return Container(
+              width: 25,
+              height: 25,
+              margin: const EdgeInsets.only(left: 10.0, top: 10.0),
+              decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.all(Radius.circular(25))),
+              child: new IconButton(
+                icon: new Icon(Icons.arrow_back, color: Colors.black),
+                onPressed: () =>
+                    Navigator.of(context).pop(),
+              ),
+        );
+            }
+          ),
+        ),
         body: Padding(
           padding: const EdgeInsets.only(
             left: 15.0,
@@ -76,6 +102,8 @@ class _MakePaymentPageState extends State<MakePaymentPage> {
           child: Container(
             child: Center(
                 child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 const SizedBox(
                   height: 30,
@@ -114,41 +142,24 @@ class _MakePaymentPageState extends State<MakePaymentPage> {
                 const SizedBox(
                   height: 20,
                 ),
-                TextFormField(
-                  controller: _phoneNumberController,
-                  focusNode: _focusPhoneNumber,
-                  decoration: const InputDecoration(
-                    labelText: 'Phone Number',
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.all(Radius.circular(12)),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Text('Secret Code'),
+                    const SizedBox(height: 5),
+                    TextFormField(
+                      controller: _secretCodeController,
+                      focusNode: _focusSecretCode,
+                      decoration: const InputDecoration(
+                        floatingLabelBehavior: FloatingLabelBehavior.never,
+                        isDense: true,
+                        labelText: 'Enter secret code',
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(12)),
+                        ),
+                      ),
                     ),
-                  ),
-                ),
-                const SizedBox(
-                  height: 20,
-                ),
-                TextFormField(
-                  controller: _amountController,
-                  focusNode: _focusAmount,
-                  decoration: const InputDecoration(
-                    labelText: 'Amount',
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.all(Radius.circular(12)),
-                    ),
-                  ),
-                ),
-                const SizedBox(
-                  height: 20,
-                ),
-                TextFormField(
-                  controller: _secretCodeController,
-                  focusNode: _focusSecretCode,
-                  decoration: const InputDecoration(
-                    labelText: 'Secret Code',
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.all(Radius.circular(12)),
-                    ),
-                  ),
+                  ],
                 ),
                 const SizedBox(
                   height: 20,
@@ -163,7 +174,11 @@ class _MakePaymentPageState extends State<MakePaymentPage> {
                     // style: ButtonStyle(
                     // padding: EdgeInsetsGeometry),
                     onPressed: () {
-                      makePayment(_phoneNumberController.text, _amountController.text, _secretCodeController.text, _companyIDController.text);
+                      makePayment(
+                          _phoneNumberController.text,
+                          _amountController.text,
+                          _secretCodeController.text,
+                          _companyIDController.text);
                     },
                     child: Text(
                       "Make Payment",

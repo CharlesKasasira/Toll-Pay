@@ -20,17 +20,17 @@ class _SplashPageState extends AuthState<SplashPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.black,
+      backgroundColor: Color(0xfff5f5f5),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           Image.asset(
-            "assets/images/Toll-Pay.png",
-            width: 100,
+            "assets/images/TollPay-logo.png",
+            width: 150,
           ),
-          Text("Toll Pay", style: TextStyle(fontSize: 30, color: Colors.white),),
+          // Text("Toll Pay", style: TextStyle(fontSize: 30, color: Colors.white),),
         ],
       ),),
     );
