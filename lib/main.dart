@@ -62,7 +62,7 @@ class MyApp extends StatelessWidget {
         '/forgot': (_) => const ForgotPage(),
         '/generate': (_) => GeneratePage(),
         '/map': (_) => const MyMap(),
-        '/payment': (_) => const PaymentPage(),
+        '/payment': (_) => PaymentPage(),
         '/make-payment': (_) => MakePaymentPage(),
       },
     );

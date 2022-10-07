@@ -218,7 +218,7 @@ class _HomePageState extends AuthRequiredState<HomePage> {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (context) => const PaymentPage()),
+                            builder: (context) => PaymentPage(user: _user)),
                       );
                     },
                     child: const Text(

@@ -118,7 +118,7 @@ class _MyDrawerState extends State<MyDrawer> {
             onTap: () {
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => const PaymentPage()),
+                MaterialPageRoute(builder: (context) => PaymentPage(user: widget.user)),
               );
             },
           ),

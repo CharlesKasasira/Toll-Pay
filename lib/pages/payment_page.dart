@@ -7,7 +7,8 @@ import 'package:otp_text_field/otp_field.dart';
 import 'package:otp_text_field/style.dart';
 
 class PaymentPage extends StatefulWidget {
-  const PaymentPage({Key? key}) : super(key: key);
+  var user;
+  PaymentPage({Key? key, this.user}) : super(key: key);
 
   @override
   State<PaymentPage> createState() => _PaymentPageState();
@@ -60,7 +61,13 @@ class _PaymentPageState extends State<PaymentPage> {
     //   }),
     // ).then((value) => value);
     Navigator.push(
-        context, MaterialPageRoute(builder: (context) => GeneratePage()));
+        context,
+        MaterialPageRoute(
+            builder: (context) => GeneratePage(
+                  amount: feesPerItems[dropdownvalue],
+                  phone: _phoneNumberController.text,
+                  user: widget.user
+                )));
     return null;
   }
 
@@ -101,6 +108,7 @@ class _PaymentPageState extends State<PaymentPage> {
   @override
   Widget build(BuildContext context) {
     int count = 0;
+    print(feesPerItems[dropdownvalue]);
     return GestureDetector(
       onTap: () {
         _focusPhoneNumber.unfocus();
@@ -348,9 +356,12 @@ class _PaymentPageState extends State<PaymentPage> {
                                             style:
                                                 TextStyle(color: Colors.white),
                                           ),
-                                          onPressed: () => Navigator.pop(context),
+                                          onPressed: () =>
+                                              Navigator.pop(context),
                                         )),
-                                        const SizedBox(height: 10,)
+                                    const SizedBox(
+                                      height: 10,
+                                    )
                                   ],
                                 ),
                               ));
