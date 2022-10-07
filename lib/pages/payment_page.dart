@@ -59,9 +59,8 @@ class _PaymentPageState extends State<PaymentPage> {
     //     "metadata": "Entebbe Express Toll Payment"
     //   }),
     // ).then((value) => value);
-        Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => GeneratePage()));
+    Navigator.push(
+        context, MaterialPageRoute(builder: (context) => GeneratePage()));
     return null;
   }
 
@@ -293,73 +292,68 @@ class _PaymentPageState extends State<PaymentPage> {
                     // style: ButtonStyle(
                     // padding: EdgeInsetsGeometry),
                     onPressed: () {
-                      if (selected == 1) {
-                        getMtnSecretCode(_phoneNumberController.text);
-                      }
-                      showModalBottomSheet<void>(
+                      showModalBottomSheet(
+                          shape: const RoundedRectangleBorder(
+                              borderRadius: BorderRadius.vertical(
+                                  top: Radius.circular(25.0))),
+                          // backgroundColor: Colors.grey,
                           context: context,
                           isScrollControlled: true,
-                          //                   shape: RoundedRectangleBorder(
-                          // borderRadius: BorderRadius.vertical(top: Radius.circular(25.0))),
-                          backgroundColor: Colors.transparent,
-                          builder: (BuildContext context) {
-                            return Container(
-                              height: 200,
-                              padding: EdgeInsets.all(20),
-                              decoration: BoxDecoration(
-                                  color: Colors.white,
-                                  borderRadius: BorderRadius.vertical(
-                                      top: Radius.circular(20))),
-                              child: Center(
-                                  child: Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                mainAxisSize: MainAxisSize.min,
-                                children: <Widget>[
-                                  const SizedBox(
-                                    height: 10,
-                                  ),
-                                  const Text(
-                                    'Enter Secret Code',
-                                    style: TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 20),
-                                  ),
-                                  const SizedBox(height: 10),
-                                  OTPTextField(
-                                    length: 6,
-                                    width: MediaQuery.of(context).size.width,
-                                    fieldWidth: 50,
-                                    style: TextStyle(fontSize: 17),
-                                    textFieldAlignment:
-                                        MainAxisAlignment.spaceAround,
-                                    fieldStyle: FieldStyle.underline,
-                                    onCompleted: (pin) {
-                                      // print("Completed: " + pin);
-                                      makePayment(pin);
-                                    },
-                                  ),
-                                  const SizedBox(
-                                    height: 10,
-                                  ),
-                                  Container(
-                                    width:
-                                        MediaQuery.of(context).size.width - 36,
-                                    height: 40,
-                                    decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(8),
-                                        color: Colors.black),
-                                    child: TextButton(
-                                      child: const Text(
-                                        "Cancel",
-                                        style: TextStyle(color: Colors.white),
+                          builder: (context) => Padding(
+                                padding: EdgeInsets.only(
+                                    top: 20,
+                                    right: 20,
+                                    left: 20,
+                                    bottom: MediaQuery.of(context)
+                                        .viewInsets
+                                        .bottom),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    Center(
+                                      child: Text(
+                                        'Enter Secret Code',
                                       ),
-                                      onPressed: () => Navigator.pop(context),
                                     ),
-                                  ),
-                                ],
-                              )),
-                            );
-                          });
+                                    const SizedBox(height: 10),
+                                    OTPTextField(
+                                      length: 6,
+                                      width: MediaQuery.of(context).size.width,
+                                      fieldWidth: 30,
+                                      style: TextStyle(fontSize: 14),
+                                      textFieldAlignment:
+                                          MainAxisAlignment.spaceAround,
+                                      fieldStyle: FieldStyle.underline,
+                                      onCompleted: (pin) {
+                                        // print("Completed: " + pin);
+                                        makePayment(pin);
+                                      },
+                                    ),
+                                    const SizedBox(
+                                      height: 10,
+                                    ),
+                                    Container(
+                                        width:
+                                            MediaQuery.of(context).size.width -
+                                                36,
+                                        height: 40,
+                                        decoration: BoxDecoration(
+                                            borderRadius:
+                                                BorderRadius.circular(8),
+                                            color: Colors.black),
+                                        child: TextButton(
+                                          child: const Text(
+                                            "Cancel",
+                                            style:
+                                                TextStyle(color: Colors.white),
+                                          ),
+                                          onPressed: () => Navigator.pop(context),
+                                        )),
+                                        const SizedBox(height: 10,)
+                                  ],
+                                ),
+                              ));
                     },
                     child: Text(
                       "Continue",

@@ -26,6 +26,7 @@ class _HomePageState extends AuthRequiredState<HomePage> {
   String? _avatarUrl;
   String? firstName;
   String? lastName;
+  var _user;
   bool _loading = false;
 
   Future fetchWeather() async {
@@ -61,6 +62,7 @@ class _HomePageState extends AuthRequiredState<HomePage> {
     final data = response.data;
     firstName = (data['first_name'] ?? '') as String;
     lastName = (data['last_name'] ?? '') as String;
+    _avatarUrl = (data['avatar_url'] ?? '') as String;
 
     setState(() {
       _loading = false;
@@ -91,6 +93,7 @@ class _HomePageState extends AuthRequiredState<HomePage> {
   @override
   void onAuthenticated(Session session) {
     final user = session.user;
+    _user = user;
     if (user != null) {
       _userId = user.id;
       _getProfile(user.id);
@@ -105,6 +108,7 @@ class _HomePageState extends AuthRequiredState<HomePage> {
     if (route != null) {
       pageName = route.settings.name == '/dashboard' ? "Dashboard" : "";
     }
+    print(_user);
 
     return Scaffold(
       backgroundColor: Color(0xffF5F5F5),
@@ -316,13 +320,13 @@ class _HomePageState extends AuthRequiredState<HomePage> {
           ],
         ),
       ),
-      drawer: MyDrawer(),
+      drawer: MyDrawer(user: _user, imageUrl: _avatarUrl, firstName: firstName, lastName: lastName),
     );
   }
 }
 
 Widget getLocationScreen(location) {
-  print(location);
+  print(location.icon);
   List<IconData> gridIcons = [
     FontAwesomeIcons.thermometerThreeQuarters,
     FontAwesomeIcons.temperatureLow,
@@ -345,6 +349,15 @@ Widget getLocationScreen(location) {
     'Rain': FontAwesomeIcons.cloudRain,
     'Snow': FontAwesomeIcons.snowflake,
     'Drizzle': FontAwesomeIcons.cloudShowersHeavy,
+    'Clear': FontAwesomeIcons.cloudShowersHeavy,
+  };
+
+  Map<String, String> mainList = {
+    'Clouds': "Partly Cloudy",
+    'Rain': "Rain",
+    'Snow': "Heavy rain",
+    'Drizzle': "Drizzling",
+    'Clear': "Clear Sky",
   };
 
   // List<String> gridValues = [
@@ -381,24 +394,27 @@ Widget getLocationScreen(location) {
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           Column(
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Container(
-                width: 100,
-                height: 100,
-                alignment: Alignment.center,
-                decoration:
-                    BoxDecoration(borderRadius: BorderRadius.circular(8)),
-                child: FaIcon(
-                  descList[location.description],
-                  size: 60,
-                  // color: Color(0x5f1A1A1A),
-                ),
-              ),
-              const SizedBox(height: 8),
+              Image.network(
+                  "http://openweathermap.org/img/wn/${location.icon}@2x.png"),
+              // Container(
+              //   // width: 100,
+              //   // height: 100,
+              //   padding: EdgeInsets.only(bottom: 5),
+              //   alignment: Alignment.center,
+              //   decoration:
+              //       BoxDecoration(borderRadius: BorderRadius.circular(8)),
+              //   child: FaIcon(
+              //     descList[location.main],
+              //     size: 60,
+              //     // color: Color(0x5f1A1A1A),
+              //   ),
+              // ),
               Text(
                 "${location.description}",
                 style: TextStyle(
-                  fontSize: 28,
+                  fontSize: 17,
                 ),
               ),
             ],

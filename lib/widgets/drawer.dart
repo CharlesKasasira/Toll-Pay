@@ -9,7 +9,11 @@ import 'package:ysave/pages/scan_qr.dart';
 import 'package:ysave/utils/constants.dart';
 
 class MyDrawer extends StatefulWidget {
-  const MyDrawer({Key? key}) : super(key: key);
+  var user;
+  String? imageUrl;
+  String? firstName;
+  String? lastName;
+  MyDrawer({this.user, this.imageUrl, this.firstName, this.lastName, Key? key}) : super(key: key);
 
   @override
   State<MyDrawer> createState() => _MyDrawerState();
@@ -51,6 +55,7 @@ class _MyDrawerState extends State<MyDrawer> {
 
   @override
   Widget build(BuildContext context) {
+    print("image is ${widget.imageUrl}");
     return Drawer(
       child: ListView(
         padding: EdgeInsets.zero,
@@ -62,7 +67,7 @@ class _MyDrawerState extends State<MyDrawer> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                if (_avatarUrl == null || _avatarUrl!.isEmpty)
+                if (widget.imageUrl == null || widget.imageUrl!.isEmpty)
                   Container(
                     width: 80,
                     height: 80,
@@ -71,27 +76,38 @@ class _MyDrawerState extends State<MyDrawer> {
                       borderRadius: BorderRadius.all(Radius.circular(50.0)),
                       color: Color(0xffF5F5F5),
                     ),
-                    child: const Text("C", style: TextStyle(fontWeight: FontWeight.bold, color: Color(0xff1a1a1a), fontSize: 30),),
+                    child: const Text(
+                      "C",
+                      style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          color: Color(0xff1a1a1a),
+                          fontSize: 30),
+                    ),
                   )
                 else
-                  Container(
-                    width: 80.0,
-                    height: 80.0,
-                    decoration: BoxDecoration(
-                      image: DecorationImage(
-                          fit: BoxFit.cover, image: NetworkImage(_avatarUrl!)),
-                      borderRadius: BorderRadius.all(Radius.circular(50.0)),
-                      color: Colors.grey,
+                  ClipRRect(
+                    borderRadius: BorderRadius.circular(75.0),
+                    child: Image.network(
+                      widget.imageUrl!,
+                      width: 80,
+                      height: 80,
+                      fit: BoxFit.cover,
                     ),
                   ),
-                  const SizedBox(height: 12,),
-                const Text(
-                  'Charles Kasasira',
-                  style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 17),
+                const SizedBox(
+                  height: 12,
                 ),
-                const Text(
-                  'charleskasasira01@gmail.com',
-                  style: TextStyle(color: Colors.white, fontWeight: FontWeight.normal),
+                Text(
+                  '${widget.firstName} ${widget.lastName}',
+                  style: const TextStyle(
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 17),
+                ),
+                Text(
+                  "${widget.user.email}",
+                  style: const TextStyle(
+                      color: Colors.white, fontWeight: FontWeight.normal),
                 ),
               ],
             ),
@@ -136,33 +152,34 @@ class _MyDrawerState extends State<MyDrawer> {
               );
             },
           ),
-          const SizedBox(height: 20,),
+          const SizedBox(
+            height: 20,
+          ),
           const Divider(
             thickness: 3,
           ),
           ListTile(
             leading: const Icon(Icons.settings_outlined),
             title: const Text('Settings'),
-            onTap: ()async {
+            onTap: () async {
               final response = await supabase.auth.signOut();
-            final error = response.error;
-            if (error != null) {
-              context.showErrorSnackBar(message: error.message);
-            }
+              final error = response.error;
+              if (error != null) {
+                context.showErrorSnackBar(message: error.message);
+              }
             },
           ),
           ListTile(
             leading: const Icon(Icons.logout),
             title: const Text('Log Out'),
-            onTap: ()async {
+            onTap: () async {
               final response = await supabase.auth.signOut();
-            final error = response.error;
-            if (error != null) {
-              context.showErrorSnackBar(message: error.message);
-            }
+              final error = response.error;
+              if (error != null) {
+                context.showErrorSnackBar(message: error.message);
+              }
             },
           ),
-          
         ],
       ),
     );
