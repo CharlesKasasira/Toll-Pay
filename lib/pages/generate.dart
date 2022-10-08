@@ -6,10 +6,20 @@ import '../utils/constants.dart';
 
 class GeneratePage extends StatefulWidget {
   var amount;
+  var plate;
   var user;
+  String? firstName;
+  String? lastName;
 
   String? phone;
-  GeneratePage({this.amount, this.phone, this.user, Key? key})
+  GeneratePage(
+      {this.amount,
+      this.phone,
+      this.user,
+      this.firstName,
+      this.lastName,
+      this.plate,
+      Key? key})
       : super(key: key);
   @override
   State<StatefulWidget> createState() => GeneratePageState();
@@ -17,43 +27,16 @@ class GeneratePage extends StatefulWidget {
 
 class GeneratePageState extends State<GeneratePage> {
 // already generated qr code when the page opens
-  String? firstName;
-  String? lastName;
-  bool _loading = false;
-
-//get users Profile
-  Future<void> _getProfile(String userId) async {
-    setState(() {
-      _loading = true;
-    });
-    final response = await supabase
-        .from('profiles')
-        .select()
-        .eq('id', userId)
-        .single()
-        .execute();
-    final error = response.error;
-    if (error != null && response.status != 406) {
-      context.showErrorSnackBar(message: error.message);
-    }
-    final data = response.data;
-    firstName = (data['first_name'] ?? '') as String;
-    lastName = (data['last_name'] ?? '') as String;
-
-    setState(() {
-      _loading = false;
-    });
-  }
-
-  @override
-  void onAuthenticated(Session session) {
-    
-  }
 
   @override
   Widget build(BuildContext context) {
-    print(firstName);
-    String qrData = "${widget.amount}, ${firstName}, ${lastName}";
+    String qrData = """
+      Amount: ${widget.amount} 
+      First Name: ${widget.firstName} 
+      Last Name: ${widget.lastName} 
+      Plate Number: ${widget.plate}
+      Paid
+    """;
     int count = 0;
     return Scaffold(
       backgroundColor: Color(0xffF6F6F6),
@@ -107,6 +90,7 @@ class GeneratePageState extends State<GeneratePage> {
               ),
               child: QrImage(
                 //plce where the QR Image will be shown
+                embeddedImage: AssetImage('assets/images/qr-icon.png'),
                 data: qrData,
               ),
             ),
@@ -117,32 +101,6 @@ class GeneratePageState extends State<GeneratePage> {
               "* Your QR code is private, if you share it with someone, they can try to scan and use it.",
               style: TextStyle(fontSize: 15.0),
             ),
-            // Padding(
-            //   padding: EdgeInsets.fromLTRB(40, 20, 40, 0),
-            //   child: TextButton(
-            //     // padding: EdgeInsets.all(15.0),
-            //     onPressed: () async {
-            //       if (qrdataFeed.text.isEmpty) {
-            //         //a little validation for the textfield
-            //         setState(() {
-            //           qrData = "";
-            //         });
-            //       } else {
-            //         setState(() {
-            //           qrData = qrdataFeed.text;
-            //         });
-            //       }
-            //     },
-            //     child: Text(
-            //       "Generate QR",
-            //       style: TextStyle(
-            //           color: Colors.blue, fontWeight: FontWeight.bold),
-            //     ),
-            //     // shape: RoundedRectangleBorder(
-            //     //     side: BorderSide(color: Colors.blue, width: 3.0),
-            //     //     borderRadius: BorderRadius.circular(20.0)),
-            //   ),
-            // )
           ],
         ),
       ),

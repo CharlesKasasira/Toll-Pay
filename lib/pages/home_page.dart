@@ -108,7 +108,6 @@ class _HomePageState extends AuthRequiredState<HomePage> {
     if (route != null) {
       pageName = route.settings.name == '/dashboard' ? "Dashboard" : "";
     }
-    print(_user);
 
     return Scaffold(
       backgroundColor: Color(0xffF5F5F5),
@@ -218,7 +217,7 @@ class _HomePageState extends AuthRequiredState<HomePage> {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (context) => PaymentPage(user: _user)),
+                            builder: (context) => PaymentPage(user: _user, firstName: firstName, lastName: lastName),),
                       );
                     },
                     child: const Text(

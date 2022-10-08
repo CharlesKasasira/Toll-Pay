@@ -8,7 +8,10 @@ import 'package:otp_text_field/style.dart';
 
 class PaymentPage extends StatefulWidget {
   var user;
-  PaymentPage({Key? key, this.user}) : super(key: key);
+  String? firstName;
+  String? lastName;
+  PaymentPage({Key? key, this.user, this.firstName, this.lastName})
+      : super(key: key);
 
   @override
   State<PaymentPage> createState() => _PaymentPageState();
@@ -17,57 +20,72 @@ class PaymentPage extends StatefulWidget {
 class _PaymentPageState extends State<PaymentPage> {
   var myAnswer = "";
   late final TextEditingController _phoneNumberController;
+  late final TextEditingController _plateNumberController;
   final _focusPhoneNumber = FocusNode();
+  final _focusPlateNumber = FocusNode();
 
   @override
   void initState() {
     _phoneNumberController = TextEditingController();
+    _plateNumberController = TextEditingController();
     super.initState();
   }
 
   @override
   void dispose() {
     _phoneNumberController.dispose();
+    _plateNumberController.dispose();
     super.dispose();
   }
 
   Future<http.Response>? getMtnSecretCode(String phone) {
-    // return http.post(
-    //   Uri.parse('https://app.shineafrika.com/send-token'),
-    //   headers: <String, String>{
-    //     'Content-Type': 'application/json; charset=UTF-8',
-    //   },
-    //   body: jsonEncode(
-    //       <String, String>{"mobile_money_company_id": "1", "phone": phone}),
-    // );
+    return http.post(
+      Uri.parse('https://app.shineafrika.com/api/send-token'),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+      body: jsonEncode(
+        <String, String>{"mobile_money_company_id": "1", "phone": phone},
+      ),
+    );
     // Navigator.of(context)
     //     .pushNamedAndRemoveUntil('/make-payment', (route) => false);
-    return null;
+    // return null;
   }
 
   Future<http.Response>? makePayment(String secretCode) {
-    // return http.post(
-    //   Uri.parse('https://app.shineafrika.com/make-payment'),
-    //   headers: <String, String>{
-    //     'Content-Type': 'application/json; charset=UTF-8',
-    //   },
-    //   body: jsonEncode(<String, String>{
-    //     "amount": amount,
-    //     "phone": phone,
-    //     "secret_code": secretCode,
-    //     "mobile_money_company_id": companyID,
-    //     "reason": "Entebbe Express Toll Payment",
-    //     "metadata": "Entebbe Express Toll Payment"
-    //   }),
-    // ).then((value) => value);
-    Navigator.push(
+    http
+        .post(
+          Uri.parse('https://app.shineafrika.com/api/make-payment'),
+          headers: <String, String>{
+            'Content-Type': 'application/json; charset=UTF-8',
+          },
+          body: jsonEncode(<String, String>{
+            "amount": feesPerItems[dropdownvalue],
+            "phone": _phoneNumberController.text,
+            "secret_code": secretCode,
+            "mobile_money_company_id": "1",
+            "reason": "Entebbe Express Toll Payment",
+            "metadata": "Entebbe Express Toll Payment"
+          }),
+        )
+        .then((value) => value);
+    
+    Future.delayed(const Duration(milliseconds: 1000), () {
+      Navigator.push(
         context,
         MaterialPageRoute(
             builder: (context) => GeneratePage(
-                  amount: feesPerItems[dropdownvalue],
-                  phone: _phoneNumberController.text,
-                  user: widget.user
-                )));
+                amount: feesPerItems[dropdownvalue],
+                phone: _phoneNumberController.text,
+                plate: _plateNumberController.text,
+                user: widget.user,
+                firstName: widget.firstName,
+                lastName: widget.lastName)));
+        setState(() {});
+
+      });
+    
     return null;
   }
 
@@ -108,10 +126,10 @@ class _PaymentPageState extends State<PaymentPage> {
   @override
   Widget build(BuildContext context) {
     int count = 0;
-    print(feesPerItems[dropdownvalue]);
     return GestureDetector(
       onTap: () {
         _focusPhoneNumber.unfocus();
+        _focusPlateNumber.unfocus();
       },
       child: Scaffold(
         backgroundColor: Color(0xffF6F6F6),
@@ -224,6 +242,26 @@ class _PaymentPageState extends State<PaymentPage> {
                     ),
                   ],
                 ),
+                const SizedBox(height: 10,),
+                Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const Text('Plate Number'),
+                      const SizedBox(height: 5),
+                      TextFormField(
+                        controller: _plateNumberController,
+                        focusNode: _focusPlateNumber,
+                        keyboardType: TextInputType.number,
+                        decoration: const InputDecoration(
+                          floatingLabelBehavior: FloatingLabelBehavior.never,
+                          labelText: 'Enter plate number',
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.all(Radius.circular(12)),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
                 const SizedBox(height: 12),
                 Row(
                   children: [
@@ -300,6 +338,7 @@ class _PaymentPageState extends State<PaymentPage> {
                     // style: ButtonStyle(
                     // padding: EdgeInsetsGeometry),
                     onPressed: () {
+                      getMtnSecretCode(_phoneNumberController.text);
                       showModalBottomSheet(
                           shape: const RoundedRectangleBorder(
                               borderRadius: BorderRadius.vertical(

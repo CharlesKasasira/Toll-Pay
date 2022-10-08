@@ -118,7 +118,7 @@ class _ForgotPageState extends AuthState<ForgotPage> {
                       // style: ButtonStyle(
                         // padding: EdgeInsetsGeometry),
                   onPressed: _isLoading ? null : _signIn,
-                  child: Text(_isLoading ? 'Loading' : 'Login'),
+                  child: Text(_isLoading ? 'Loading' : 'Submit'),
                 ),
                   ),
                 
@@ -128,7 +128,7 @@ class _ForgotPageState extends AuthState<ForgotPage> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  const Text("Remember password,"),
+                  const Text("Remember password?,"),
                   TextButton(
                     style: ButtonStyle(
                       foregroundColor:

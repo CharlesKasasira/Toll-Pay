@@ -5,11 +5,11 @@
 Table A: Group Members
 | # | Names | Role |
 | :--- | --- | --- |
-| 1 | Kasasira Charles Derrick | - |
-| 2 | Lukyamuzi Akram | - |
-| 3 | Nakuwanda Hellen Bridget | - |
-| 4 | Langalafa Gideon Ohure | - |
-| 5 | Tangaya Daphine Damalie | - |
+| 1 | Kasasira Charles Derrick | Google Maps & Weath API |
+| 2 | Lukyamuzi Akram | Generate QR |
+| 3 | Nakuwanda Hellen Bridget | Authentication |
+| 4 | Langalafa Gideon Ohure | User Interface Inital Screen |
+| 5 | Tangaya Daphine Damalie | Mobile Payment Integration |
 
 
 ## Problem Statement
