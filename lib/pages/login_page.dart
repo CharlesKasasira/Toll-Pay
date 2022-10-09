@@ -1,10 +1,7 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:supabase/supabase.dart';
-import 'package:ysave/components/auth_state.dart';
-import 'package:ysave/utils/constants.dart';
-import 'package:flutter/services.dart';
-import 'package:ysave/utils/validator.dart';
+import 'package:tollpay/components/auth_state.dart';
+import 'package:tollpay/utils/constants.dart';
+import 'package:tollpay/utils/validator.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);

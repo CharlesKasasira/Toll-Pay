@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
 
 class ColorConstants {
-  static const kblackColor = Colors.black;
-  static const kwhiteColor = Colors.white;
-  static const korangeColor = Color(0xfffe752f);
-  static const kgreyColor = Color(0xff909090);
-  static const gblackColor = Color(0xff242424);
-  static const cblackColor = Color(0xFF313131);
-  static const corangeColor = Color(0xffdd601e);
+  static const kprimary = Color(0xfffafafa);
+  static const ksecondary = Color(0xff1a1a1a);
+  static const kExpressGreen = Color(0xff005620);
+  static const klightGreen = Color(0xffd7eb00);
+  static const ktransparent = Colors.transparent;
 }

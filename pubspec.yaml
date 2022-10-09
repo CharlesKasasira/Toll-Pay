@@ -1,5 +1,5 @@
-name: ysave
-description: Sample app on how to get started with Supabase on Flutter.
+name: tollpay
+description: A toll road payment mobile application.
 
 publish_to: "none"
 
@@ -32,6 +32,7 @@ dependencies:
   qr_code_scanner: ^1.0.1
   qr_flutter: ^4.0.0
   supabase_flutter: ^0.2.9
+  timeago: ^3.3.0
 
 dev_dependencies:
   flutter_test:

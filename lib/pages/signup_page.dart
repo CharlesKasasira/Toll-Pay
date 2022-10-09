@@ -1,8 +1,8 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:supabase/supabase.dart';
-import 'package:ysave/components/auth_state.dart';
-import 'package:ysave/utils/constants.dart';
+import 'package:tollpay/components/auth_state.dart';
+import 'package:tollpay/utils/constants.dart';
 
 class SignupPage extends StatefulWidget {
   const SignupPage({Key? key}) : super(key: key);
@@ -26,16 +26,25 @@ class _SignupPageState extends AuthState<SignupPage> {
     Navigator.of(context).pushNamedAndRemoveUntil('/login', (route) => false);
   }
 
-  Future<void> _signIn() async {
+  Future<void> _signUp() async {
     setState(() {
       _isLoading = true;
     });
+    final username = _namesController.text;
+    final phoneNumber = _phoneNumberController.text;
 
-    final response = await supabase.auth
-        .signUp(_emailController.text, _passwordController.text);
+    final response = await supabase.auth.signUp(
+      _emailController.text,
+      _passwordController.text,
+      userMetadata: {
+        "username": username,
+        "phone": phoneNumber
+      },
+    );
 
     final error = response.error;
     if (error != null) {
+      print(error);
       context.showErrorSnackBar(message: error.message);
     } else {
       context.showSnackBar(message: 'You have created your account');
@@ -107,6 +116,7 @@ class _SignupPageState extends AuthState<SignupPage> {
                       TextFormField(
                         controller: _emailController,
                         focusNode: _focusEmail,
+                        keyboardType: TextInputType.emailAddress,
                         decoration: const InputDecoration(
                           isDense: true,
                           floatingLabelBehavior: FloatingLabelBehavior.never,
@@ -125,7 +135,6 @@ class _SignupPageState extends AuthState<SignupPage> {
                       const Text('Full Name'),
                       const SizedBox(height: 5),
                       TextFormField(
-                        obscureText: true,
                         controller: _namesController,
                         focusNode: _focusNames,
                         decoration: const InputDecoration(
@@ -146,6 +155,7 @@ class _SignupPageState extends AuthState<SignupPage> {
                       const Text('Phone Number'),
                       const SizedBox(height: 5),
                       TextFormField(
+                        keyboardType: TextInputType.phone,
                         controller: _phoneNumberController,
                         focusNode: _focusPhoneNumber,
                         decoration: const InputDecoration(
@@ -187,7 +197,7 @@ class _SignupPageState extends AuthState<SignupPage> {
                         width: MediaQuery.of(context).size.width - 36,
                         height: 50,
                         child: ElevatedButton(
-                          onPressed: _isLoading ? null : _signIn,
+                          onPressed: _isLoading ? null : _signUp,
                           child: Text(_isLoading ? 'Loading' : 'Sign Up'),
                         ),
                       ),

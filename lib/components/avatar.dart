@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:ysave/utils/constants.dart';
+import 'package:tollpay/utils/constants.dart';
 
 class Avatar extends StatefulWidget {
   const Avatar({
@@ -30,11 +30,11 @@ class _AvatarState extends State<Avatar> {
               width: 120,
               height: 120,
               alignment: Alignment.bottomCenter,
-              decoration: BoxDecoration(
+              decoration: const BoxDecoration(
                 color: Color.fromARGB(255, 200, 200, 200),
                 // borderRadius: BorderRadius.circular(75.0),
               ),
-              child: Icon(Icons.person,
+              child: const Icon(Icons.person,
               size: 150,
               color: Colors.white,
               ),

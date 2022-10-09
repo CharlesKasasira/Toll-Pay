@@ -5,17 +5,17 @@
 Table A: Group Members
 | # | Names | Role |
 | :--- | --- | --- |
-| 1 | Kasasira Charles Derrick | Google Maps & Weath API |
+| 1 | Kasasira Charles Derrick | Google Maps & Weather API |
 | 2 | Lukyamuzi Akram | Generate QR |
 | 3 | Nakuwanda Hellen Bridget | Authentication |
-| 4 | Langalafa Gideon Ohure | User Interface Inital Screen |
+| 4 | Langalafa Gideon Ohure | User Interface |
 | 5 | Tangaya Daphine Damalie | Mobile Payment Integration |
 
 
 ## Problem Statement
 ---
 
-TRoad tolling is a method of raising revenue form transport infrastructure through imposing a charge or fee on the vehicle. In Uganda today, we have one toll road at the Entebbe express highway and from the UNRA toll poll section 10.7 the allowed method of payment is by cash and credit cards, operator cards, mobile money and others. Payment by cash leads to too much waste of time at the toll and in some extreme cars there is a holder while wanting for balance at this toll pay.
+Road tolling is a method of raising revenue form transport infrastructure through imposing a charge or fee on the vehicle. In Uganda today, we have one toll road at the Entebbe express highway and from the UNRA toll poll section 10.7 the allowed method of payment is by cash and credit cards, operator cards, mobile money and others. Payment by cash leads to too much waste of time at the toll and in some extreme cars there is a holder while wanting for balance at this toll pay.
 
 
 ## Our Solution (Toll Pay)

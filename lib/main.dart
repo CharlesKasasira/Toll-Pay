@@ -1,17 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
-import 'package:ysave/pages/account_page.dart';
-import 'package:ysave/pages/forgot_password.dart';
-import 'package:ysave/pages/generate.dart';
-import 'package:ysave/pages/home_page.dart';
-import 'package:ysave/pages/login_page.dart';
-import 'package:ysave/pages/make_payment.dart';
-import 'package:ysave/pages/maps_page.dart';
-import 'package:ysave/pages/payment_page.dart';
-import 'package:ysave/pages/signup_page.dart';
-import 'package:ysave/pages/splash_page.dart';
-import 'package:flutter/services.dart';
+import 'package:tollpay/pages/account_page.dart';
+import 'package:tollpay/pages/chat_page.dart';
+import 'package:tollpay/pages/forgot_password.dart';
+import 'package:tollpay/pages/generate.dart';
+import 'package:tollpay/pages/home_page.dart';
+import 'package:tollpay/pages/login_page.dart';
+import 'package:tollpay/pages/maps_page.dart';
+import 'package:tollpay/pages/payment_page.dart';
+import 'package:tollpay/pages/signup_page.dart';
+import 'package:tollpay/pages/splash_page.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -29,7 +29,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.light.copyWith(
-            statusBarColor: Color(0xff1a1a1a),
+            statusBarColor: const Color(0xff1a1a1a),
             /* set Status bar color in Android devices. */
             statusBarIconBrightness: Brightness.light,
             /* set Status bar icons color in Android devices.*/
@@ -40,7 +40,7 @@ class MyApp extends StatelessWidget {
       title: 'Toll Pay',
       debugShowCheckedModeBanner: false,
       theme: ThemeData.light().copyWith(
-        appBarTheme: AppBarTheme(
+        appBarTheme: const AppBarTheme(
           systemOverlayStyle: SystemUiOverlayStyle.light
         ),
         primaryColor: Colors.black,
@@ -63,7 +63,7 @@ class MyApp extends StatelessWidget {
         '/generate': (_) => GeneratePage(),
         '/map': (_) => const MyMap(),
         '/payment': (_) => PaymentPage(),
-        '/make-payment': (_) => MakePaymentPage(),
+        '/chat': (_) => const ChatPage(),
       },
     );
   }

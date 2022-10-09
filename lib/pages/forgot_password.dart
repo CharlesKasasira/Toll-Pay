@@ -1,8 +1,8 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:supabase/supabase.dart';
-import 'package:ysave/components/auth_state.dart';
-import 'package:ysave/utils/constants.dart';
+import 'package:tollpay/components/auth_state.dart';
+import 'package:tollpay/utils/constants.dart';
 import 'package:flutter/services.dart';
 
 class ForgotPage extends StatefulWidget {

@@ -3,6 +3,11 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 
 final supabase = Supabase.instance.client;
 
+/// Simple preloader inside a Center widget
+const preloader =
+    Center(child: CircularProgressIndicator(color: Colors.black));
+
+// ignore: avoid_classes_with_only_static_members
 class ApiConstants {
   static String baseUrl = 'http://localhost:4000';
 }

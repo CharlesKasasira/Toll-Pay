@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:ysave/components/auth_state.dart';
+import 'package:tollpay/components/auth_state.dart';
 
 class SplashPage extends StatefulWidget {
   const SplashPage({Key? key}) : super(key: key);

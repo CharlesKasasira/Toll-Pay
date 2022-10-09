@@ -1,10 +1,10 @@
 import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import 'package:ysave/pages/generate.dart';
-import 'package:ysave/pages/make_payment.dart';
 import 'package:otp_text_field/otp_field.dart';
 import 'package:otp_text_field/style.dart';
+import 'package:tollpay/pages/generate.dart';
 
 class PaymentPage extends StatefulWidget {
   var user;
@@ -61,7 +61,7 @@ class _PaymentPageState extends State<PaymentPage> {
             'Content-Type': 'application/json; charset=UTF-8',
           },
           body: jsonEncode(<String, String>{
-            "amount": feesPerItems[dropdownvalue],
+            "amount": feesPerItems[dropdownvalue].toString(),
             "phone": _phoneNumberController.text,
             "secret_code": secretCode,
             "mobile_money_company_id": "1",

@@ -1,18 +1,19 @@
+import 'dart:convert';
+
+// ignore: unnecessary_import
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:supabase/supabase.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:ysave/components/auth_required_state.dart';
-import 'package:ysave/pages/generate.dart';
-import 'package:ysave/pages/payment_page.dart';
-import 'package:ysave/utils/constants.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:http/http.dart' as http;
-import 'dart:convert';
-import 'dart:math';
-import 'package:ysave/models/weather.dart';
-import 'package:ysave/widgets/drawer.dart';
+import 'package:supabase/supabase.dart';
+import 'package:tollpay/components/auth_required_state.dart';
+import 'package:tollpay/models/weather.dart';
+import 'package:tollpay/pages/payment_page.dart';
+import 'package:tollpay/utils/color_constants.dart';
+import 'package:tollpay/utils/constants.dart';
+import 'package:tollpay/widgets/drawer.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -30,16 +31,13 @@ class _HomePageState extends AuthRequiredState<HomePage> {
   bool _loading = false;
 
   Future fetchWeather() async {
-    print("start fetch !");
-    var url = Uri.parse(
+    final url = Uri.parse(
         "https://api.openweathermap.org/data/2.5/weather?q=Entebbe&units=metric&appid=${dotenv.env['WEATHER_API_KEY']}");
-    http.Response response = await http.get(url);
-    //status codes : 200 success, 404 city not found, 401 invalid API key
+    final http.Response response = await http.get(url);
     if (response.statusCode == 200) {
-      var json = jsonDecode(response.body);
+      final json = jsonDecode(response.body);
       return Weather.getWeather(json);
     } else {
-      print("Not found");
       return null;
     }
   }
@@ -57,6 +55,7 @@ class _HomePageState extends AuthRequiredState<HomePage> {
         .execute();
     final error = response.error;
     if (error != null && response.status != 406) {
+      // ignore: use_build_context_synchronously
       context.showErrorSnackBar(message: error.message);
     }
     final data = response.data;
@@ -67,27 +66,6 @@ class _HomePageState extends AuthRequiredState<HomePage> {
     setState(() {
       _loading = false;
     });
-  }
-
-  Future<void> _signOut() async {
-    final response = await supabase.auth.signOut();
-    final error = response.error;
-    if (error != null) {
-      context.showErrorSnackBar(message: error.message);
-    }
-  }
-
-  void moveToProfile() async {
-    Navigator.of(context).pushNamedAndRemoveUntil('/account', (route) => false);
-  }
-
-  void moveToGenerate() async {
-    Navigator.of(context)
-        .pushNamedAndRemoveUntil('/generate', (route) => false);
-  }
-
-  void moveToMap() async {
-    Navigator.of(context).pushNamedAndRemoveUntil('/map', (route) => false);
   }
 
   @override
@@ -110,13 +88,12 @@ class _HomePageState extends AuthRequiredState<HomePage> {
     }
 
     return Scaffold(
-      backgroundColor: Color(0xffF5F5F5),
+      backgroundColor: ColorConstants.kprimary,
       appBar: AppBar(
-        backgroundColor: Color(0x00000000),
-        shadowColor: null,
+        backgroundColor: ColorConstants.ktransparent,
         elevation: 0,
         foregroundColor: Colors.black,
-        title: Text("Home"),
+        title: const Text("Home"),
         leading: Builder(builder: (context) {
           return Container(
             width: 25,
@@ -128,13 +105,13 @@ class _HomePageState extends AuthRequiredState<HomePage> {
                     color: Colors.grey.withOpacity(0.2),
                     spreadRadius: 2,
                     blurRadius: 3,
-                    offset: Offset(0, 3), // changes position of shadow
+                    offset: const Offset(0, 3), // changes position of shadow
                   ),
                 ],
                 color: Colors.white,
-                borderRadius: BorderRadius.all(Radius.circular(25))),
-            child: new IconButton(
-              icon: new Icon(Icons.menu, color: Colors.black),
+                borderRadius: BorderRadius.all(Radius.circular(25)),),
+            child: IconButton(
+              icon: const Icon(Icons.menu, color: Colors.black),
               onPressed: () => Scaffold.of(context).openDrawer(),
             ),
           );
@@ -170,10 +147,10 @@ class _HomePageState extends AuthRequiredState<HomePage> {
               padding: const EdgeInsets.all(10),
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(10.0),
-                gradient: LinearGradient(
+                gradient: const LinearGradient(
                     colors: [Colors.black, Color(0xff636363)],
                     begin: Alignment.topLeft,
-                    end: Alignment.bottomRight),
+                    end: Alignment.bottomRight,),
               ),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -217,7 +194,11 @@ class _HomePageState extends AuthRequiredState<HomePage> {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (context) => PaymentPage(user: _user, firstName: firstName, lastName: lastName),),
+                          builder: (context) => PaymentPage(
+                              user: _user,
+                              firstName: firstName,
+                              lastName: lastName),
+                        ),
                       );
                     },
                     child: const Text(
@@ -233,14 +214,14 @@ class _HomePageState extends AuthRequiredState<HomePage> {
             ),
             Container(
               child: FutureBuilder(
-                future: this.fetchWeather(),
+                future: fetchWeather(),
                 builder: (context, snapshot) {
                   switch (snapshot.connectionState) {
                     case ConnectionState.none:
                     case ConnectionState.waiting:
                       return Container(
                           height: 180,
-                          padding: EdgeInsets.all(10),
+                          padding: const EdgeInsets.all(10),
                           alignment: Alignment.center,
                           decoration: BoxDecoration(
                             color: Colors.white,
@@ -251,7 +232,7 @@ class _HomePageState extends AuthRequiredState<HomePage> {
                                 spreadRadius: 2,
                                 blurRadius: 3,
                                 offset:
-                                    Offset(0, 3), // changes position of shadow
+                                    const Offset(0, 3), // changes position of shadow
                               ),
                             ],
                           ),
@@ -263,7 +244,7 @@ class _HomePageState extends AuthRequiredState<HomePage> {
                       return snapshot.data == null
                           ? Container(
                               height: 180,
-                              padding: EdgeInsets.all(10),
+                              padding: const EdgeInsets.all(10),
                               alignment: Alignment.center,
                               decoration: BoxDecoration(
                                 color: Colors.white,
@@ -273,8 +254,8 @@ class _HomePageState extends AuthRequiredState<HomePage> {
                                     color: Colors.grey.withOpacity(0.1),
                                     spreadRadius: 2,
                                     blurRadius: 3,
-                                    offset: Offset(
-                                        0, 3), // changes position of shadow
+                                    offset: const Offset(
+                                        0, 3,), // changes position of shadow
                                   ),
                                 ],
                               ),
@@ -313,35 +294,19 @@ class _HomePageState extends AuthRequiredState<HomePage> {
               "Last QR Codes",
               style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
             ),
-            ListTile(
-              title: Text(""),
-            )
           ],
         ),
       ),
-      drawer: MyDrawer(user: _user, imageUrl: _avatarUrl, firstName: firstName, lastName: lastName),
+      drawer: MyDrawer(
+          user: _user,
+          imageUrl: _avatarUrl,
+          firstName: firstName,
+          lastName: lastName),
     );
   }
 }
 
 Widget getLocationScreen(location) {
-  print(location.icon);
-  List<IconData> gridIcons = [
-    FontAwesomeIcons.thermometerThreeQuarters,
-    FontAwesomeIcons.temperatureLow,
-    FontAwesomeIcons.temperatureHigh,
-    FontAwesomeIcons.tachometerAlt,
-    FontAwesomeIcons.tint,
-    FontAwesomeIcons.wind
-  ];
-  List<String> gridHeaders = [
-    'Feels like',
-    'Temp min',
-    'Temp max',
-    'Pressure',
-    'Humidity',
-    'Wind'
-  ];
 
   Map<String, IconData> descList = {
     'Clouds': Icons.cloud_outlined,
@@ -351,28 +316,9 @@ Widget getLocationScreen(location) {
     'Clear': FontAwesomeIcons.cloudShowersHeavy,
   };
 
-  Map<String, String> mainList = {
-    'Clouds': "Partly Cloudy",
-    'Rain': "Rain",
-    'Snow': "Heavy rain",
-    'Drizzle': "Drizzling",
-    'Clear': "Clear Sky",
-  };
-
-  // List<String> gridValues = [
-  //   location.feelsLike,
-  //   location.tempMin,
-  //   location.tempMax,
-  //   location.pressure,
-  //   location.humidity,
-  //   location.windspeed
-  // ];
-
-  // Color screenColor = colorList[Random().nextInt(colorList.length)];
-
   return Container(
     height: 180,
-    padding: EdgeInsets.all(10),
+    padding: const EdgeInsets.all(10),
     alignment: Alignment.center,
     // width: MediaQuery.of().size.width,
     decoration: BoxDecoration(
@@ -383,7 +329,7 @@ Widget getLocationScreen(location) {
           color: Colors.grey.withOpacity(0.1),
           spreadRadius: 2,
           blurRadius: 3,
-          offset: Offset(0, 3), // changes position of shadow
+          offset: const Offset(0, 3), // changes position of shadow
         ),
       ],
     ),
@@ -396,30 +342,17 @@ Widget getLocationScreen(location) {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Image.network(
-                  "http://openweathermap.org/img/wn/${location.icon}@2x.png"),
-              // Container(
-              //   // width: 100,
-              //   // height: 100,
-              //   padding: EdgeInsets.only(bottom: 5),
-              //   alignment: Alignment.center,
-              //   decoration:
-              //       BoxDecoration(borderRadius: BorderRadius.circular(8)),
-              //   child: FaIcon(
-              //     descList[location.main],
-              //     size: 60,
-              //     // color: Color(0x5f1A1A1A),
-              //   ),
-              // ),
+                  "http://openweathermap.org/img/wn/${location.icon}@2x.png",),
               Text(
                 "${location.description}",
-                style: TextStyle(
-                  fontSize: 17,
+                style: const TextStyle(
+                  fontSize: 14,
                 ),
               ),
             ],
           ),
           const SizedBox(
-            width: 12,
+            width: 10,
           ),
           Column(
             crossAxisAlignment: CrossAxisAlignment.end,
@@ -427,10 +360,10 @@ Widget getLocationScreen(location) {
             children: [
               Text(
                 "${location.temp}",
-                style: TextStyle(
+                style: const TextStyle(
                     fontSize: 40,
                     fontWeight: FontWeight.bold,
-                    color: Color(0xff1a1a1a)),
+                    color: ColorConstants.ksecondary,),
               ),
               const SizedBox(
                 height: 5,
@@ -454,6 +387,6 @@ Widget getLocationScreen(location) {
           const SizedBox(
             width: 10,
           ),
-        ]),
+        ],),
   );
 }

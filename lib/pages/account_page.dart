@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:supabase/supabase.dart';
-import 'package:ysave/components/auth_required_state.dart';
-import 'package:ysave/components/avatar.dart';
-import 'package:ysave/utils/constants.dart';
+import 'package:tollpay/components/auth_required_state.dart';
+import 'package:tollpay/components/avatar.dart';
+import 'package:tollpay/utils/constants.dart';
 
 class AccountPage extends StatefulWidget {
   const AccountPage({Key? key}) : super(key: key);
