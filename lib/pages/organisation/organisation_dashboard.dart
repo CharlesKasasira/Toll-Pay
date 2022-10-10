@@ -23,7 +23,8 @@ class OrganisationHomePage extends StatefulWidget {
   _OrganisationHomePageState createState() => _OrganisationHomePageState();
 }
 
-class _OrganisationHomePageState extends AuthRequiredState<OrganisationHomePage> {
+class _OrganisationHomePageState
+    extends AuthRequiredState<OrganisationHomePage> {
   String? _userId;
   String? _avatarUrl;
   String? firstName;
@@ -64,7 +65,7 @@ class _OrganisationHomePageState extends AuthRequiredState<OrganisationHomePage>
     firstName = (data['first_name'] ?? '') as String;
     lastName = (data['last_name'] ?? '') as String;
     _avatarUrl = (data['avatar_url'] ?? '') as String;
-    _avatarUrl = (data['username'] ?? '') as String;
+    username = (data['username'] ?? '') as String;
 
     setState(() {
       _loading = false;
@@ -83,12 +84,7 @@ class _OrganisationHomePageState extends AuthRequiredState<OrganisationHomePage>
 
   @override
   Widget build(BuildContext context) {
-    final route = ModalRoute.of(context);
-    var pageName = "";
-
-    if (route != null) {
-      pageName = route.settings.name == '/dashboard' ? "Dashboard" : "";
-    }
+    print(username);
 
     return Scaffold(
       backgroundColor: ColorConstants.kprimary,
@@ -104,16 +100,17 @@ class _OrganisationHomePageState extends AuthRequiredState<OrganisationHomePage>
             height: 25,
             margin: const EdgeInsets.only(left: 10.0, top: 10.0, bottom: 5),
             decoration: BoxDecoration(
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.grey.withOpacity(0.2),
-                    spreadRadius: 2,
-                    blurRadius: 3,
-                    offset: const Offset(0, 3), // changes position of shadow
-                  ),
-                ],
-                color: Colors.white,
-                borderRadius: BorderRadius.all(Radius.circular(25)),),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.grey.withOpacity(0.2),
+                  spreadRadius: 2,
+                  blurRadius: 3,
+                  offset: const Offset(0, 3), // changes position of shadow
+                ),
+              ],
+              color: Colors.white,
+              borderRadius: BorderRadius.all(Radius.circular(25)),
+            ),
             child: IconButton(
               icon: const Icon(Icons.menu, color: Colors.black),
               onPressed: () => Scaffold.of(context).openDrawer(),
@@ -154,9 +151,10 @@ class _OrganisationHomePageState extends AuthRequiredState<OrganisationHomePage>
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(10.0),
                   gradient: const LinearGradient(
-                      colors: [Colors.black, Color(0xff636363)],
-                      begin: Alignment.topLeft,
-                      end: Alignment.bottomRight,),
+                    colors: [Colors.black, Color(0xff636363)],
+                    begin: Alignment.topLeft,
+                    end: Alignment.bottomRight,
+                  ),
                 ),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -237,8 +235,8 @@ class _OrganisationHomePageState extends AuthRequiredState<OrganisationHomePage>
                                   color: Colors.grey.withOpacity(0.1),
                                   spreadRadius: 2,
                                   blurRadius: 3,
-                                  offset:
-                                      const Offset(0, 3), // changes position of shadow
+                                  offset: const Offset(
+                                      0, 3), // changes position of shadow
                                 ),
                               ],
                             ),
@@ -261,7 +259,9 @@ class _OrganisationHomePageState extends AuthRequiredState<OrganisationHomePage>
                                       spreadRadius: 2,
                                       blurRadius: 3,
                                       offset: const Offset(
-                                          0, 3,), // changes position of shadow
+                                        0,
+                                        3,
+                                      ), // changes position of shadow
                                     ),
                                   ],
                                 ),
@@ -309,13 +309,13 @@ class _OrganisationHomePageState extends AuthRequiredState<OrganisationHomePage>
         imageUrl: _avatarUrl,
         firstName: firstName,
         lastName: lastName,
+        username: username,
       ),
     );
   }
 }
 
 Widget getLocationScreen(location) {
-
   Map<String, IconData> descList = {
     'Clouds': Icons.cloud_outlined,
     'Rain': FontAwesomeIcons.cloudRain,
@@ -343,58 +343,61 @@ Widget getLocationScreen(location) {
     ),
 
     child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Image.network(
-                  "http://openweathermap.org/img/wn/${location.icon}@2x.png",),
-              Text(
-                "${location.description}",
-                style: const TextStyle(
-                  fontSize: 14,
-                ),
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Image.network(
+              "http://openweathermap.org/img/wn/${location.icon}@2x.png",
+            ),
+            Text(
+              "${location.description}",
+              style: const TextStyle(
+                fontSize: 14,
               ),
-            ],
-          ),
-          const SizedBox(
-            width: 10,
-          ),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.end,
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Text(
-                "${location.temp}",
-                style: const TextStyle(
-                    fontSize: 40,
-                    fontWeight: FontWeight.bold,
-                    color: ColorConstants.ksecondary,),
+            ),
+          ],
+        ),
+        const SizedBox(
+          width: 10,
+        ),
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.end,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text(
+              "${location.temp}",
+              style: const TextStyle(
+                fontSize: 40,
+                fontWeight: FontWeight.bold,
+                color: ColorConstants.ksecondary,
               ),
-              const SizedBox(
-                height: 5,
+            ),
+            const SizedBox(
+              height: 5,
+            ),
+            const Text(
+              "ENTEBBE",
+              style: TextStyle(
+                fontSize: 26,
+                fontWeight: FontWeight.bold,
               ),
-              const Text(
-                "ENTEBBE",
-                style: TextStyle(
-                  fontSize: 26,
-                  fontWeight: FontWeight.bold,
-                ),
+            ),
+            const Text(
+              "Uganda",
+              style: TextStyle(
+                fontSize: 15,
+                color: Color.fromARGB(255, 62, 62, 62),
               ),
-              const Text(
-                "Uganda",
-                style: TextStyle(
-                  fontSize: 15,
-                  color: Color.fromARGB(255, 62, 62, 62),
-                ),
-              ),
-            ],
-          ),
-          const SizedBox(
-            width: 10,
-          ),
-        ],),
+            ),
+          ],
+        ),
+        const SizedBox(
+          width: 10,
+        ),
+      ],
+    ),
   );
 }

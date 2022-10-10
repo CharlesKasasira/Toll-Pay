@@ -151,7 +151,7 @@ class _MyDrawerState extends State<MyDrawer> {
             },
           ),
           ListTile(
-            leading: const Icon(Icons.person_outline),
+            leading: const Icon(Icons.message_outlined),
             title: const Text('Chat'),
             onTap: () {
               Navigator.push(

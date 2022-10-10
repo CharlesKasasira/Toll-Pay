@@ -14,7 +14,8 @@ class OrganisationDrawer extends StatefulWidget {
   String? imageUrl;
   String? firstName;
   String? lastName;
-  OrganisationDrawer({this.user, this.imageUrl, this.firstName, this.lastName, Key? key}) : super(key: key);
+  String? username;
+  OrganisationDrawer({this.user, this.imageUrl, this.firstName, this.lastName, this.username, Key? key}) : super(key: key);
 
   @override
   State<OrganisationDrawer> createState() => _OrganisationDrawerState();
@@ -56,7 +57,6 @@ class _OrganisationDrawerState extends State<OrganisationDrawer> {
 
   @override
   Widget build(BuildContext context) {
-    print("image is ${widget.imageUrl}");
     return Drawer(
       child: ListView(
         padding: EdgeInsets.zero,
@@ -69,20 +69,16 @@ class _OrganisationDrawerState extends State<OrganisationDrawer> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 if (widget.imageUrl == null || widget.imageUrl!.isEmpty)
-                  Container(
-                    width: 80,
-                    height: 80,
-                    alignment: Alignment.center,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.all(Radius.circular(50.0)),
-                      color: Color(0xffF5F5F5),
-                    ),
-                    child: const Text(
-                      "C",
-                      style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          color: Color(0xff1a1a1a),
-                          fontSize: 30),
+                  ClipRRect(
+                    borderRadius: BorderRadius.circular(75.0),
+                    child: Container(
+                      width: 80,
+                      height: 80,
+                      alignment: Alignment.bottomCenter,
+                      decoration: const BoxDecoration(
+                        color: Color.fromARGB(255, 200, 200, 200),
+                      ),
+                      child: Image.asset("assets/images/avatar_icon.png"),
                     ),
                   )
                 else
@@ -99,7 +95,7 @@ class _OrganisationDrawerState extends State<OrganisationDrawer> {
                   height: 12,
                 ),
                 Text(
-                  '${widget.firstName} ${widget.lastName}',
+                  '${widget.username}',
                   style: const TextStyle(
                       color: Colors.white,
                       fontWeight: FontWeight.bold,
@@ -116,6 +112,16 @@ class _OrganisationDrawerState extends State<OrganisationDrawer> {
           ListTile(
             leading: const Icon(Icons.payment_outlined),
             title: const Text('Make Payment'),
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => PaymentPage(user: widget.user, firstName: widget.firstName, lastName: widget.lastName)),
+              );
+            },
+          ),
+          ListTile(
+            leading: const Icon(Icons.groups_outlined),
+            title: const Text('Our Drivers'),
             onTap: () {
               Navigator.push(
                 context,
