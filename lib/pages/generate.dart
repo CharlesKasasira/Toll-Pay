@@ -8,16 +8,14 @@ class GeneratePage extends StatefulWidget {
   var amount;
   var plate;
   var user;
-  String? firstName;
-  String? lastName;
+  var username;
 
   String? phone;
   GeneratePage(
       {this.amount,
       this.phone,
       this.user,
-      this.firstName,
-      this.lastName,
+      this.username,
       this.plate,
       Key? key})
       : super(key: key);
@@ -32,8 +30,7 @@ class GeneratePageState extends State<GeneratePage> {
   Widget build(BuildContext context) {
     String qrData = """
       Amount: ${widget.amount} 
-      First Name: ${widget.firstName} 
-      Last Name: ${widget.lastName} 
+      First Name: ${widget.username}
       Plate Number: ${widget.plate}
       Paid
     """;

@@ -11,18 +11,21 @@ import 'package:supabase/supabase.dart';
 import 'package:tollpay/components/auth_required_state.dart';
 import 'package:tollpay/models/weather.dart';
 import 'package:tollpay/pages/payment_page.dart';
+import 'package:tollpay/pages/scan_qr.dart';
 import 'package:tollpay/utils/color_constants.dart';
 import 'package:tollpay/utils/constants.dart';
 import 'package:tollpay/widgets/drawer.dart';
+import 'package:tollpay/widgets/operator_drawer.dart';
+import 'package:get/get.dart';
 
-class HomePage extends StatefulWidget {
-  const HomePage({Key? key}) : super(key: key);
+class OperatorHomePage extends StatefulWidget {
+  const OperatorHomePage({Key? key}) : super(key: key);
 
   @override
-  _HomePageState createState() => _HomePageState();
+  _OperatorHomePageState createState() => _OperatorHomePageState();
 }
 
-class _HomePageState extends AuthRequiredState<HomePage> {
+class _OperatorHomePageState extends AuthRequiredState<OperatorHomePage> {
   String? _userId;
   String? _avatarUrl;
   String? firstName;
@@ -41,6 +44,15 @@ class _HomePageState extends AuthRequiredState<HomePage> {
     } else {
       return null;
     }
+  }
+
+  void _goToScan() {
+    Get.off(
+      () => ScanPage(),
+      transition: Transition.cupertino,
+      duration: const Duration(milliseconds: 600),
+      curve: Curves.easeOut,
+    );
   }
 
   //get users Profile
@@ -163,53 +175,30 @@ class _HomePageState extends AuthRequiredState<HomePage> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      Column(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            'No current',
-                            style: GoogleFonts.roboto(
-                                textStyle: const TextStyle(letterSpacing: .5),
-                                fontSize: 18,
-                                color: Colors.white),
-                          ),
-                          Text(
-                            'QR code',
-                            style: GoogleFonts.roboto(
-                                textStyle: const TextStyle(letterSpacing: .5),
-                                fontSize: 30,
-                                color: Colors.white,
-                                fontWeight: FontWeight.bold),
-                          ),
-                        ],
+                      // Image.asset(
+                      //   "assets/images/qr-code.png",
+                      //   width: 100,
+                      // ),
+                      GestureDetector(
+                        onTap: _goToScan,
+                        child: const Icon(
+                          Icons.qr_code_scanner,
+                          color: Colors.white,
+                          size: 100,
+                        ),
                       ),
-                      Image.asset(
-                        "assets/images/qr-code.png",
-                        width: 100,
-                      ),
+                      TextButton(
+                        onPressed: _goToScan,
+                        child: const Text(
+                          "Scan QR code",
+                          style: TextStyle(color: Colors.white, fontSize: 20),
+                        ),
+                      )
                     ],
                   ),
                   const SizedBox(
                     height: 18,
                   ),
-                  TextButton(
-                    onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => PaymentPage(
-                              user: _user,
-                              username: username
-                              ),
-                        ),
-                      );
-                    },
-                    child: const Text(
-                      "Pay now >",
-                      style: TextStyle(color: Colors.white, fontSize: 20),
-                    ),
-                  )
                 ],
               ),
             ),
@@ -296,20 +285,15 @@ class _HomePageState extends AuthRequiredState<HomePage> {
             const SizedBox(
               height: 20,
             ),
-            const Text(
-              "Last QR Codes",
-              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-            ),
           ],
         ),
       ),
-      drawer: MyDrawer(
+      drawer: OperatorDrawer(
           user: _user,
           imageUrl: _avatarUrl,
           firstName: firstName,
           lastName: lastName,
-          username: username,
-          ),
+          username: username),
     );
   }
 }

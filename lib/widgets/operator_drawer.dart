@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:tollpay/components/avatar.dart';
 import 'package:supabase/supabase.dart';
 import 'package:tollpay/components/auth_required_state.dart';
@@ -9,13 +10,13 @@ import 'package:tollpay/pages/payment_page.dart';
 import 'package:tollpay/pages/scan_qr.dart';
 import 'package:tollpay/utils/constants.dart';
 
-class MyDrawer extends StatefulWidget {
+class OperatorDrawer extends StatefulWidget {
   var user;
   String? imageUrl;
   String? firstName;
   String? lastName;
   String? username;
-  MyDrawer(
+  OperatorDrawer(
       {this.user,
       this.imageUrl,
       this.firstName,
@@ -25,15 +26,24 @@ class MyDrawer extends StatefulWidget {
       : super(key: key);
 
   @override
-  State<MyDrawer> createState() => _MyDrawerState();
+  State<OperatorDrawer> createState() => _OperatorDrawerState();
 }
 
-class _MyDrawerState extends State<MyDrawer> {
+class _OperatorDrawerState extends State<OperatorDrawer> {
   final _firstNameController = TextEditingController();
   final _lastNameController = TextEditingController();
   String? _userId;
   String? _avatarUrl;
   var _loading = false;
+
+  void _goToScan() {
+    Get.off(
+      () => ScanPage(),
+      transition: Transition.cupertino,
+      duration: const Duration(milliseconds: 600),
+      curve: Curves.easeOut,
+    );
+  }
 
   Future<void> _getProfile(String userId) async {
     setState(() {
@@ -117,27 +127,10 @@ class _MyDrawerState extends State<MyDrawer> {
             ),
           ),
           ListTile(
-            leading: const Icon(Icons.payment_outlined),
-            title: const Text('Make Payment'),
+            leading: const Icon(Icons.qr_code_scanner_outlined),
+            title: const Text('QR Scanner'),
             onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (context) => PaymentPage(
-                        user: widget.user,
-                        firstName: widget.firstName,
-                        lastName: widget.lastName)),
-              );
-            },
-          ),
-          ListTile(
-            leading: const Icon(Icons.map_outlined),
-            title: const Text('Map'),
-            onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => const MyMap()),
-              );
+              _goToScan();
             },
           ),
           ListTile(
@@ -165,17 +158,6 @@ class _MyDrawerState extends State<MyDrawer> {
           ),
           const Divider(
             thickness: 1,
-          ),
-          ListTile(
-            leading: const Icon(Icons.settings_outlined),
-            title: const Text('Settings'),
-            onTap: () async {
-              final response = await supabase.auth.signOut();
-              final error = response.error;
-              if (error != null) {
-                context.showErrorSnackBar(message: error.message);
-              }
-            },
           ),
           ListTile(
             leading: const Icon(Icons.logout),

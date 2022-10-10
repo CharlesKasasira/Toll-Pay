@@ -9,26 +9,18 @@ import 'package:tollpay/pages/payment_page.dart';
 import 'package:tollpay/pages/scan_qr.dart';
 import 'package:tollpay/utils/constants.dart';
 
-class MyDrawer extends StatefulWidget {
+class OrganisationDrawer extends StatefulWidget {
   var user;
   String? imageUrl;
   String? firstName;
   String? lastName;
-  String? username;
-  MyDrawer(
-      {this.user,
-      this.imageUrl,
-      this.firstName,
-      this.lastName,
-      this.username,
-      Key? key})
-      : super(key: key);
+  OrganisationDrawer({this.user, this.imageUrl, this.firstName, this.lastName, Key? key}) : super(key: key);
 
   @override
-  State<MyDrawer> createState() => _MyDrawerState();
+  State<OrganisationDrawer> createState() => _OrganisationDrawerState();
 }
 
-class _MyDrawerState extends State<MyDrawer> {
+class _OrganisationDrawerState extends State<OrganisationDrawer> {
   final _firstNameController = TextEditingController();
   final _lastNameController = TextEditingController();
   String? _userId;
@@ -64,6 +56,7 @@ class _MyDrawerState extends State<MyDrawer> {
 
   @override
   Widget build(BuildContext context) {
+    print("image is ${widget.imageUrl}");
     return Drawer(
       child: ListView(
         padding: EdgeInsets.zero,
@@ -76,16 +69,20 @@ class _MyDrawerState extends State<MyDrawer> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 if (widget.imageUrl == null || widget.imageUrl!.isEmpty)
-                  ClipRRect(
-                    borderRadius: BorderRadius.circular(75.0),
-                    child: Container(
-                      width: 80,
-                      height: 80,
-                      alignment: Alignment.bottomCenter,
-                      decoration: const BoxDecoration(
-                        color: Color.fromARGB(255, 200, 200, 200),
-                      ),
-                      child: Image.asset("assets/images/avatar_icon.png"),
+                  Container(
+                    width: 80,
+                    height: 80,
+                    alignment: Alignment.center,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.all(Radius.circular(50.0)),
+                      color: Color(0xffF5F5F5),
+                    ),
+                    child: const Text(
+                      "C",
+                      style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          color: Color(0xff1a1a1a),
+                          fontSize: 30),
                     ),
                   )
                 else
@@ -102,7 +99,7 @@ class _MyDrawerState extends State<MyDrawer> {
                   height: 12,
                 ),
                 Text(
-                  '${widget.username}',
+                  '${widget.firstName} ${widget.lastName}',
                   style: const TextStyle(
                       color: Colors.white,
                       fontWeight: FontWeight.bold,
@@ -122,11 +119,7 @@ class _MyDrawerState extends State<MyDrawer> {
             onTap: () {
               Navigator.push(
                 context,
-                MaterialPageRoute(
-                    builder: (context) => PaymentPage(
-                        user: widget.user,
-                        firstName: widget.firstName,
-                        lastName: widget.lastName)),
+                MaterialPageRoute(builder: (context) => PaymentPage(user: widget.user, firstName: widget.firstName, lastName: widget.lastName)),
               );
             },
           ),

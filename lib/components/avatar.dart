@@ -21,46 +21,65 @@ class _AvatarState extends State<Avatar> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        if (widget.imageUrl == null || widget.imageUrl!.isEmpty)
-          ClipRRect(
-            borderRadius: BorderRadius.circular(75.0),
-            child: Container(
-              width: 120,
-              height: 120,
-              alignment: Alignment.bottomCenter,
-              decoration: const BoxDecoration(
-                color: Color.fromARGB(255, 200, 200, 200),
-                // borderRadius: BorderRadius.circular(75.0),
-              ),
-              child: const Icon(Icons.person,
-              size: 150,
-              color: Colors.white,
-              ),
+    return Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Stack(children: <Widget>[
+          Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Column(
+                  children: [
+                    if (widget.imageUrl == null || widget.imageUrl!.isEmpty)
+                      ClipRRect(
+                        borderRadius: BorderRadius.circular(75.0),
+                        child: Container(
+                          width: 120,
+                          height: 120,
+                          alignment: Alignment.bottomCenter,
+                          decoration: const BoxDecoration(
+                            color: Color.fromARGB(255, 200, 200, 200),
+                          ),
+                          child: Image.asset("assets/images/avatar_icon.png"),
+                        ),
+                      )
+                    else
+                      ClipRRect(
+                        borderRadius: BorderRadius.circular(75.0),
+                        child: Image.network(
+                          widget.imageUrl!,
+                          width: 120,
+                          height: 120,
+                          fit: BoxFit.cover,
+                        ),
+                      ),
+                  ],
+                ),
+              ]),
+          Padding(
+            padding: const EdgeInsets.only(top: 80.0, right: 90.0),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                GestureDetector(
+                  onTap: () => _upload(),
+                  child: const CircleAvatar(
+                    backgroundColor: Colors.black,
+                    radius: 18.0,
+                    child: Icon(
+                      Icons.camera_alt,
+                      color: Colors.white,
+                    ),
+                  ),
+                )
+              ],
             ),
           )
-        else
-          ClipRRect(
-            borderRadius: BorderRadius.circular(75.0),
-            child: Image.network(
-              widget.imageUrl!,
-              width: 150,
-              height: 150,
-              fit: BoxFit.cover,
-            ),
-          ),
-        ElevatedButton(
-          onPressed: _isLoading ? null : _upload,
-          child: const Text('Upload'),
-        ),
-      ],
-    );
+        ]));
   }
 
   Future<void> _upload() async {
-    final _picker = ImagePicker();
-    final imageFile = await _picker.pickImage(
+    final picker = ImagePicker();
+    final imageFile = await picker.pickImage(
       source: ImageSource.gallery,
       maxWidth: 300,
       maxHeight: 300,

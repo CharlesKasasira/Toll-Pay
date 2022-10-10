@@ -9,14 +9,14 @@ import 'package:get/get.dart';
 
 import '../widgets/button.dart';
 
-class SignupPage extends StatefulWidget {
-  const SignupPage({Key? key}) : super(key: key);
+class SignUpOrg extends StatefulWidget {
+  const SignUpOrg({Key? key}) : super(key: key);
 
   @override
-  _SignupPageState createState() => _SignupPageState();
+  _SignUpOrgState createState() => _SignUpOrgState();
 }
 
-class _SignupPageState extends AuthState<SignupPage> {
+class _SignUpOrgState extends AuthState<SignUpOrg> {
   bool _isLoading = false;
   late final TextEditingController _emailController;
   late final TextEditingController _passwordController;
@@ -55,7 +55,7 @@ class _SignupPageState extends AuthState<SignupPage> {
       _passwordController.text,
       userMetadata: {
         "username": username,
-        "roles": "driver",
+        "roles": "organization",
         "phone": phoneNumber
       }
     );
@@ -150,7 +150,7 @@ class _SignupPageState extends AuthState<SignupPage> {
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const Text('Full Name'),
+                      const Text('Organisation Name'),
                       const SizedBox(height: 5),
                       TextFormField(
                         controller: _namesController,

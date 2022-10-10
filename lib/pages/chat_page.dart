@@ -70,27 +70,27 @@ class _ChatPageState extends State<ChatPage> {
         foregroundColor: Colors.black,
         title: const Text("Chat"),
         leading: Builder(builder: (context) {
-            return Container(
-              width: 25,
-              height: 25,
-              margin: const EdgeInsets.only(left: 10.0, top: 10.0, bottom: 4),
-              decoration: BoxDecoration(
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.grey.withOpacity(0.2),
-                      spreadRadius: 2,
-                      blurRadius: 3,
-                      offset: Offset(0, 3), // changes position of shadow
-                    ),
-                  ],
-                  color: Colors.white,
-                  borderRadius: BorderRadius.all(Radius.circular(25))),
-              child: new IconButton(
-                icon: new Icon(Icons.arrow_back, color: Colors.black),
-                onPressed: () => Navigator.of(context).pop(),
-              ),
-            );
-          }),
+          return Container(
+            width: 25,
+            height: 25,
+            margin: const EdgeInsets.only(left: 10.0, top: 10.0, bottom: 4),
+            decoration: BoxDecoration(
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.grey.withOpacity(0.2),
+                    spreadRadius: 2,
+                    blurRadius: 3,
+                    offset: Offset(0, 3), // changes position of shadow
+                  ),
+                ],
+                color: Colors.white,
+                borderRadius: BorderRadius.all(Radius.circular(25))),
+            child: new IconButton(
+              icon: new Icon(Icons.arrow_back, color: Colors.black),
+              onPressed: () => Navigator.of(context).pop(),
+            ),
+          );
+        }),
       ),
       body: StreamBuilder<List<Message>>(
         stream: _messagesStream,
@@ -168,7 +168,7 @@ class _MessageBarState extends State<_MessageBar> {
               ),
               TextButton(
                 onPressed: () => _submitMessage(),
-                child: const Text('Send'),
+                child: const Icon(Icons.send),
               ),
             ],
           ),
@@ -220,13 +220,14 @@ class _ChatBubble extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    print(message);
     List<Widget> chatContents = [
-      if (!message.isMine)
-        CircleAvatar(
-          child: profile == null
-              ? preloader
-              : Text(profile!.username.substring(0, 2)),
-        ),
+      // if (!message.isMine)
+      //   CircleAvatar(
+      //     child: profile == null
+      //         ? preloader
+      //         : Text(profile!.username.substring(0, 2)),
+      //   ),
       const SizedBox(width: 12),
       Flexible(
         child: Container(
@@ -235,9 +236,7 @@ class _ChatBubble extends StatelessWidget {
             horizontal: 12,
           ),
           decoration: BoxDecoration(
-            color: message.isMine
-                ? Colors.grey[500]
-                : Colors.grey[300],
+            color: message.isMine ? Colors.grey[500] : Colors.grey[300],
             borderRadius: BorderRadius.circular(8),
           ),
           child: Text(message.content),

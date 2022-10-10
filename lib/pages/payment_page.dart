@@ -10,7 +10,7 @@ class PaymentPage extends StatefulWidget {
   var user;
   String? firstName;
   String? lastName;
-  PaymentPage({Key? key, this.user, this.firstName, this.lastName})
+  PaymentPage({Key? key, this.user, this.firstName, this.lastName, String? username})
       : super(key: key);
 
   @override
@@ -79,9 +79,7 @@ class _PaymentPageState extends State<PaymentPage> {
                 amount: feesPerItems[dropdownvalue],
                 phone: _phoneNumberController.text,
                 plate: _plateNumberController.text,
-                user: widget.user,
-                firstName: widget.firstName,
-                lastName: widget.lastName)));
+                user: widget.user)));
         setState(() {});
 
       });
@@ -132,7 +130,8 @@ class _PaymentPageState extends State<PaymentPage> {
         _focusPlateNumber.unfocus();
       },
       child: Scaffold(
-        backgroundColor: Color(0xffF6F6F6),
+        backgroundColor: const Color(0xffF6F6F6),
+        extendBodyBehindAppBar: true,
         appBar: AppBar(
           backgroundColor: Color(0x00000000),
           elevation: 0,
@@ -173,14 +172,15 @@ class _PaymentPageState extends State<PaymentPage> {
                 const SizedBox(
                   height: 10,
                 ),
-                Row(
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     const Text(
                       "Vehicle Type",
                       style: TextStyle(),
                     ),
                     const SizedBox(
-                      width: 10,
+                      height: 5,
                     ),
                     Container(
                       padding:
@@ -190,6 +190,7 @@ class _PaymentPageState extends State<PaymentPage> {
                           borderRadius: BorderRadius.circular(10)),
                       child: DropdownButton(
                         // Initial Value
+                        isExpanded: true,
                         value: dropdownvalue,
                         onChanged: (String? newValue) {
                           setState(() {
@@ -251,7 +252,6 @@ class _PaymentPageState extends State<PaymentPage> {
                       TextFormField(
                         controller: _plateNumberController,
                         focusNode: _focusPlateNumber,
-                        keyboardType: TextInputType.number,
                         decoration: const InputDecoration(
                           floatingLabelBehavior: FloatingLabelBehavior.never,
                           labelText: 'Enter plate number',

@@ -2,8 +2,12 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:supabase/supabase.dart';
 import 'package:tollpay/components/auth_state.dart';
+import 'package:tollpay/pages/login_page.dart';
 import 'package:tollpay/utils/constants.dart';
 import 'package:flutter/services.dart';
+import 'package:get/get.dart';
+
+import '../widgets/button.dart';
 
 class ForgotPage extends StatefulWidget {
   const ForgotPage({Key? key}) : super(key: key);
@@ -18,27 +22,22 @@ class _ForgotPageState extends AuthState<ForgotPage> {
   final _focusEmail = FocusNode();
 
   void moveToLogin() {
-    Navigator.of(context).pushNamedAndRemoveUntil('/login', (route) => false);
+    Get.off(
+      () => const LoginPage(),
+      transition: Transition.cupertino,
+      duration: const Duration(milliseconds: 600),
+      curve: Curves.easeOut,
+    );
+  }
+
+  Future<void> _resetPassword() async {
+
   }
 
   Future<void> _signIn() async {
     setState(() {
       _isLoading = true;
     });
-
-    // final response = await supabase.auth.signIn(
-    //   email: _emailController.text,
-    //   password: _passwordController.text,
-    // );
-
-    // final error = response.error;
-    // if (error != null) {
-    //   context.showErrorSnackBar(message: error.message);
-    // } else {
-    //   Navigator.of(context)
-    //       .pushNamedAndRemoveUntil('/dashboard', (route) => false);
-    //   _emailController.clear();
-    // }
 
     setState(() {
       _isLoading = false;
@@ -108,22 +107,12 @@ class _ForgotPageState extends AuthState<ForgotPage> {
               const SizedBox(height: 18),
               
               const SizedBox(height: 18),
-              
-              Row(
-                children: [
-                  Container(
-                    width: MediaQuery.of(context).size.width - 36,
-                    height: 50,
-                    child: ElevatedButton(
-                      // style: ButtonStyle(
-                        // padding: EdgeInsetsGeometry),
-                  onPressed: _isLoading ? null : _signIn,
-                  child: Text(_isLoading ? 'Loading' : 'Submit'),
-                ),
+              CustomElevatedButton(
+                      onTap: _resetPassword,
+                      text: "SUBMIT",),
+                  const SizedBox(
+                    height: 10,
                   ),
-                
-                ],
-              ),
               const SizedBox(height: 18),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -135,7 +124,7 @@ class _ForgotPageState extends AuthState<ForgotPage> {
                           MaterialStateProperty.all<Color>(Colors.blue),
                     ),
                     onPressed: moveToLogin,
-                    child: Text('Login'),
+                    child: Text('Login', style: TextStyle(fontSize: 16, color: Color(0xff005620))),
                   ),
                 ],
               ),

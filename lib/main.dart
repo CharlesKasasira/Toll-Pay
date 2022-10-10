@@ -9,9 +9,12 @@ import 'package:tollpay/pages/generate.dart';
 import 'package:tollpay/pages/home_page.dart';
 import 'package:tollpay/pages/login_page.dart';
 import 'package:tollpay/pages/maps_page.dart';
+import 'package:tollpay/pages/operator/operator_dashboard.dart';
+import 'package:tollpay/pages/organisation/organisation_dashboard.dart';
 import 'package:tollpay/pages/payment_page.dart';
 import 'package:tollpay/pages/signup_page.dart';
 import 'package:tollpay/pages/splash_page.dart';
+import 'package:get/get.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -36,7 +39,7 @@ class MyApp extends StatelessWidget {
             statusBarBrightness:
                 Brightness.light) /* set Status bar icon color in iOS. */
         );
-    return MaterialApp(
+    return GetMaterialApp(
       title: 'Toll Pay',
       debugShowCheckedModeBanner: false,
       theme: ThemeData.light().copyWith(
@@ -59,6 +62,8 @@ class MyApp extends StatelessWidget {
         '/signup': (_) => const SignupPage(),
         '/account': (_) => const AccountPage(),
         '/dashboard': (_) => const HomePage(),
+        '/org-dashboard': (_) => const OrganisationHomePage(),
+        '/operator-dashboard': (_) => const OperatorHomePage(),
         '/forgot': (_) => const ForgotPage(),
         '/generate': (_) => GeneratePage(),
         '/map': (_) => const MyMap(),
