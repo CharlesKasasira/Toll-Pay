@@ -132,7 +132,7 @@ class _OrganisationHomePageState
               Row(
                 children: [
                   const Text(
-                    'Welcome, ',
+                    'Hello, ',
                     style: TextStyle(
                       fontSize: 18,
                     ),
@@ -145,6 +145,7 @@ class _OrganisationHomePageState
                   ),
                 ],
               ),
+              const Text("Welcome to your dashboard"),
               const SizedBox(height: 18),
               Container(
                 padding: const EdgeInsets.all(10),
@@ -161,61 +162,151 @@ class _OrganisationHomePageState
                   children: [
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
                         Column(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
+                            const SizedBox(height: 10,),
                             Text(
-                              'No current',
+                              '13',
                               style: GoogleFonts.roboto(
                                   textStyle: const TextStyle(letterSpacing: .5),
                                   fontSize: 18,
                                   color: Colors.white),
                             ),
+                            const SizedBox(height: 10,),
                             Text(
-                              'QR code',
+                              'Drivers',
                               style: GoogleFonts.roboto(
                                   textStyle: const TextStyle(letterSpacing: .5),
-                                  fontSize: 30,
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.bold),
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 22,
+                                  color: Colors.white),
                             ),
                           ],
                         ),
-                        Image.asset(
-                          "assets/images/qr-code.png",
-                          width: 100,
-                        ),
+                        const Icon(
+                          Icons.groups_outlined,
+                          color: Colors.white,
+                          size: 60,
+                        )
                       ],
                     ),
-                    const SizedBox(
-                      height: 18,
-                    ),
-                    TextButton(
-                      onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => PaymentPage(
-                                user: _user,
-                                firstName: firstName,
-                                lastName: lastName),
-                          ),
-                        );
-                      },
-                      child: const Text(
-                        "Pay now >",
-                        style: TextStyle(color: Colors.white, fontSize: 20),
-                      ),
-                    )
+                    const SizedBox(height: 10,)
                   ],
                 ),
               ),
               const SizedBox(
                 height: 20,
               ),
+              Container(
+                padding: const EdgeInsets.all(10),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(10.0),
+                  gradient: const LinearGradient(
+                    colors: [Color.fromARGB(255, 15, 113, 48), Color.fromARGB(200, 15, 113, 48)],
+                    begin: Alignment.topLeft,
+                    end: Alignment.bottomRight,
+                  ),
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Column(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            const SizedBox(height: 10,),
+                            Text(
+                              '2',
+                              style: GoogleFonts.roboto(
+                                  textStyle: const TextStyle(letterSpacing: .5),
+                                  fontSize: 18,
+                                  color: Colors.white),
+                            ),
+                            const SizedBox(height: 10,),
+                            Text(
+                              'Used QR Codes',
+                              style: GoogleFonts.roboto(
+                                  textStyle: const TextStyle(letterSpacing: .5),
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 22,
+                                  color: Colors.white),
+                            ),
+                          ],
+                        ),
+                        const Icon(
+                          Icons.qr_code,
+                          color: Colors.white,
+                          size: 60,
+                        )
+                      ],
+                    ),
+                    const SizedBox(height: 10,)
+                  ],
+                ),
+              ),
+              const SizedBox(
+                height: 20,
+              ),
+              Container(
+                padding: const EdgeInsets.all(10),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(10.0),
+                  gradient: LinearGradient(
+                    colors: [Colors.blue, Colors.blue.shade300],
+                    begin: Alignment.topLeft,
+                    end: Alignment.bottomRight,
+                  ),
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Column(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            const SizedBox(height: 10,),
+                            Text(
+                              '10',
+                              style: GoogleFonts.roboto(
+                                  textStyle: const TextStyle(letterSpacing: .5),
+                                  fontSize: 18,
+                                  color: Colors.white),
+                            ),
+                            const SizedBox(height: 10,),
+                            Text(
+                              'Registered Cars',
+                              style: GoogleFonts.roboto(
+                                  textStyle: const TextStyle(letterSpacing: .5),
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 22,
+                                  color: Colors.white),
+                            ),
+                          ],
+                        ),
+                        const Icon(
+                          Icons.car_rental,
+                          color: Colors.white,
+                          size: 60,
+                        )
+                      ],
+                    ),
+                    const SizedBox(height: 10,)
+                  ],
+                ),
+              ),
+              const SizedBox(
+                height: 20,
+              ),
+              
               Container(
                 child: FutureBuilder(
                   future: fetchWeather(),
