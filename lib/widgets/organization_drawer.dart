@@ -130,6 +130,16 @@ class _OrganisationDrawerState extends State<OrganisationDrawer> {
             },
           ),
           ListTile(
+            leading: const Icon(Icons.car_crash_outlined),
+            title: const Text('Our Cars'),
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => PaymentPage(user: widget.user, firstName: widget.firstName, lastName: widget.lastName)),
+              );
+            },
+          ),
+          ListTile(
             leading: const Icon(Icons.map_outlined),
             title: const Text('Map'),
             onTap: () {
