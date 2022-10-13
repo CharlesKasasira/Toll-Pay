@@ -12,6 +12,7 @@ import 'package:tollpay/pages/myqr_page.dart';
 import 'package:tollpay/pages/payment_page.dart';
 import 'package:tollpay/utils/color_constants.dart';
 import 'package:tollpay/utils/constants.dart';
+import 'package:tollpay/utils/fetch_weather.dart';
 import 'package:tollpay/widgets/drawer.dart';
 import 'package:tollpay/widgets/organization_drawer.dart';
 
@@ -32,18 +33,6 @@ class _AdminHomePageState
   var activeQrCodes;
   var _user;
   bool _loading = false;
-
-  Future fetchWeather() async {
-    final url = Uri.parse(
-        "https://api.openweathermap.org/data/2.5/weather?q=Entebbe&units=metric&appid=${dotenv.env['WEATHER_API_KEY']}");
-    final http.Response response = await http.get(url);
-    if (response.statusCode == 200) {
-      final json = jsonDecode(response.body);
-      return Weather.getWeather(json);
-    } else {
-      return null;
-    }
-  }
 
   Future getActiveQRCodes() async {
     final response = await supabase.from('qrcodes').select().execute();
@@ -153,18 +142,6 @@ class _AdminHomePageState
             width: 25,
             height: 25,
             margin: const EdgeInsets.only(left: 10.0, top: 10.0, bottom: 5),
-            // decoration: BoxDecoration(
-            //   boxShadow: [
-            //     BoxShadow(
-            //       color: Colors.grey.withOpacity(0.2),
-            //       spreadRadius: 2,
-            //       blurRadius: 3,
-            //       offset: const Offset(0, 3), // changes position of shadow
-            //     ),
-            //   ],
-            //   color: Colors.white,
-            //   borderRadius: BorderRadius.all(Radius.circular(25)),
-            // ),
             child: IconButton(
               icon: const Icon(Icons.menu, color: Colors.black),
               onPressed: () => Scaffold.of(context).openDrawer(),

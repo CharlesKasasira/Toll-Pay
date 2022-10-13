@@ -1,21 +1,16 @@
-import 'dart:convert';
-
-// ignore: unnecessary_import
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:http/http.dart' as http;
 import 'package:supabase/supabase.dart';
 import 'package:tollpay/components/auth_required_state.dart';
-import 'package:tollpay/models/weather.dart';
 import 'package:tollpay/pages/myqr_page.dart';
-import 'package:tollpay/pages/payment_page.dart';
+import 'package:tollpay/pages/organisation/bar_chart.dart';
 import 'package:tollpay/utils/color_constants.dart';
 import 'package:tollpay/utils/constants.dart';
-import 'package:tollpay/widgets/drawer.dart';
+import 'package:tollpay/utils/fetch_weather.dart';
+import 'package:tollpay/utils/price_point.dart';
 import 'package:tollpay/widgets/organization_drawer.dart';
+import 'package:fl_chart/fl_chart.dart';
 
 class OrganisationHomePage extends StatefulWidget {
   const OrganisationHomePage({Key? key}) : super(key: key);
@@ -33,19 +28,6 @@ class _OrganisationHomePageState
   String? username;
   var activeQrCodes;
   var _user;
-  bool _loading = false;
-
-  Future fetchWeather() async {
-    final url = Uri.parse(
-        "https://api.openweathermap.org/data/2.5/weather?q=Entebbe&units=metric&appid=${dotenv.env['WEATHER_API_KEY']}");
-    final http.Response response = await http.get(url);
-    if (response.statusCode == 200) {
-      final json = jsonDecode(response.body);
-      return Weather.getWeather(json);
-    } else {
-      return null;
-    }
-  }
 
   Future getActiveQRCodes() async {
     final response = await supabase.from('qrcodes').select().execute();
@@ -58,17 +40,14 @@ class _OrganisationHomePageState
     } else {
       activeQrCodes = "0";
     }
-
-    if (error != null) {
-      print(error.message);
-    }
+    // if (error != null) {
+    //   print(error.message);
+    // }
   }
 
   //get users Profile
   Future<void> _getProfile(String userId) async {
-    setState(() {
-      _loading = true;
-    });
+    setState(() {});
     final response = await supabase
         .from('profiles')
         .select()
@@ -86,9 +65,7 @@ class _OrganisationHomePageState
     _avatarUrl = (data['avatar_url'] ?? '') as String;
     username = (data['username'] ?? '') as String;
 
-    setState(() {
-      _loading = false;
-    });
+    setState(() {});
   }
 
   @override
@@ -111,41 +88,62 @@ class _OrganisationHomePageState
 
   @override
   Widget build(BuildContext context) {
-    print(activeQrCodes);
     return Scaffold(
-      backgroundColor: ColorConstants.kprimary,
+      backgroundColor: const Color(0xffFAFAFA),
       extendBodyBehindAppBar: true,
       appBar: AppBar(
-        backgroundColor: ColorConstants.ktransparent,
+        shadowColor: const Color.fromARGB(100, 158, 158, 158),
+        backgroundColor: Color(0xff1a1a1a),
         elevation: 0,
-        foregroundColor: Colors.black,
-        title: const Text("Home"),
-        leading: Builder(builder: (context) {
-          return Container(
-            width: 25,
-            height: 25,
-            margin: const EdgeInsets.only(left: 10.0, top: 10.0, bottom: 5),
-            decoration: BoxDecoration(
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.grey.withOpacity(0.2),
-                  spreadRadius: 2,
-                  blurRadius: 3,
-                  offset: const Offset(0, 3), // changes position of shadow
+        foregroundColor: Colors.white,
+        title: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            const Text(
+              "Home",
+              style: TextStyle(fontWeight: FontWeight.w400),
+            ),
+            const SizedBox(
+              width: 10,
+            ),
+            if (_avatarUrl == null || _avatarUrl!.isEmpty)
+              ClipRRect(
+                borderRadius: BorderRadius.circular(75.0),
+                child: Container(
+                  width: 32,
+                  height: 32,
+                  alignment: Alignment.bottomCenter,
+                  decoration: const BoxDecoration(
+                    color: Color.fromARGB(255, 200, 200, 200),
+                  ),
+                  child: Image.asset("assets/images/avatar_icon.png"),
                 ),
-              ],
+              )
+            else
+              ClipRRect(
+                borderRadius: BorderRadius.circular(75.0),
+                child: Image.network(
+                  _avatarUrl!,
+                  width: 32,
+                  height: 32,
+                  fit: BoxFit.cover,
+                ),
+              ),
+          ],
+        ),
+        leading: Builder(builder: (context) {
+          return IconButton(
+            icon: const Icon(
+              Icons.menu,
               color: Colors.white,
-              borderRadius: BorderRadius.all(Radius.circular(25)),
+              size: 25,
             ),
-            child: IconButton(
-              icon: const Icon(Icons.menu, color: Colors.black),
-              onPressed: () => Scaffold.of(context).openDrawer(),
-            ),
+            onPressed: () => Scaffold.of(context).openDrawer(),
           );
         }),
       ),
       body: SafeArea(
-        minimum: EdgeInsets.only(top: 30),
+        minimum: const EdgeInsets.only(top: 30),
         child: Padding(
           padding: const EdgeInsets.only(
             left: 10.0,
@@ -166,19 +164,26 @@ class _OrganisationHomePageState
                   Text(
                     '$username',
                     style: const TextStyle(
-                      fontSize: 18,
-                    ),
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                        fontFamily: "NunitoSans"),
                   ),
                 ],
               ),
-              const Text("Welcome to your dashboard"),
+              const Text(
+                "Welcome to your dashboard",
+                style: TextStyle(color: Colors.grey),
+              ),
               const SizedBox(height: 18),
               Container(
                 padding: const EdgeInsets.all(10),
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(10.0),
                   gradient: const LinearGradient(
-                    colors: [Colors.black, Color(0xff636363)],
+                    colors: [
+                      Color(0xff1a1a1a),
+                      Color.fromARGB(255, 57, 57, 57)
+                    ],
                     begin: Alignment.topLeft,
                     end: Alignment.bottomRight,
                   ),
@@ -230,8 +235,9 @@ class _OrganisationHomePageState
                 ),
               ),
               const SizedBox(
-                height: 20,
+                height: 10,
               ),
+
               GestureDetector(
                 onTap: () {
                   Navigator.push(
@@ -362,6 +368,57 @@ class _OrganisationHomePageState
                   ],
                 ),
               ),
+              const SizedBox(height: 18,),
+              Container(
+                  alignment: Alignment.center,
+                  padding: const EdgeInsets.only(top: 20, left: 10, right: 10, bottom: 10),
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(10.0),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.grey.withOpacity(0.1),
+                        spreadRadius: 2,
+                        blurRadius: 3,
+                        offset:
+                            const Offset(0, 3), // changes position of shadow
+                      ),
+                    ],
+                  ),
+                  child: Column(
+                    children: [
+                      const Text("QR Codes per day", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),),
+                      const SizedBox(height: 15,),
+                      Row(
+                        children: [
+                          const SizedBox(width: 12,),
+                          Container(
+                            padding: const EdgeInsets.all(5),
+                            decoration: BoxDecoration(
+                              color: Color(0xffd7eb00),
+                              borderRadius: BorderRadius.circular(5.0),
+                            ),
+                            child: Text("This week", style: TextStyle(fontWeight: FontWeight.bold),)
+                          ),
+                          const SizedBox(width: 10,),
+                          Container(
+                            padding: const EdgeInsets.all(5),
+                            decoration: BoxDecoration(
+                              // color: Color(0xffd7eb00),
+                              borderRadius: BorderRadius.circular(5.0),
+                            ),
+                            child: Text("Last week", style: TextStyle(),)
+                          )
+                        ],
+                      ),
+                      const SizedBox(height: 15,),
+                      BarChartWidget(points: pricePoints),
+                    ],
+                  )),
+              const SizedBox(
+                height: 10,
+              ),
+              
               const SizedBox(
                 height: 20,
               ),
@@ -444,10 +501,6 @@ class _OrganisationHomePageState
               ),
               const SizedBox(
                 height: 20,
-              ),
-              const Text(
-                "Last QR Codes",
-                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
               ),
             ],
           ),
