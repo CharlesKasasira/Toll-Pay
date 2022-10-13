@@ -23,6 +23,7 @@ class ChatPage extends StatefulWidget {
 }
 
 class _ChatPageState extends State<ChatPage> {
+  String? _avatarUrl;
   late final Stream<List<Message>> _messagesStream;
   final Map<String, Profile> _profileCache = {};
 
@@ -65,28 +66,52 @@ class _ChatPageState extends State<ChatPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Color(0x00000000),
+        shadowColor: const Color.fromARGB(100, 158, 158, 158),
+        backgroundColor: Color(0xff1a1a1a),
         elevation: 0,
-        foregroundColor: Colors.black,
-        title: const Text("Chat"),
+        foregroundColor: Colors.white,
+        title: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            const Text(
+              "Chat",
+              style: TextStyle(fontWeight: FontWeight.w400),
+            ),
+            const SizedBox(
+              width: 10,
+            ),
+            if (_avatarUrl == null || _avatarUrl!.isEmpty)
+              ClipRRect(
+                borderRadius: BorderRadius.circular(75.0),
+                child: Container(
+                  width: 32,
+                  height: 32,
+                  alignment: Alignment.bottomCenter,
+                  decoration: const BoxDecoration(
+                    color: Color.fromARGB(255, 200, 200, 200),
+                  ),
+                  child: Image.asset("assets/images/avatar_icon.png"),
+                ),
+              )
+            else
+              ClipRRect(
+                borderRadius: BorderRadius.circular(75.0),
+                child: Image.network(
+                  _avatarUrl!,
+                  width: 32,
+                  height: 32,
+                  fit: BoxFit.cover,
+                ),
+              ),
+          ],
+        ),
         leading: Builder(builder: (context) {
           return Container(
             width: 25,
             height: 25,
             margin: const EdgeInsets.only(left: 10.0, top: 10.0, bottom: 4),
-            decoration: BoxDecoration(
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.grey.withOpacity(0.2),
-                    spreadRadius: 2,
-                    blurRadius: 3,
-                    offset: Offset(0, 3), // changes position of shadow
-                  ),
-                ],
-                color: Colors.white,
-                borderRadius: BorderRadius.all(Radius.circular(25))),
-            child: new IconButton(
-              icon: new Icon(Icons.arrow_back, color: Colors.black),
+            child: IconButton(
+              icon: const Icon(Icons.arrow_back),
               onPressed: () => Navigator.of(context).pop(),
             ),
           );

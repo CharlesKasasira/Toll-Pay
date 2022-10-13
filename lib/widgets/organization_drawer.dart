@@ -5,6 +5,8 @@ import 'package:tollpay/components/auth_required_state.dart';
 import 'package:tollpay/pages/account_page.dart';
 import 'package:tollpay/pages/chat_page.dart';
 import 'package:tollpay/pages/maps_page.dart';
+import 'package:tollpay/pages/organisation/cars_page.dart';
+import 'package:tollpay/pages/organisation/drivers_page.dart';
 import 'package:tollpay/pages/payment_page.dart';
 import 'package:tollpay/pages/scan_qr.dart';
 import 'package:tollpay/utils/constants.dart';
@@ -141,7 +143,7 @@ class _OrganisationDrawerState extends State<OrganisationDrawer> {
             title: const Text('Our Drivers'),
             onTap: () { 
               Get.to(
-                    () => PaymentPage(
+                    () => DriversPage(
                       user: widget.user,
                         firstName: widget.firstName,
                         lastName: widget.lastName
@@ -156,14 +158,16 @@ class _OrganisationDrawerState extends State<OrganisationDrawer> {
             leading: const Icon(Icons.car_crash_outlined),
             title: const Text('Our Cars'),
             onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (context) => PaymentPage(
-                        user: widget.user,
+              Get.to(
+                    () => CarsPage(
+                      user: widget.user,
                         firstName: widget.firstName,
-                        lastName: widget.lastName)),
-              );
+                        lastName: widget.lastName
+                    ),
+                    transition: Transition.cupertino,
+                    duration: const Duration(milliseconds: 600),
+                    curve: Curves.easeOut,
+                  );
             },
           ),
           ListTile(
@@ -177,6 +181,16 @@ class _OrganisationDrawerState extends State<OrganisationDrawer> {
             },
           ),
           ListTile(
+            leading: const Icon(Icons.chat_outlined),
+            title: const Text('Chat'),
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => const ChatPage()),
+              );
+            },
+          ),
+          ListTile(
             leading: const Icon(Icons.person_outline),
             title: const Text('Profile'),
             onTap: () {
@@ -186,16 +200,6 @@ class _OrganisationDrawerState extends State<OrganisationDrawer> {
                     duration: const Duration(milliseconds: 600),
                     curve: Curves.easeOut,
                   );
-            },
-          ),
-          ListTile(
-            leading: const Icon(Icons.chat_outlined),
-            title: const Text('Chat'),
-            onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => const ChatPage()),
-              );
             },
           ),
           const SizedBox(

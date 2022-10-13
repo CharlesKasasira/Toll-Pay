@@ -135,21 +135,21 @@ class _OperatorDrawerState extends State<OperatorDrawer> {
           ),
           ListTile(
             leading: const Icon(Icons.person_outline),
-            title: const Text('Profile'),
-            onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => const AccountPage()),
-              );
-            },
-          ),
-          ListTile(
-            leading: const Icon(Icons.person_outline),
             title: const Text('Chat'),
             onTap: () {
               Navigator.push(
                 context,
                 MaterialPageRoute(builder: (context) => const ChatPage()),
+              );
+            },
+          ),
+          ListTile(
+            leading: const Icon(Icons.person_outline),
+            title: const Text('Profile'),
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => const AccountPage()),
               );
             },
           ),

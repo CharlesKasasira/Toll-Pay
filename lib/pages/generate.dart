@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 import 'package:supabase/supabase.dart';
+import 'package:tollpay/pages/organisation/organisation_dashboard.dart';
 
 import '../utils/constants.dart';
 
@@ -13,13 +15,20 @@ class GeneratePage extends StatefulWidget {
 
   String? phone;
   GeneratePage(
-      {this.amount, this.phone, this.user, this.username, this.plate, this.count, Key? key})
+      {this.amount,
+      this.phone,
+      this.user,
+      this.username,
+      this.plate,
+      this.count,
+      Key? key})
       : super(key: key);
   @override
   State<StatefulWidget> createState() => GeneratePageState();
 }
 
 class GeneratePageState extends State<GeneratePage> {
+  String? _avatarUrl;
   Future<void> sendQRData() async {
     final response = await supabase.from('qrcodes').insert([
       {
@@ -61,35 +70,67 @@ class GeneratePageState extends State<GeneratePage> {
     return Scaffold(
       backgroundColor: const Color(0xffF6F6F6),
       appBar: AppBar(
-        backgroundColor: const Color(0x00000000),
+        shadowColor: const Color.fromARGB(100, 158, 158, 158),
+        backgroundColor: Color(0xff1a1a1a),
         elevation: 0,
-        foregroundColor: Colors.black,
+        foregroundColor: Colors.white,
         leading: Builder(
           builder: (context) {
             return Container(
               width: 25,
               height: 25,
               margin: const EdgeInsets.only(left: 10.0, top: 10.0, bottom: 4),
-              decoration: BoxDecoration(
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.grey.withOpacity(0.2),
-                    spreadRadius: 2,
-                    blurRadius: 3,
-                    offset: const Offset(0, 3), // changes position of shadow
-                  ),
-                ],
-                color: Colors.white,
-                borderRadius: const BorderRadius.all(Radius.circular(25)),
-              ),
               child: IconButton(
-                icon: const Icon(Icons.arrow_back, color: Colors.black),
-                onPressed: () => Navigator.of(context).pop(),
+                icon: const Icon(
+                  Icons.arrow_back,
+                ),
+                onPressed: () {
+                  Get.off(
+                    () => const OrganisationHomePage(),
+                    transition: Transition.cupertino,
+                    duration: const Duration(milliseconds: 600),
+                    curve: Curves.easeOut,
+                  );
+                },
               ),
             );
           },
         ),
-        title: const Text("QR Code"),
+        title: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            const Text(
+              "Get Token",
+              style: TextStyle(fontWeight: FontWeight.w400),
+            ),
+            const SizedBox(
+              width: 10,
+            ),
+            if (_avatarUrl == null || _avatarUrl!.isEmpty)
+              ClipRRect(
+                borderRadius: BorderRadius.circular(75.0),
+                child: Container(
+                  width: 32,
+                  height: 32,
+                  alignment: Alignment.bottomCenter,
+                  decoration: const BoxDecoration(
+                    color: Color.fromARGB(255, 200, 200, 200),
+                  ),
+                  child: Image.asset("assets/images/avatar_icon.png"),
+                ),
+              )
+            else
+              ClipRRect(
+                borderRadius: BorderRadius.circular(75.0),
+                child: Image.network(
+                  _avatarUrl!,
+                  width: 32,
+                  height: 32,
+                  fit: BoxFit.cover,
+                ),
+              ),
+          ],
+        ),
       ),
       body: Container(
         padding: const EdgeInsets.all(20.0),

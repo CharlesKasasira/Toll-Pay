@@ -8,21 +8,21 @@ import 'package:otp_text_field/style.dart';
 import 'package:tollpay/pages/generate.dart';
 import 'package:tollpay/pages/organisation/organisation_dashboard.dart';
 
-class PaymentPage extends StatefulWidget {
+class DriversPage extends StatefulWidget {
   var user;
   String? firstName;
   String? lastName;
   String? username;
 
-  PaymentPage(
+  DriversPage(
       {Key? key, this.user, this.firstName, this.lastName, this.username})
       : super(key: key);
 
   @override
-  State<PaymentPage> createState() => _PaymentPageState();
+  State<DriversPage> createState() => _DriversPageState();
 }
 
-class _PaymentPageState extends State<PaymentPage> {
+class _DriversPageState extends State<DriversPage> {
   var myAnswer = "";
   String? _avatarUrl;
   bool isAndroid = false;
@@ -162,7 +162,7 @@ class _PaymentPageState extends State<PaymentPage> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               const Text(
-                "Get Token",
+                "Drivers",
                 style: TextStyle(fontWeight: FontWeight.w400),
               ),
               const SizedBox(
