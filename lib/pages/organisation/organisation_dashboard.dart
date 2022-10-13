@@ -10,6 +10,7 @@ import 'package:http/http.dart' as http;
 import 'package:supabase/supabase.dart';
 import 'package:tollpay/components/auth_required_state.dart';
 import 'package:tollpay/models/weather.dart';
+import 'package:tollpay/pages/myqr_page.dart';
 import 'package:tollpay/pages/payment_page.dart';
 import 'package:tollpay/utils/color_constants.dart';
 import 'package:tollpay/utils/constants.dart';
@@ -30,6 +31,7 @@ class _OrganisationHomePageState
   String? firstName;
   String? lastName;
   String? username;
+  var activeQrCodes;
   var _user;
   bool _loading = false;
 
@@ -42,6 +44,23 @@ class _OrganisationHomePageState
       return Weather.getWeather(json);
     } else {
       return null;
+    }
+  }
+
+  Future getActiveQRCodes() async {
+    final response = await supabase.from('qrcodes').select().execute();
+
+    final data = response.data;
+    final error = response.error;
+
+    if (data != null) {
+      activeQrCodes = data.length;
+    } else {
+      activeQrCodes = "0";
+    }
+
+    if (error != null) {
+      print(error.message);
     }
   }
 
@@ -79,13 +98,20 @@ class _OrganisationHomePageState
     if (user != null) {
       _userId = user.id;
       _getProfile(user.id);
+      getActiveQRCodes();
     }
   }
 
   @override
-  Widget build(BuildContext context) {
-    print(username);
+  void initState() {
+    // TODO: implement initState
+    getActiveQRCodes();
+    super.initState();
+  }
 
+  @override
+  Widget build(BuildContext context) {
+    print(activeQrCodes);
     return Scaffold(
       backgroundColor: ColorConstants.kprimary,
       extendBodyBehindAppBar: true,
@@ -167,7 +193,9 @@ class _OrganisationHomePageState
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            const SizedBox(height: 10,),
+                            const SizedBox(
+                              height: 10,
+                            ),
                             Text(
                               '13',
                               style: GoogleFonts.roboto(
@@ -175,7 +203,9 @@ class _OrganisationHomePageState
                                   fontSize: 18,
                                   color: Colors.white),
                             ),
-                            const SizedBox(height: 10,),
+                            const SizedBox(
+                              height: 10,
+                            ),
                             Text(
                               'Drivers',
                               style: GoogleFonts.roboto(
@@ -193,61 +223,84 @@ class _OrganisationHomePageState
                         )
                       ],
                     ),
-                    const SizedBox(height: 10,)
+                    const SizedBox(
+                      height: 10,
+                    )
                   ],
                 ),
               ),
               const SizedBox(
                 height: 20,
               ),
-              Container(
-                padding: const EdgeInsets.all(10),
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(10.0),
-                  gradient: const LinearGradient(
-                    colors: [Color.fromARGB(255, 15, 113, 48), Color.fromARGB(200, 15, 113, 48)],
-                    begin: Alignment.topLeft,
-                    end: Alignment.bottomRight,
-                  ),
-                ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Column(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            const SizedBox(height: 10,),
-                            Text(
-                              '2',
-                              style: GoogleFonts.roboto(
-                                  textStyle: const TextStyle(letterSpacing: .5),
-                                  fontSize: 18,
-                                  color: Colors.white),
-                            ),
-                            const SizedBox(height: 10,),
-                            Text(
-                              'Used QR Codes',
-                              style: GoogleFonts.roboto(
-                                  textStyle: const TextStyle(letterSpacing: .5),
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 22,
-                                  color: Colors.white),
-                            ),
-                          ],
-                        ),
-                        const Icon(
-                          Icons.qr_code,
-                          color: Colors.white,
-                          size: 60,
-                        )
-                      ],
+              GestureDetector(
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const MyQRCodes(),
                     ),
-                    const SizedBox(height: 10,)
-                  ],
+                  );
+                },
+                child: Container(
+                  padding: const EdgeInsets.all(10),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(10.0),
+                    gradient: const LinearGradient(
+                      colors: [
+                        Color.fromARGB(255, 15, 113, 48),
+                        Color.fromARGB(200, 15, 113, 48)
+                      ],
+                      begin: Alignment.topLeft,
+                      end: Alignment.bottomRight,
+                    ),
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Column(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              const SizedBox(
+                                height: 10,
+                              ),
+                              Text(
+                                '${activeQrCodes}',
+                                style: GoogleFonts.roboto(
+                                    textStyle:
+                                        const TextStyle(letterSpacing: .5),
+                                    fontSize: 18,
+                                    color: Colors.white),
+                              ),
+                              const SizedBox(
+                                height: 10,
+                              ),
+                              Text(
+                                'Active QR Codes',
+                                style: GoogleFonts.roboto(
+                                    textStyle:
+                                        const TextStyle(letterSpacing: .5),
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 22,
+                                    color: Colors.white),
+                              ),
+                            ],
+                          ),
+                          const Icon(
+                            Icons.qr_code,
+                            color: Colors.white,
+                            size: 60,
+                          )
+                        ],
+                      ),
+                      const SizedBox(
+                        height: 10,
+                      )
+                    ],
+                  ),
                 ),
               ),
               const SizedBox(
@@ -273,7 +326,9 @@ class _OrganisationHomePageState
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            const SizedBox(height: 10,),
+                            const SizedBox(
+                              height: 10,
+                            ),
                             Text(
                               '10',
                               style: GoogleFonts.roboto(
@@ -281,7 +336,9 @@ class _OrganisationHomePageState
                                   fontSize: 18,
                                   color: Colors.white),
                             ),
-                            const SizedBox(height: 10,),
+                            const SizedBox(
+                              height: 10,
+                            ),
                             Text(
                               'Registered Cars',
                               style: GoogleFonts.roboto(
@@ -299,14 +356,15 @@ class _OrganisationHomePageState
                         )
                       ],
                     ),
-                    const SizedBox(height: 10,)
+                    const SizedBox(
+                      height: 10,
+                    )
                   ],
                 ),
               ),
               const SizedBox(
                 height: 20,
               ),
-              
               Container(
                 child: FutureBuilder(
                   future: fetchWeather(),

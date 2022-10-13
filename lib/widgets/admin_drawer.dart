@@ -110,11 +110,12 @@ class _OrganisationDrawerState extends State<OrganisationDrawer> {
                       fontWeight: FontWeight.bold,
                       fontSize: 17),
                 ),
-                Text(
-                  "${widget.user.email}",
-                  style: const TextStyle(
-                      color: Colors.white, fontWeight: FontWeight.normal),
-                ),
+                // Text(
+                //   // "${widget.user.email}",
+                //   "hhhh",
+                //   style: const TextStyle(
+                //       color: Colors.white, fontWeight: FontWeight.normal),
+                // ),
               ],
             ),
           ),

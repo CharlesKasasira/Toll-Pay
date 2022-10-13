@@ -7,10 +7,6 @@ final supabase = Supabase.instance.client;
 const preloader =
     Center(child: CircularProgressIndicator(color: Colors.black));
 
-// ignore: avoid_classes_with_only_static_members
-class ApiConstants {
-  static String baseUrl = 'http://localhost:4000';
-}
 
 
 extension ShowSnackBar on BuildContext {
@@ -26,5 +22,9 @@ extension ShowSnackBar on BuildContext {
 
   void showErrorSnackBar({required String message}) {
     showSnackBar(message: message, backgroundColor: Colors.red);
+  }
+
+  void showSuccessSnackBar({required String message}) {
+    showSnackBar(message: message, backgroundColor: Colors.green);
   }
 }

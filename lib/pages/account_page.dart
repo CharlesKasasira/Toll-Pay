@@ -15,7 +15,11 @@ class _AccountPageState extends AuthRequiredState<AccountPage> {
   final _firstNameController = TextEditingController();
   final _lastNameController = TextEditingController();
   final _fullNameController = TextEditingController();
+  final _emailController = TextEditingController();
+  final _phoneController = TextEditingController();
   final _focusName = FocusNode();
+  final _focusEmail = FocusNode();
+  final _focusPhone = FocusNode();
   String? _userId;
   String? _avatarUrl;
   var _loading = false;
@@ -37,9 +41,12 @@ class _AccountPageState extends AuthRequiredState<AccountPage> {
     }
     final data = response.data;
     if (data != null) {
+      print(data);
       _firstNameController.text = (data['first_name'] ?? '') as String;
       _lastNameController.text = (data['last_name'] ?? '') as String;
       _fullNameController.text = (data['username'] ?? '') as String;
+      _emailController.text = (data['email'] ?? '') as String;
+      _phoneController.text = (data['phone'] ?? '') as String;
       _avatarUrl = (data['avatar_url'] ?? '') as String;
     }
     setState(() {
@@ -52,15 +59,15 @@ class _AccountPageState extends AuthRequiredState<AccountPage> {
     setState(() {
       _loading = true;
     });
-    final firstName = _firstNameController.text;
-    final lastName = _lastNameController.text;
     final fullName = _fullNameController.text;
+    final email = _emailController.text;
+    final phone = _phoneController.text;
     final user = supabase.auth.currentUser;
     final updates = {
       'id': user!.id,
-      'first_name': firstName,
-      'last_name': lastName,
       'username': fullName,
+      'email': email,
+      'phone': phone,
       'updated_at': DateTime.now().toIso8601String(),
     };
     final response = await supabase.from('profiles').upsert(updates).execute();
@@ -110,9 +117,9 @@ class _AccountPageState extends AuthRequiredState<AccountPage> {
 
   @override
   void dispose() {
-    _firstNameController.dispose();
-    _lastNameController.dispose();
     _fullNameController.dispose();
+    _emailController.dispose();
+    _phoneController.dispose();
     super.dispose();
   }
 
@@ -121,56 +128,53 @@ class _AccountPageState extends AuthRequiredState<AccountPage> {
     return GestureDetector(
       onTap: () {
         _focusName.unfocus();
+        _focusEmail.unfocus();
+        _focusPhone.unfocus();
       },
       child: Scaffold(
         backgroundColor: const Color(0xffF5F5F5),
         appBar: AppBar(
-          backgroundColor: const Color(0x00000000),
-          elevation: 0,
+          backgroundColor: Colors.white,
+          elevation: 3,
           foregroundColor: Colors.black,
           title: const Text("Profile"),
           leading: Builder(builder: (context) {
-              return Container(
-                width: 25,
-                height: 25,
-                margin: const EdgeInsets.only(left: 10.0, top: 10.0, bottom: 4),
-                decoration: BoxDecoration(
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.grey.withOpacity(0.2),
-                        spreadRadius: 2,
-                        blurRadius: 3,
-                        offset: Offset(0, 3), // changes position of shadow
-                      ),
-                    ],
-                    color: Colors.white,
-                    borderRadius: BorderRadius.all(Radius.circular(25))),
-                child: new IconButton(
-                  icon: new Icon(Icons.arrow_back, color: Colors.black),
-                  onPressed: () => Navigator.of(context).pop(),
-                ),
-              );
-            }),
+            return Container(
+              width: 25,
+              height: 25,
+              margin: const EdgeInsets.only(left: 10.0, top: 10.0, bottom: 4),
+              child: new IconButton(
+                icon: new Icon(Icons.arrow_back, color: Colors.black),
+                onPressed: () => Navigator.of(context).pop(),
+              ),
+            );
+          }),
         ),
         body: ListView(
           padding: const EdgeInsets.symmetric(vertical: 18, horizontal: 12),
           children: [
             Avatar(
-            imageUrl: _avatarUrl,
-            onUpload: _onUpload,
+              imageUrl: _avatarUrl,
+              onUpload: _onUpload,
             ),
             const SizedBox(height: 18),
-            const Text("Personal Information"),
+            const Text(
+              "Personal Information",
+              style: TextStyle(fontWeight: FontWeight.bold),
+            ),
             const SizedBox(height: 18),
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Text("Name",
+                const Text(
+                  "Name",
                   style: TextStyle(
-                                fontWeight: FontWeight.bold,),
-                          ),
-                // const SizedBox(height: 5,), 
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                // const SizedBox(height: 5,),
                 TextFormField(
+                  style: TextStyle(color: Color.fromARGB(255, 144, 142, 142)),
                   controller: _fullNameController,
                   focusNode: _focusName,
                   decoration: const InputDecoration(
@@ -182,9 +186,71 @@ class _AccountPageState extends AuthRequiredState<AccountPage> {
               ],
             ),
             const SizedBox(height: 18),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Text(
+                  "Email",
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                // const SizedBox(height: 5,),
+                TextFormField(
+                  style: TextStyle(color: Color.fromARGB(255, 144, 142, 142)),
+                  controller: _emailController,
+                  focusNode: _focusEmail,
+                  decoration: const InputDecoration(
+                    isDense: true,
+                    labelText: 'Enter email',
+                    floatingLabelBehavior: FloatingLabelBehavior.never,
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 18),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Text(
+                  "Phone Number",
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                // const SizedBox(height: 5,),
+                TextFormField(
+                  style: TextStyle(color: Color.fromARGB(255, 144, 142, 142)),
+                  controller: _phoneController,
+                  focusNode: _focusPhone,
+                  decoration: const InputDecoration(
+                    isDense: true,
+                    labelText: 'Phone Number',
+                    floatingLabelBehavior: FloatingLabelBehavior.never,
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 18),
             ElevatedButton(
                 onPressed: _updateProfile,
                 child: Text(_loading ? 'Saving...' : 'Update')),
+            const SizedBox(height: 5),
+            ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  primary: Color.fromARGB(255, 249, 194, 194),
+                  elevation: 0,
+                ),
+                onPressed: _updateProfile,
+                child: Row(
+                  children: const [
+                    Icon(Icons.delete, color: Color(0xffE71111),),
+                    SizedBox(
+                      width: 8,
+                    ),
+                    Text("Delete Account", style: TextStyle(color: Color(0xffE71111)),)
+                  ],
+                )),
             const SizedBox(height: 18),
           ],
         ),

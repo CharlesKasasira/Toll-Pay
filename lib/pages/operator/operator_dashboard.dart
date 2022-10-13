@@ -5,18 +5,16 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:google_fonts/google_fonts.dart';
+import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'package:supabase/supabase.dart';
 import 'package:tollpay/components/auth_required_state.dart';
 import 'package:tollpay/models/weather.dart';
-import 'package:tollpay/pages/payment_page.dart';
+import 'package:tollpay/pages/account_page.dart';
 import 'package:tollpay/pages/scan_qr.dart';
 import 'package:tollpay/utils/color_constants.dart';
 import 'package:tollpay/utils/constants.dart';
-import 'package:tollpay/widgets/drawer.dart';
 import 'package:tollpay/widgets/operator_drawer.dart';
-import 'package:get/get.dart';
 
 class OperatorHomePage extends StatefulWidget {
   const OperatorHomePage({Key? key}) : super(key: key);
@@ -47,7 +45,7 @@ class _OperatorHomePageState extends AuthRequiredState<OperatorHomePage> {
   }
 
   void _goToScan() {
-    Get.off(
+    Get.to(
       () => ScanPage(),
       transition: Transition.cupertino,
       duration: const Duration(milliseconds: 600),
@@ -94,37 +92,81 @@ class _OperatorHomePageState extends AuthRequiredState<OperatorHomePage> {
 
   @override
   Widget build(BuildContext context) {
-    final route = ModalRoute.of(context);
-    var pageName = "";
-
-    if (route != null) {
-      pageName = route.settings.name == '/dashboard' ? "Dashboard" : "";
-    }
-
     return Scaffold(
       backgroundColor: ColorConstants.kprimary,
       appBar: AppBar(
-        backgroundColor: ColorConstants.ktransparent,
-        elevation: 0,
+        backgroundColor: Colors.white,
+        elevation: 3,
         foregroundColor: Colors.black,
-        title: const Text("Home"),
+        title: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            const Text("Home"),
+            const SizedBox(
+              width: 10,
+            ),
+            if (_avatarUrl == null || _avatarUrl!.isEmpty)
+              GestureDetector(
+                onTap: () {
+                  Get.to(
+                    () => const AccountPage(),
+                    transition: Transition.cupertino,
+                    duration: const Duration(milliseconds: 600),
+                    curve: Curves.easeOut,
+                  );
+                },
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(75.0),
+                  child: Container(
+                    width: 32,
+                    height: 32,
+                    alignment: Alignment.bottomCenter,
+                    decoration: const BoxDecoration(
+                      color: Color.fromARGB(255, 200, 200, 200),
+                    ),
+                    child: Image.asset("assets/images/avatar_icon.png"),
+                  ),
+                ),
+              )
+            else
+              GestureDetector(
+                onTap: () {
+                  Get.to(
+                    () => const AccountPage(),
+                    transition: Transition.cupertino,
+                    duration: const Duration(milliseconds: 600),
+                    curve: Curves.easeOut,
+                  );
+                },
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(75.0),
+                  child: Image.network(
+                    _avatarUrl!,
+                    width: 32,
+                    height: 32,
+                    fit: BoxFit.cover,
+                  ),
+                ),
+              ),
+          ],
+        ),
         leading: Builder(builder: (context) {
           return Container(
             width: 25,
             height: 25,
             margin: const EdgeInsets.only(left: 10.0, top: 10.0, bottom: 5),
-            decoration: BoxDecoration(
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.grey.withOpacity(0.2),
-                  spreadRadius: 2,
-                  blurRadius: 3,
-                  offset: const Offset(0, 3), // changes position of shadow
-                ),
-              ],
-              color: Colors.white,
-              borderRadius: BorderRadius.all(Radius.circular(25)),
-            ),
+            // decoration: BoxDecoration(
+            //   boxShadow: [
+            //     BoxShadow(
+            //       color: Colors.grey.withOpacity(0.2),
+            //       spreadRadius: 2,
+            //       blurRadius: 3,
+            //       offset: const Offset(0, 3), // changes position of shadow
+            //     ),
+            //   ],
+            //   color: Colors.white,
+            //   borderRadius: BorderRadius.all(Radius.circular(25)),
+            // ),
             child: IconButton(
               icon: const Icon(Icons.menu, color: Colors.black),
               onPressed: () => Scaffold.of(context).openDrawer(),
@@ -158,48 +200,40 @@ class _OperatorHomePageState extends AuthRequiredState<OperatorHomePage> {
               ],
             ),
             const SizedBox(height: 18),
-            Container(
-              padding: const EdgeInsets.all(10),
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(10.0),
-                gradient: const LinearGradient(
-                  colors: [Colors.black, Color(0xff636363)],
-                  begin: Alignment.topLeft,
-                  end: Alignment.bottomRight,
+            GestureDetector(
+              onTap: _goToScan,
+              child: Container(
+                padding: const EdgeInsets.all(10),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(10.0),
+                  gradient: const LinearGradient(
+                    colors: [Colors.black, Color(0xff636363)],
+                    begin: Alignment.topLeft,
+                    end: Alignment.bottomRight,
+                  ),
                 ),
-              ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      // Image.asset(
-                      //   "assets/images/qr-code.png",
-                      //   width: 100,
-                      // ),
-                      GestureDetector(
-                        onTap: _goToScan,
-                        child: const Icon(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: const [
+                        Icon(
                           Icons.qr_code_scanner,
                           color: Colors.white,
                           size: 100,
                         ),
-                      ),
-                      TextButton(
-                        onPressed: _goToScan,
-                        child: const Text(
+                        Text(
                           "Scan QR code",
                           style: TextStyle(color: Colors.white, fontSize: 20),
-                        ),
-                      )
-                    ],
-                  ),
-                  const SizedBox(
-                    height: 18,
-                  ),
-                ],
+                        )
+                      ],
+                    ),
+                    const SizedBox(
+                      height: 18,
+                    ),
+                  ],
+                ),
               ),
             ),
             const SizedBox(
@@ -289,11 +323,12 @@ class _OperatorHomePageState extends AuthRequiredState<OperatorHomePage> {
         ),
       ),
       drawer: OperatorDrawer(
-          user: _user,
-          imageUrl: _avatarUrl,
-          firstName: firstName,
-          lastName: lastName,
-          username: username),
+        user: _user,
+        imageUrl: _avatarUrl,
+        firstName: firstName,
+        lastName: lastName,
+        username: username,
+      ),
     );
   }
 }
@@ -309,7 +344,7 @@ Widget getLocationScreen(location) {
 
   return Container(
     height: 180,
-    padding: const EdgeInsets.all(10),
+    padding: const EdgeInsets.only(top: 10, bottom: 10),
     alignment: Alignment.center,
     // width: MediaQuery.of().size.width,
     decoration: BoxDecoration(

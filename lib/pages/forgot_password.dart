@@ -31,7 +31,10 @@ class _ForgotPageState extends AuthState<ForgotPage> {
   }
 
   Future<void> _resetPassword() async {
+    final res = await supabase.auth.api.resetPasswordForEmail(_emailController.text);
 
+    final error = res.error;
+    _emailController.clear();
   }
 
   Future<void> _signIn() async {
@@ -81,6 +84,17 @@ class _ForgotPageState extends AuthState<ForgotPage> {
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Image.asset(
+                        "assets/images/Toll-Pay.png",
+                        width: 80,
+                      ),
+                    ],
+                  ),
+                const SizedBox(height: 20,),
               const Text(
                 'Forgot Password',
                 style: TextStyle(fontWeight: FontWeight.bold, fontSize: 40),

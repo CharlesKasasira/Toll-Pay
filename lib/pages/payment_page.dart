@@ -10,7 +10,9 @@ class PaymentPage extends StatefulWidget {
   var user;
   String? firstName;
   String? lastName;
-  PaymentPage({Key? key, this.user, this.firstName, this.lastName, String? username})
+  String? username;
+  PaymentPage(
+      {Key? key, this.user, this.firstName, this.lastName, this.username})
       : super(key: key);
 
   @override
@@ -70,20 +72,20 @@ class _PaymentPageState extends State<PaymentPage> {
           }),
         )
         .then((value) => value);
-    
+
     Future.delayed(const Duration(milliseconds: 1000), () {
       Navigator.push(
-        context,
-        MaterialPageRoute(
-            builder: (context) => GeneratePage(
-                amount: feesPerItems[dropdownvalue],
-                phone: _phoneNumberController.text,
-                plate: _plateNumberController.text,
-                user: widget.user)));
-        setState(() {});
+          context,
+          MaterialPageRoute(
+              builder: (context) => GeneratePage(
+                  amount: feesPerItems[dropdownvalue],
+                  phone: _phoneNumberController.text,
+                  plate: _plateNumberController.text,
+                  username: widget.username,
+                  user: widget.user)));
+      setState(() {});
+    });
 
-      });
-    
     return null;
   }
 
@@ -243,25 +245,27 @@ class _PaymentPageState extends State<PaymentPage> {
                     ),
                   ],
                 ),
-                const SizedBox(height: 10,),
+                const SizedBox(
+                  height: 10,
+                ),
                 Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const Text('Plate Number'),
-                      const SizedBox(height: 5),
-                      TextFormField(
-                        controller: _plateNumberController,
-                        focusNode: _focusPlateNumber,
-                        decoration: const InputDecoration(
-                          floatingLabelBehavior: FloatingLabelBehavior.never,
-                          labelText: 'Enter plate number',
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.all(Radius.circular(12)),
-                          ),
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Text('Plate Number'),
+                    const SizedBox(height: 5),
+                    TextFormField(
+                      controller: _plateNumberController,
+                      focusNode: _focusPlateNumber,
+                      decoration: const InputDecoration(
+                        floatingLabelBehavior: FloatingLabelBehavior.never,
+                        labelText: 'Enter plate number',
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(12)),
                         ),
                       ),
-                    ],
-                  ),
+                    ),
+                  ],
+                ),
                 const SizedBox(height: 12),
                 Row(
                   children: [

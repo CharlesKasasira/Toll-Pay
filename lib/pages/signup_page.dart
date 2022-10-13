@@ -203,7 +203,8 @@ class _SignupPageState extends AuthState<SignupPage> {
                             child: GestureDetector(
                               onTap: _togglePasswordVisibility,
                               child: SvgPicture.asset(
-                                      "assets/icon/password_visible.svg",
+                                      _showPassword ?
+                                    "assets/icon/password_invisible.svg" : "assets/icon/password_visible.svg",
                                       height: 15,
                                       width: 20,
                                     ),

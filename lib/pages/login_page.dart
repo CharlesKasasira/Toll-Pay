@@ -57,8 +57,8 @@ class _LoginPageState extends AuthState<LoginPage> {
     });
 
     final response = await supabase.auth.signIn(
-      email: _emailController.text,
-      password: _passwordController.text,
+      email: _emailController.text.trim(),
+      password: _passwordController.text.trim(),
     );
     final user = response.user;
 
@@ -113,13 +113,14 @@ class _LoginPageState extends AuthState<LoginPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       // resizeToAvoidBottomInset: false,
+      extendBodyBehindAppBar: true,
       backgroundColor: Colors.white,
       body: GestureDetector(
         onTap: () {
           FocusScope.of(context).unfocus();
         },
         child: SafeArea(
-          minimum: const EdgeInsets.only(top: 60),
+          // minimum: const EdgeInsets.only(top: 60),
           child: SingleChildScrollView(
             // physics: const NeverScrollableScrollPhysics(),
             reverse: true,
@@ -131,14 +132,26 @@ class _LoginPageState extends AuthState<LoginPage> {
               child: Center(
                   child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   const SizedBox(height: 50),
-                  Image.asset(
-                    "assets/images/Toll-Pay.png",
-                    width: 80,
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Image.asset(
+                        "assets/images/Toll-Pay.png",
+                        width: 80,
+                      ),
+                    ],
                   ),
+                  const SizedBox(height: 20,),
+                  const Text(
+                'Login',
+                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 30),
+              ),
                   const SizedBox(
-                    height: 40,
+                    height: 10,
                   ),
                   Form(
                     key: _formKey,
@@ -187,8 +200,8 @@ class _LoginPageState extends AuthState<LoginPage> {
                                 padding: const EdgeInsets.only(right: 15),
                                 child: GestureDetector(
                                   onTap: _togglePasswordVisibility,
-                                  child: SvgPicture.asset(
-                                    "assets/icon/password_visible.svg",
+                                  child: SvgPicture.asset(_showPassword ?
+                                    "assets/icon/password_invisible.svg" : "assets/icon/password_visible.svg",
                                     height: 15,
                                     width: 20,
                                   ),
@@ -215,7 +228,7 @@ class _LoginPageState extends AuthState<LoginPage> {
                   ),
                   CustomElevatedButton(
                     onTap: _signIn,
-                    text: "LOGIN",
+                    text: _isLoading ? "Loading" : "LOGIN",
                   ),
                   const SizedBox(
                     height: 10,
