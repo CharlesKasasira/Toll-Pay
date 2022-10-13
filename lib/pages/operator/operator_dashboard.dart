@@ -95,9 +95,10 @@ class _OperatorHomePageState extends AuthRequiredState<OperatorHomePage> {
     return Scaffold(
       backgroundColor: ColorConstants.kprimary,
       appBar: AppBar(
-        backgroundColor: Colors.white,
-        elevation: 3,
-        foregroundColor: Colors.black,
+        shadowColor: const Color.fromARGB(100, 158, 158, 158),
+        backgroundColor: Color(0xff1a1a1a),
+        elevation: 0,
+        foregroundColor: Colors.white,
         title: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
@@ -155,20 +156,8 @@ class _OperatorHomePageState extends AuthRequiredState<OperatorHomePage> {
             width: 25,
             height: 25,
             margin: const EdgeInsets.only(left: 10.0, top: 10.0, bottom: 5),
-            // decoration: BoxDecoration(
-            //   boxShadow: [
-            //     BoxShadow(
-            //       color: Colors.grey.withOpacity(0.2),
-            //       spreadRadius: 2,
-            //       blurRadius: 3,
-            //       offset: const Offset(0, 3), // changes position of shadow
-            //     ),
-            //   ],
-            //   color: Colors.white,
-            //   borderRadius: BorderRadius.all(Radius.circular(25)),
-            // ),
             child: IconButton(
-              icon: const Icon(Icons.menu, color: Colors.black),
+              icon: const Icon(Icons.menu),
               onPressed: () => Scaffold.of(context).openDrawer(),
             ),
           );

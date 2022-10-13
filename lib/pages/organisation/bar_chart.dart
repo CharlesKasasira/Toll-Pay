@@ -32,7 +32,7 @@ class _BarChartWidgetState extends State<BarChartWidget> {
               leftTitles: AxisTitles(
                 sideTitles: SideTitles(
                   showTitles: true,
-                  reservedSize: 40,
+                  reservedSize: 30,
                   interval: 2,
                   ),
                 ),
@@ -57,7 +57,7 @@ class _BarChartWidgetState extends State<BarChartWidget> {
             backDrawRodData: BackgroundBarChartRodData(
               show: true,
               color: const Color.fromARGB(255, 237, 237, 237),
-              toY: 15
+              toY: 16
               )
           )
           

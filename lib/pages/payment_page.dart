@@ -394,7 +394,6 @@ class _PaymentPageState extends State<PaymentPage> {
                   height: 10,
                 ),
                 Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(

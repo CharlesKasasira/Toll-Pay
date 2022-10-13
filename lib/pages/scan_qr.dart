@@ -23,7 +23,7 @@ class _ScanPageState extends State<ScanPage> {
     );
   }
 
-  Future<void> updateQRCode(String code) async {
+  Future updateQRCode(String code) async {
     setState(() {
       _loading = true;
     });
@@ -36,20 +36,33 @@ class _ScanPageState extends State<ScanPage> {
         .execute();
 
     if (res.data != null) {
-      if (res.data == 0) {
+      if (res.data['count'] == 0) {
         context.showErrorSnackBar(message: "This QR Code is already Expired");
-      } else if (res.data == 1) {
+      } else if (res.data['count'] == 1) {
         final response = await supabase
             .from('qrcodes')
             .update({'count': 0, 'status': 'Expired'})
             .eq('qrcode_id', code.split("\n")[0].trim())
             .execute();
+
+        if (response.data != null) {
+          context.showSuccessSnackBar(message: "successful");
+        }
+        return null;
       } else {
         final response = await supabase
             .from('qrcodes')
-            .update({'count': res.data - 1, 'status': 'Active'})
+            .update({
+              'count': (res.data['count'] as int) - 1,
+            })
             .eq('qrcode_id', code.split("\n")[0].trim())
             .execute();
+
+        if (response.data != null) {
+          context.showSuccessSnackBar(message: "successful");
+        }
+
+        return null;
       }
 
       final error = res.error;
@@ -57,26 +70,8 @@ class _ScanPageState extends State<ScanPage> {
         // ignore: use_build_context_synchronously
         context.showErrorSnackBar(message: error.message);
       }
-      final data = res.data;
-      if (data != null) {
-        context.showSuccessSnackBar(message: "successful");
-      }
-    }
 
-    final response = await supabase
-        .from('qrcodes')
-        .update({'count': 0, 'status': 'Expired'})
-        .eq('qrcode_id', code.split("\n")[0].trim())
-        .execute();
-
-    final error = response.error;
-    if (error != null && response.status != 406) {
-      // ignore: use_build_context_synchronously
-      context.showErrorSnackBar(message: error.message);
-    }
-    final data = response.data;
-    if (data != null) {
-      context.showSuccessSnackBar(message: "successful");
+      return null;
     }
   }
 
@@ -135,11 +130,11 @@ class _ScanPageState extends State<ScanPage> {
               icon: const Icon(Icons.arrow_back),
               onPressed: () {
                 Get.off(
-                    () => const OperatorHomePage(),
-                    transition: Transition.cupertino,
-                    duration: const Duration(milliseconds: 600),
-                    curve: Curves.easeOut,
-                  );
+                  () => const OperatorHomePage(),
+                  transition: Transition.cupertino,
+                  duration: const Duration(milliseconds: 600),
+                  curve: Curves.easeOut,
+                );
               },
             ),
           );
