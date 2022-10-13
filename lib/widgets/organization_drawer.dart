@@ -8,6 +8,7 @@ import 'package:tollpay/pages/maps_page.dart';
 import 'package:tollpay/pages/payment_page.dart';
 import 'package:tollpay/pages/scan_qr.dart';
 import 'package:tollpay/utils/constants.dart';
+import 'package:get/get.dart';
 
 class OrganisationDrawer extends StatefulWidget {
   var user;
@@ -122,30 +123,33 @@ class _OrganisationDrawerState extends State<OrganisationDrawer> {
             leading: const Icon(Icons.payment_outlined),
             title: const Text('Make Payment'),
             onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (context) => PaymentPage(
-                          user: widget.user,
-                          firstName: widget.firstName,
-                          lastName: widget.lastName,
-                          username: widget.username,
-                        )),
-              );
+              Get.to(
+                    () => PaymentPage(
+                      user: widget.user,
+                      firstName: widget.firstName,
+                      lastName: widget.lastName,
+                      username: widget.username,
+                    ),
+                    transition: Transition.cupertino,
+                    duration: const Duration(milliseconds: 600),
+                    curve: Curves.easeOut,
+                  );
             },
           ),
           ListTile(
             leading: const Icon(Icons.groups_outlined),
             title: const Text('Our Drivers'),
-            onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (context) => PaymentPage(
-                        user: widget.user,
+            onTap: () { 
+              Get.to(
+                    () => PaymentPage(
+                      user: widget.user,
                         firstName: widget.firstName,
-                        lastName: widget.lastName)),
-              );
+                        lastName: widget.lastName
+                    ),
+                    transition: Transition.cupertino,
+                    duration: const Duration(milliseconds: 600),
+                    curve: Curves.easeOut,
+                  );
             },
           ),
           ListTile(
@@ -176,14 +180,16 @@ class _OrganisationDrawerState extends State<OrganisationDrawer> {
             leading: const Icon(Icons.person_outline),
             title: const Text('Profile'),
             onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => const AccountPage()),
-              );
+              Get.to(
+                    () => const AccountPage(),
+                    transition: Transition.cupertino,
+                    duration: const Duration(milliseconds: 600),
+                    curve: Curves.easeOut,
+                  );
             },
           ),
           ListTile(
-            leading: const Icon(Icons.person_outline),
+            leading: const Icon(Icons.chat_outlined),
             title: const Text('Chat'),
             onTap: () {
               Navigator.push(

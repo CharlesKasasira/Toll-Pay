@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:supabase/supabase.dart';
 import 'package:tollpay/components/auth_required_state.dart';
 import 'package:tollpay/components/avatar.dart';
+import 'package:tollpay/pages/home_page.dart';
+import 'package:tollpay/pages/organisation/organisation_dashboard.dart';
 import 'package:tollpay/utils/constants.dart';
 
 class AccountPage extends StatefulWidget {
@@ -41,9 +44,6 @@ class _AccountPageState extends AuthRequiredState<AccountPage> {
     }
     final data = response.data;
     if (data != null) {
-      print(data);
-      _firstNameController.text = (data['first_name'] ?? '') as String;
-      _lastNameController.text = (data['last_name'] ?? '') as String;
       _fullNameController.text = (data['username'] ?? '') as String;
       _emailController.text = (data['email'] ?? '') as String;
       _phoneController.text = (data['phone'] ?? '') as String;
@@ -134,18 +134,60 @@ class _AccountPageState extends AuthRequiredState<AccountPage> {
       child: Scaffold(
         backgroundColor: const Color(0xffF5F5F5),
         appBar: AppBar(
-          backgroundColor: Colors.white,
-          elevation: 3,
-          foregroundColor: Colors.black,
-          title: const Text("Profile"),
+          shadowColor: const Color.fromARGB(100, 158, 158, 158),
+        backgroundColor: Color(0xff1a1a1a),
+          elevation: 0,
+          foregroundColor: Colors.white,
+          title: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            const Text(
+              "Home",
+              style: TextStyle(fontWeight: FontWeight.w400),
+            ),
+            const SizedBox(
+              width: 10,
+            ),
+            if (_avatarUrl == null || _avatarUrl!.isEmpty)
+              ClipRRect(
+                borderRadius: BorderRadius.circular(75.0),
+                child: Container(
+                  width: 32,
+                  height: 32,
+                  alignment: Alignment.bottomCenter,
+                  decoration: const BoxDecoration(
+                    color: Color.fromARGB(255, 200, 200, 200),
+                  ),
+                  child: Image.asset("assets/images/avatar_icon.png"),
+                ),
+              )
+            else
+              ClipRRect(
+                borderRadius: BorderRadius.circular(75.0),
+                child: Image.network(
+                  _avatarUrl!,
+                  width: 32,
+                  height: 32,
+                  fit: BoxFit.cover,
+                ),
+              ),
+          ],
+        ),
           leading: Builder(builder: (context) {
             return Container(
               width: 25,
               height: 25,
               margin: const EdgeInsets.only(left: 10.0, top: 10.0, bottom: 4),
-              child: new IconButton(
-                icon: new Icon(Icons.arrow_back, color: Colors.black),
-                onPressed: () => Navigator.of(context).pop(),
+              child: IconButton(
+                icon: const Icon(Icons.arrow_back,),
+                onPressed: () {
+                  Get.off(
+                    () => const OrganisationHomePage(),
+                    transition: Transition.cupertino,
+                    duration: const Duration(milliseconds: 600),
+                    curve: Curves.easeOut,
+                  );
+                },
               ),
             );
           }),

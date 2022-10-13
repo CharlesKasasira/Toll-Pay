@@ -1,16 +1,19 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'package:otp_text_field/otp_field.dart';
 import 'package:otp_text_field/style.dart';
 import 'package:tollpay/pages/generate.dart';
+import 'package:tollpay/pages/organisation/organisation_dashboard.dart';
 
 class PaymentPage extends StatefulWidget {
   var user;
   String? firstName;
   String? lastName;
   String? username;
+
   PaymentPage(
       {Key? key, this.user, this.firstName, this.lastName, this.username})
       : super(key: key);
@@ -21,15 +24,20 @@ class PaymentPage extends StatefulWidget {
 
 class _PaymentPageState extends State<PaymentPage> {
   var myAnswer = "";
+  String? _avatarUrl;
+  bool isAndroid = false;
   late final TextEditingController _phoneNumberController;
   late final TextEditingController _plateNumberController;
+  late final TextEditingController _tripsController;
   final _focusPhoneNumber = FocusNode();
   final _focusPlateNumber = FocusNode();
+  final _trips = FocusNode();
 
   @override
   void initState() {
     _phoneNumberController = TextEditingController();
     _plateNumberController = TextEditingController();
+    _tripsController = TextEditingController();
     super.initState();
   }
 
@@ -81,6 +89,7 @@ class _PaymentPageState extends State<PaymentPage> {
                   amount: feesPerItems[dropdownvalue],
                   phone: _phoneNumberController.text,
                   plate: _plateNumberController.text,
+                  count: _tripsController.text,
                   username: widget.username,
                   user: widget.user)));
       setState(() {});
@@ -108,6 +117,16 @@ class _PaymentPageState extends State<PaymentPage> {
     "Class 5": "18,000",
   };
 
+  List<String> cars = [
+    'Range Rover',
+    'Truck',
+  ];
+
+  Map<String, String> feesPerCar = {
+    "Range Rover": "5,000",
+    "Truck": "10,000",
+  };
+
   dynamic selected = 1;
 
   List checkListItems = [
@@ -130,34 +149,67 @@ class _PaymentPageState extends State<PaymentPage> {
       onTap: () {
         _focusPhoneNumber.unfocus();
         _focusPlateNumber.unfocus();
+        _trips.unfocus();
       },
       child: Scaffold(
         backgroundColor: const Color(0xffF6F6F6),
         extendBodyBehindAppBar: true,
         appBar: AppBar(
-          backgroundColor: Color(0x00000000),
+          shadowColor: const Color.fromARGB(100, 158, 158, 158),
+          backgroundColor: Color(0xff1a1a1a),
           elevation: 0,
-          foregroundColor: Colors.black,
-          title: Text("Get Token"),
+          foregroundColor: Colors.white,
+          title: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              const Text(
+                "Get Token",
+                style: TextStyle(fontWeight: FontWeight.w400),
+              ),
+              const SizedBox(
+                width: 10,
+              ),
+              if (_avatarUrl == null || _avatarUrl!.isEmpty)
+                ClipRRect(
+                  borderRadius: BorderRadius.circular(75.0),
+                  child: Container(
+                    width: 32,
+                    height: 32,
+                    alignment: Alignment.bottomCenter,
+                    decoration: const BoxDecoration(
+                      color: Color.fromARGB(255, 200, 200, 200),
+                    ),
+                    child: Image.asset("assets/images/avatar_icon.png"),
+                  ),
+                )
+              else
+                ClipRRect(
+                  borderRadius: BorderRadius.circular(75.0),
+                  child: Image.network(
+                    _avatarUrl!,
+                    width: 32,
+                    height: 32,
+                    fit: BoxFit.cover,
+                  ),
+                ),
+            ],
+          ),
           leading: Builder(builder: (context) {
             return Container(
               width: 25,
               height: 25,
               margin: const EdgeInsets.only(left: 10.0, top: 10.0, bottom: 4),
-              decoration: BoxDecoration(
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.grey.withOpacity(0.2),
-                      spreadRadius: 2,
-                      blurRadius: 3,
-                      offset: Offset(0, 3), // changes position of shadow
-                    ),
-                  ],
-                  color: Colors.white,
-                  borderRadius: BorderRadius.all(Radius.circular(25))),
-              child: new IconButton(
-                icon: new Icon(Icons.arrow_back, color: Colors.black),
-                onPressed: () => Navigator.of(context).pop(),
+              child: IconButton(
+                icon: const Icon(Icons.arrow_back),
+                // onPressed: () => Navigator.of(context).pop(),
+                onPressed: () {
+                  Get.off(
+                    () => const OrganisationHomePage(),
+                    transition: Transition.cupertino,
+                    duration: const Duration(milliseconds: 600),
+                    curve: Curves.easeOut,
+                  );
+                },
               ),
             );
           }),
@@ -174,47 +226,167 @@ class _PaymentPageState extends State<PaymentPage> {
                 const SizedBox(
                   height: 10,
                 ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    const Text(
+                      "Pay for a registered Car",
+                      style: TextStyle(fontWeight: FontWeight.bold),
+                    ),
+                    Switch(
+                      // thumb color (round icon)
+                      activeColor: Colors.greenAccent,
+                      activeTrackColor: Colors.black,
+                      inactiveThumbColor: Colors.black,
+                      inactiveTrackColor: Colors.grey,
+                      splashRadius: 50.0,
+                      // boolean variable value
+                      value: isAndroid,
+                      // changes the state of the switch
+                      onChanged: (value) => setState(() => isAndroid = value),
+                    ),
+                  ],
+                ),
+                const SizedBox(
+                  height: 10,
+                ),
+                if (!isAndroid)
+                  Column(
+                    children: [
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          const Text(
+                            "Vehicle Type",
+                            style: TextStyle(),
+                          ),
+                          const SizedBox(
+                            height: 5,
+                          ),
+                          Container(
+                            padding: EdgeInsets.symmetric(
+                                horizontal: 10, vertical: 5),
+                            decoration: BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.circular(10)),
+                            child: DropdownButton(
+                              // Initial Value
+                              isExpanded: true,
+                              value: dropdownvalue,
+                              onChanged: (String? newValue) {
+                                setState(() {
+                                  dropdownvalue = newValue!;
+                                });
+                              },
+
+                              // add extra sugar..
+                              icon: Icon(Icons.arrow_drop_down),
+                              iconSize: 42,
+                              underline: SizedBox(),
+
+                              // Array list of items
+                              items: items.map((String items) {
+                                return DropdownMenuItem(
+                                  value: items,
+                                  child: Text(items),
+                                );
+                              }).toList(),
+
+                              // After selecting the desired option,it will
+                              // change button value to selected value
+                            ),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(
+                        height: 10,
+                      ),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          const Text('Plate Number'),
+                          const SizedBox(height: 5),
+                          TextFormField(
+                            controller: _plateNumberController,
+                            focusNode: _focusPlateNumber,
+                            decoration: const InputDecoration(
+                              isDense: true,
+                              floatingLabelBehavior:
+                                  FloatingLabelBehavior.never,
+                              labelText: 'Enter plate number',
+                              border: OutlineInputBorder(
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(12)),
+                              ),
+                            ),
+                          ),
+                        ],
+                      )
+                    ],
+                  )
+                else
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const Text("Select the Car"),
+                      const SizedBox(
+                        height: 5,
+                      ),
+                      Container(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 10, vertical: 5),
+                        decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(10)),
+                        child: DropdownButton(
+                          // Initial Value
+                          isExpanded: true,
+                          value: dropdownvalue,
+                          onChanged: (String? newValue) {
+                            setState(() {
+                              dropdownvalue = newValue!;
+                            });
+                          },
+
+                          // add extra sugar..
+                          icon: Icon(Icons.arrow_drop_down),
+                          iconSize: 42,
+                          underline: SizedBox(),
+
+                          // Array list of items
+                          items: items.map((String item) {
+                            return DropdownMenuItem(
+                              value: item,
+                              child: Text(item),
+                            );
+                          }).toList(),
+
+                          // After selecting the desired option,it will
+                          // change button value to selected value
+                        ),
+                      ),
+                    ],
+                  ),
+                const SizedBox(
+                  height: 10,
+                ),
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const Text(
-                      "Vehicle Type",
-                      style: TextStyle(),
-                    ),
+                    const Text("Number of Trips"),
                     const SizedBox(
                       height: 5,
                     ),
-                    Container(
-                      padding:
-                          EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-                      decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(10)),
-                      child: DropdownButton(
-                        // Initial Value
-                        isExpanded: true,
-                        value: dropdownvalue,
-                        onChanged: (String? newValue) {
-                          setState(() {
-                            dropdownvalue = newValue!;
-                          });
-                        },
-
-                        // add extra sugar..
-                        icon: Icon(Icons.arrow_drop_down),
-                        iconSize: 42,
-                        underline: SizedBox(),
-
-                        // Array list of items
-                        items: items.map((String items) {
-                          return DropdownMenuItem(
-                            value: items,
-                            child: Text(items),
-                          );
-                        }).toList(),
-
-                        // After selecting the desired option,it will
-                        // change button value to selected value
+                    TextFormField(
+                      controller: _tripsController,
+                      focusNode: _trips,
+                      decoration: const InputDecoration(
+                        isDense: true,
+                        floatingLabelBehavior: FloatingLabelBehavior.never,
+                        labelText: 'Enter trips',
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(12)),
+                        ),
                       ),
                     ),
                   ],
@@ -242,27 +414,6 @@ class _PaymentPageState extends State<PaymentPage> {
                               fontSize: 30, fontWeight: FontWeight.bold),
                         ),
                       ],
-                    ),
-                  ],
-                ),
-                const SizedBox(
-                  height: 10,
-                ),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const Text('Plate Number'),
-                    const SizedBox(height: 5),
-                    TextFormField(
-                      controller: _plateNumberController,
-                      focusNode: _focusPlateNumber,
-                      decoration: const InputDecoration(
-                        floatingLabelBehavior: FloatingLabelBehavior.never,
-                        labelText: 'Enter plate number',
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.all(Radius.circular(12)),
-                        ),
-                      ),
                     ),
                   ],
                 ),

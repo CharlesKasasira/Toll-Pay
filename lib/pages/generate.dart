@@ -9,10 +9,11 @@ class GeneratePage extends StatefulWidget {
   var plate;
   var user;
   var username;
+  String? count;
 
   String? phone;
   GeneratePage(
-      {this.amount, this.phone, this.user, this.username, this.plate, Key? key})
+      {this.amount, this.phone, this.user, this.username, this.plate, this.count, Key? key})
       : super(key: key);
   @override
   State<StatefulWidget> createState() => GeneratePageState();
@@ -20,12 +21,11 @@ class GeneratePage extends StatefulWidget {
 
 class GeneratePageState extends State<GeneratePage> {
   Future<void> sendQRData() async {
-    print("Hello world!");
     final response = await supabase.from('qrcodes').insert([
       {
         'user_id': widget.user.id,
         'qrcode_id': "QR${new DateTime.now()}",
-        'count': 1,
+        'count': widget.count,
         'status': 'Active',
         'amount': widget.amount,
         'username': widget.username,
