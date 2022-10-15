@@ -1,4 +1,6 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 final supabase = Supabase.instance.client;
@@ -14,10 +16,16 @@ extension ShowSnackBar on BuildContext {
     required String message,
     Color backgroundColor = Colors.white,
   }) {
-    ScaffoldMessenger.of(this).showSnackBar(SnackBar(
-      content: Text(message),
-      backgroundColor: backgroundColor,
-    ));
+    ScaffoldMessenger.of(this).showSnackBar(
+      SnackBar(
+        content: Text(message),
+        backgroundColor: backgroundColor,
+        elevation: 6,
+        duration: const Duration(milliseconds: 1500),
+        behavior: SnackBarBehavior.floating,
+        // width: 280.0,
+      ),
+    );
   }
 
   void showErrorSnackBar({required String message}) {
@@ -26,5 +34,73 @@ extension ShowSnackBar on BuildContext {
 
   void showSuccessSnackBar({required String message}) {
     showSnackBar(message: message, backgroundColor: Colors.green);
+  }
+}
+
+
+
+
+Future kDefaultDialog(String title, String message,
+    {VoidCallback? onYesPressed}) async {
+  if (GetPlatform.isIOS) {
+    await Get.dialog(
+      CupertinoAlertDialog(
+        title: Text(title),
+        content: Text(message),
+        actions: [
+          if (onYesPressed != null)
+            CupertinoDialogAction(
+              isDestructiveAction: true,
+              onPressed: () {
+                Get.back();
+              },
+              child: const Text(
+                "Cancel",
+              ),
+            ),
+          CupertinoDialogAction(
+            isDefaultAction: true,
+            onPressed: onYesPressed,
+            child: Text(
+              (onYesPressed == null) ? "Ok" : "Yes",
+            ),
+          ),
+        ],
+      ),
+    );
+  } else {
+    await Get.dialog(
+      AlertDialog(
+        title: Text(title),
+        content: Text(message),
+        actions: [
+          if (onYesPressed != null)
+            TextButton(
+              onPressed: () {
+                Get.back();
+              },
+              child: const Text(
+                "Cancel",
+                style: TextStyle(
+                  color: Color(0xFFEB5757),
+                ),
+              ),
+            ),
+          TextButton(
+            onPressed: (onYesPressed == null)
+                ? () {
+                    Get.back();
+                  }
+                : onYesPressed,
+            child: Text(
+              (onYesPressed == null) ? "Ok" : "Yes",
+              style: const TextStyle(
+                color: Color(0xff1a1a1a),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
   }
 }

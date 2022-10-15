@@ -125,7 +125,7 @@ class _OrganisationDrawerState extends State<OrganisationDrawer> {
             leading: const Icon(Icons.payment_outlined),
             title: const Text('Make Payment'),
             onTap: () {
-              Get.to(
+              Get.off(
                     () => PaymentPage(
                       user: widget.user,
                       firstName: widget.firstName,
@@ -140,9 +140,10 @@ class _OrganisationDrawerState extends State<OrganisationDrawer> {
           ),
           ListTile(
             leading: const Icon(Icons.groups_outlined),
-            title: const Text('Our Drivers'),
+            title: const Text('Drivers'),
             onTap: () { 
-              Get.to(
+              Navigator.of(context).pop();
+              Get.off(
                     () => DriversPage(
                       user: widget.user,
                         firstName: widget.firstName,
@@ -156,7 +157,7 @@ class _OrganisationDrawerState extends State<OrganisationDrawer> {
           ),
           ListTile(
             leading: const Icon(Icons.car_crash_outlined),
-            title: const Text('Our Cars'),
+            title: const Text('Cars'),
             onTap: () {
               Get.to(
                     () => CarsPage(
@@ -194,7 +195,7 @@ class _OrganisationDrawerState extends State<OrganisationDrawer> {
             leading: const Icon(Icons.person_outline),
             title: const Text('Profile'),
             onTap: () {
-              Get.to(
+              Get.off(
                     () => const AccountPage(),
                     transition: Transition.cupertino,
                     duration: const Duration(milliseconds: 600),
@@ -207,17 +208,6 @@ class _OrganisationDrawerState extends State<OrganisationDrawer> {
           ),
           const Divider(
             thickness: 1,
-          ),
-          ListTile(
-            leading: const Icon(Icons.settings_outlined),
-            title: const Text('Settings'),
-            onTap: () async {
-              final response = await supabase.auth.signOut();
-              final error = response.error;
-              if (error != null) {
-                context.showErrorSnackBar(message: error.message);
-              }
-            },
           ),
           ListTile(
             leading: const Icon(Icons.logout),

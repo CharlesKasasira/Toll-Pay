@@ -7,6 +7,7 @@ import 'package:otp_text_field/otp_field.dart';
 import 'package:otp_text_field/style.dart';
 import 'package:tollpay/pages/generate.dart';
 import 'package:tollpay/pages/organisation/organisation_dashboard.dart';
+import 'package:tollpay/widgets/button.dart';
 
 class PaymentPage extends StatefulWidget {
   var user;
@@ -481,16 +482,9 @@ class _PaymentPageState extends State<PaymentPage> {
                 const SizedBox(
                   height: 20,
                 ),
-                Container(
-                  width: MediaQuery.of(context).size.width - 36,
-                  height: 40,
-                  decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(8),
-                      color: Colors.black),
-                  child: TextButton(
-                    // style: ButtonStyle(
-                    // padding: EdgeInsetsGeometry),
-                    onPressed: () {
+
+                CustomElevatedButton(
+                    onTap: (){
                       getMtnSecretCode(_phoneNumberController.text);
                       showModalBottomSheet(
                           shape: const RoundedRectangleBorder(
@@ -558,12 +552,12 @@ class _PaymentPageState extends State<PaymentPage> {
                                 ),
                               ));
                     },
-                    child: Text(
-                      "Continue",
-                      style: TextStyle(color: Colors.white),
-                    ),
+                    text: "Continue",
                   ),
-                ),
+
+                const SizedBox(
+                  height: 18,
+                )
               ],
             ),
           ),

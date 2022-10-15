@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:tollpay/components/auth_state.dart';
+import 'package:tollpay/pages/controllers/auth_controllers.dart';
 import 'package:tollpay/pages/forgot_password.dart';
 import 'package:tollpay/pages/signup_as_page.dart';
 import 'package:tollpay/pages/signup_page.dart';
@@ -19,6 +20,7 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends AuthState<LoginPage> {
+  final AuthController _authController = AuthController();
   bool _isLoading = false;
   late final TextEditingController _emailController;
   late final TextEditingController _passwordController;
@@ -56,39 +58,7 @@ class _LoginPageState extends AuthState<LoginPage> {
       _isLoading = true;
     });
 
-    final response = await supabase.auth.signIn(
-      email: _emailController.text.trim(),
-      password: _passwordController.text.trim(),
-    );
-    final user = response.user;
-
-    if (user != null) {
-      print(user.userMetadata);
-      final meta = user.userMetadata;
-      print(meta);
-      if (meta["roles"] == "organization") {
-        Navigator.of(context)
-            .pushNamedAndRemoveUntil('/org-dashboard', (route) => false);
-        _emailController.clear();
-        _passwordController.clear();
-      } else if (meta["roles"] == "operator") {
-        print("here");
-        Navigator.of(context)
-            .pushNamedAndRemoveUntil('/operator-dashboard', (route) => false);
-        _emailController.clear();
-        _passwordController.clear();
-      } else {
-        Navigator.of(context)
-            .pushNamedAndRemoveUntil('/dashboard', (route) => false);
-        _emailController.clear();
-        _passwordController.clear();
-      }
-    }
-
-    final error = response.error;
-    if (error != null) {
-      context.showErrorSnackBar(message: error.message);
-    }
+    _authController.signIn(_emailController.text.trim(), _passwordController.text.trim());
 
     setState(() {
       _isLoading = false;

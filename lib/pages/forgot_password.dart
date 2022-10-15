@@ -2,6 +2,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:supabase/supabase.dart';
 import 'package:tollpay/components/auth_state.dart';
+import 'package:tollpay/pages/controllers/auth_controllers.dart';
 import 'package:tollpay/pages/login_page.dart';
 import 'package:tollpay/utils/constants.dart';
 import 'package:flutter/services.dart';
@@ -17,6 +18,7 @@ class ForgotPage extends StatefulWidget {
 }
 
 class _ForgotPageState extends AuthState<ForgotPage> {
+  final AuthController _authController = AuthController();
   bool _isLoading = false;
   late final TextEditingController _emailController;
   final _focusEmail = FocusNode();
@@ -31,9 +33,7 @@ class _ForgotPageState extends AuthState<ForgotPage> {
   }
 
   Future<void> _resetPassword() async {
-    final res = await supabase.auth.api.resetPasswordForEmail(_emailController.text);
-
-    final error = res.error;
+    _authController.forgotPassword(_emailController.text);
     _emailController.clear();
   }
 

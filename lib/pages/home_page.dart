@@ -13,6 +13,8 @@ import 'package:tollpay/models/weather.dart';
 import 'package:tollpay/pages/payment_page.dart';
 import 'package:tollpay/utils/color_constants.dart';
 import 'package:tollpay/utils/constants.dart';
+import 'package:tollpay/utils/fetch_weather.dart';
+import 'package:tollpay/widgets/appbar_avatar.dart';
 import 'package:tollpay/widgets/drawer.dart';
 
 class HomePage extends StatefulWidget {
@@ -30,18 +32,6 @@ class _HomePageState extends AuthRequiredState<HomePage> {
   String? username;
   var _user;
   bool _loading = false;
-
-  Future fetchWeather() async {
-    final url = Uri.parse(
-        "https://api.openweathermap.org/data/2.5/weather?q=Entebbe&units=metric&appid=${dotenv.env['WEATHER_API_KEY']}");
-    final http.Response response = await http.get(url);
-    if (response.statusCode == 200) {
-      final json = jsonDecode(response.body);
-      return Weather.getWeather(json);
-    } else {
-      return null;
-    }
-  }
 
   //get users Profile
   Future<void> _getProfile(String userId) async {
@@ -92,29 +82,30 @@ class _HomePageState extends AuthRequiredState<HomePage> {
     return Scaffold(
       backgroundColor: ColorConstants.kprimary,
       appBar: AppBar(
-        backgroundColor: ColorConstants.ktransparent,
+        shadowColor: const Color.fromARGB(100, 158, 158, 158),
+        backgroundColor: const Color(0xff1a1a1a),
         elevation: 0,
-        foregroundColor: Colors.black,
-        title: const Text("Home"),
+        foregroundColor: Colors.white,
+        title: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: const [
+            Text(
+              "Home",
+              style: TextStyle(fontWeight: FontWeight.w400),
+            ),
+            SizedBox(
+              width: 10,
+            ),
+            AppBarAvatar()
+          ],
+        ),
         leading: Builder(builder: (context) {
           return Container(
             width: 25,
             height: 25,
             margin: const EdgeInsets.only(left: 10.0, top: 10.0, bottom: 5),
-            decoration: BoxDecoration(
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.grey.withOpacity(0.2),
-                  spreadRadius: 2,
-                  blurRadius: 3,
-                  offset: const Offset(0, 3), // changes position of shadow
-                ),
-              ],
-              color: Colors.white,
-              borderRadius: BorderRadius.all(Radius.circular(25)),
-            ),
             child: IconButton(
-              icon: const Icon(Icons.menu, color: Colors.black),
+              icon: const Icon(Icons.menu),
               onPressed: () => Scaffold.of(context).openDrawer(),
             ),
           );

@@ -41,7 +41,7 @@ class _AvatarState extends State<Avatar> {
                               color: Color.fromARGB(255, 200, 200, 200),
                             ),
                             child: Image.asset("assets/images/avatar_icon.png"),
-                          ),
+                          ), 
                         ),
                         decoration: BoxDecoration(
                           border: Border.all(),
@@ -49,13 +49,19 @@ class _AvatarState extends State<Avatar> {
                         ),
                       )
                     else
-                      ClipRRect(
-                        borderRadius: BorderRadius.circular(75.0),
-                        child: Image.network(
-                          widget.imageUrl!,
-                          width: 120,
-                          height: 120,
-                          fit: BoxFit.cover,
+                      Container(
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(75.0),
+                          child: Image.network(
+                            widget.imageUrl!,
+                            width: 120,
+                            height: 120,
+                            fit: BoxFit.cover,
+                          ),
+                        ),
+                        decoration: BoxDecoration(
+                          border: Border.all(),
+                          borderRadius: BorderRadius.circular(75.0), 
                         ),
                       ),
                   ],

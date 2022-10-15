@@ -3,10 +3,13 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
+import 'package:jiffy/jiffy.dart';
 import 'package:otp_text_field/otp_field.dart';
 import 'package:otp_text_field/style.dart';
 import 'package:tollpay/pages/generate.dart';
 import 'package:tollpay/pages/organisation/organisation_dashboard.dart';
+import 'package:tollpay/pages/qr_details.dart';
+import 'package:tollpay/utils/constants.dart';
 
 class CarsPage extends StatefulWidget {
   var user;
@@ -32,6 +35,27 @@ class _CarsPageState extends State<CarsPage> {
   final _focusPhoneNumber = FocusNode();
   final _focusPlateNumber = FocusNode();
   final _trips = FocusNode();
+  var activeQrCodes;
+
+  Future getActiveQRCodes() async {
+    final response = await supabase.from('qrcodes').select().order('created_at', ascending: false).execute();
+
+    final data = response.data;
+    final error = response.error;
+
+    // print("inside");
+    if (data != null) {
+      // print(data);
+      activeQrCodes = data.length;
+    } else {
+      activeQrCodes = "There is no data";
+    }
+
+    if (error != null) {
+      print("the error is ${error.message}");
+    }
+    return data;
+  }
 
   @override
   void initState() {
@@ -213,363 +237,102 @@ class _CarsPageState extends State<CarsPage> {
             );
           }),
         ),
-        body: Padding(
+        body: SafeArea(
+        minimum: EdgeInsets.only(top: 30),
+        child: Padding(
           padding: const EdgeInsets.only(
-            left: 15.0,
-            right: 15.0,
-            top: 30.0,
+            left: 10.0,
+            right: 10.0,
+            top: 8.0,
           ),
-          child: Container(
-            child: ListView(
-              children: [
-                const SizedBox(
-                  height: 10,
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    const Text(
-                      "Pay for a registered Car",
-                      style: TextStyle(fontWeight: FontWeight.bold),
-                    ),
-                    Switch(
-                      // thumb color (round icon)
-                      activeColor: Colors.greenAccent,
-                      activeTrackColor: Colors.black,
-                      inactiveThumbColor: Colors.black,
-                      inactiveTrackColor: Colors.grey,
-                      splashRadius: 50.0,
-                      // boolean variable value
-                      value: isAndroid,
-                      // changes the state of the switch
-                      onChanged: (value) => setState(() => isAndroid = value),
-                    ),
-                  ],
-                ),
-                const SizedBox(
-                  height: 10,
-                ),
-                if (!isAndroid)
-                  Column(
-                    children: [
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          const Text(
-                            "Vehicle Type",
-                            style: TextStyle(),
-                          ),
-                          const SizedBox(
-                            height: 5,
-                          ),
-                          Container(
-                            padding: EdgeInsets.symmetric(
-                                horizontal: 10, vertical: 5),
-                            decoration: BoxDecoration(
-                                color: Colors.white,
-                                borderRadius: BorderRadius.circular(10)),
-                            child: DropdownButton(
-                              // Initial Value
-                              isExpanded: true,
-                              value: dropdownvalue,
-                              onChanged: (String? newValue) {
-                                setState(() {
-                                  dropdownvalue = newValue!;
-                                });
-                              },
-
-                              // add extra sugar..
-                              icon: Icon(Icons.arrow_drop_down),
-                              iconSize: 42,
-                              underline: SizedBox(),
-
-                              // Array list of items
-                              items: items.map((String items) {
-                                return DropdownMenuItem(
-                                  value: items,
-                                  child: Text(items),
-                                );
-                              }).toList(),
-
-                              // After selecting the desired option,it will
-                              // change button value to selected value
-                            ),
-                          ),
-                        ],
-                      ),
-                      const SizedBox(
-                        height: 10,
-                      ),
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          const Text('Plate Number'),
-                          const SizedBox(height: 5),
-                          TextFormField(
-                            controller: _plateNumberController,
-                            focusNode: _focusPlateNumber,
-                            decoration: const InputDecoration(
-                              isDense: true,
-                              floatingLabelBehavior:
-                                  FloatingLabelBehavior.never,
-                              labelText: 'Enter plate number',
-                              border: OutlineInputBorder(
-                                borderRadius:
-                                    BorderRadius.all(Radius.circular(12)),
-                              ),
-                            ),
-                          ),
-                        ],
-                      )
-                    ],
-                  )
-                else
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const Text("Select the Car"),
-                      const SizedBox(
-                        height: 5,
-                      ),
-                      Container(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 10, vertical: 5),
-                        decoration: BoxDecoration(
-                            color: Colors.white,
-                            borderRadius: BorderRadius.circular(10)),
-                        child: DropdownButton(
-                          // Initial Value
-                          isExpanded: true,
-                          value: dropdownvalue,
-                          onChanged: (String? newValue) {
-                            setState(() {
-                              dropdownvalue = newValue!;
-                            });
-                          },
-
-                          // add extra sugar..
-                          icon: Icon(Icons.arrow_drop_down),
-                          iconSize: 42,
-                          underline: SizedBox(),
-
-                          // Array list of items
-                          items: items.map((String item) {
-                            return DropdownMenuItem(
-                              value: item,
-                              child: Text(item),
-                            );
-                          }).toList(),
-
-                          // After selecting the desired option,it will
-                          // change button value to selected value
-                        ),
-                      ),
-                    ],
-                  ),
-                const SizedBox(
-                  height: 10,
-                ),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const Text("Number of Trips"),
-                    const SizedBox(
-                      height: 5,
-                    ),
-                    TextFormField(
-                      controller: _tripsController,
-                      focusNode: _trips,
-                      decoration: const InputDecoration(
-                        isDense: true,
-                        floatingLabelBehavior: FloatingLabelBehavior.never,
-                        labelText: 'Enter trips',
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.all(Radius.circular(12)),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-                const SizedBox(
-                  height: 10,
-                ),
-                Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      "Amount to Pay",
-                      style: TextStyle(fontSize: 20),
-                    ),
-                    SizedBox(
-                      width: 10,
-                    ),
-                    Row(
-                      children: [
-                        Text("Ugx "),
-                        Text(
-                          "${feesPerItems[dropdownvalue]}",
-                          style: TextStyle(
-                              fontSize: 30, fontWeight: FontWeight.bold),
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 12),
-                Row(
-                  children: [
-                    const Text(
-                      "Choose Payment Method",
-                      style: TextStyle(fontSize: 20),
-                    ),
-                  ],
-                ),
-                Column(
-                    children: List.generate(
-                  checkListItems.length,
-                  (index) => CheckboxListTile(
-                    controlAffinity: ListTileControlAffinity.leading,
-                    contentPadding: EdgeInsets.zero,
-                    dense: true,
-                    title: Text(
-                      "${checkListItems[index]["title"]}",
-                      style: const TextStyle(
-                        fontSize: 16.0,
-                        color: Colors.black,
-                      ),
-                    ),
-                    value: checkListItems[index]["value"] == true,
-                    onChanged: (value) {
-                      setState(() {
-                        for (var element in checkListItems) {
-                          element["value"] = false;
-                        }
-                        checkListItems[index]["value"] = value;
-                        selected = checkListItems[index]["id"];
-                        // selected =
-                        //     "${checkListItems[index]["id"]}, ${checkListItems[index]["title"]}, ${checkListItems[index]["value"]}";
-                      });
-                    },
-                  ),
-                )),
-                const SizedBox(
-                  height: 20,
-                ),
-                if (selected == 1)
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const Text('Phone Number'),
-                      const SizedBox(height: 5),
-                      TextFormField(
-                        controller: _phoneNumberController,
-                        focusNode: _focusPhoneNumber,
-                        keyboardType: TextInputType.number,
-                        decoration: const InputDecoration(
-                          floatingLabelBehavior: FloatingLabelBehavior.never,
-                          labelText: 'Enter phone number',
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.all(Radius.circular(12)),
-                          ),
-                        ),
-                      ),
-                    ],
-                  )
-                else
-                  const Text(
-                      "When using Airtel money, please initiate the transaction by getting the secret cod"),
-                const SizedBox(
-                  height: 20,
-                ),
-                Container(
-                  width: MediaQuery.of(context).size.width - 36,
-                  height: 40,
-                  decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(8),
-                      color: Colors.black),
-                  child: TextButton(
-                    // style: ButtonStyle(
-                    // padding: EdgeInsetsGeometry),
-                    onPressed: () {
-                      getMtnSecretCode(_phoneNumberController.text);
-                      showModalBottomSheet(
-                          shape: const RoundedRectangleBorder(
-                              borderRadius: BorderRadius.vertical(
-                                  top: Radius.circular(25.0))),
-                          // backgroundColor: Colors.grey,
-                          context: context,
-                          isScrollControlled: true,
-                          builder: (context) => Padding(
-                                padding: EdgeInsets.only(
-                                    top: 20,
-                                    right: 20,
-                                    left: 20,
-                                    bottom: MediaQuery.of(context)
-                                        .viewInsets
-                                        .bottom),
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: [
-                                    Center(
-                                      child: Text(
-                                        'Enter Secret Code',
-                                      ),
-                                    ),
-                                    const SizedBox(height: 10),
-                                    OTPTextField(
-                                      length: 6,
-                                      width: MediaQuery.of(context).size.width,
-                                      fieldWidth: 30,
-                                      style: TextStyle(fontSize: 14),
-                                      textFieldAlignment:
-                                          MainAxisAlignment.spaceAround,
-                                      fieldStyle: FieldStyle.underline,
-                                      onCompleted: (pin) {
-                                        // print("Completed: " + pin);
-                                        makePayment(pin);
-                                      },
-                                    ),
-                                    const SizedBox(
-                                      height: 10,
-                                    ),
-                                    Container(
-                                        width:
-                                            MediaQuery.of(context).size.width -
-                                                36,
-                                        height: 40,
-                                        decoration: BoxDecoration(
-                                            borderRadius:
-                                                BorderRadius.circular(8),
-                                            color: Colors.black),
-                                        child: TextButton(
-                                          child: const Text(
-                                            "Cancel",
-                                            style:
-                                                TextStyle(color: Colors.white),
-                                          ),
-                                          onPressed: () =>
-                                              Navigator.pop(context),
-                                        )),
-                                    const SizedBox(
-                                      height: 10,
-                                    )
-                                  ],
-                                ),
-                              ));
-                    },
-                    child: Text(
-                      "Continue",
-                      style: TextStyle(color: Colors.white),
-                    ),
-                  ),
-                ),
-              ],
+          child: ListView(
+            padding: const EdgeInsets.symmetric(
+              vertical: 18,
             ),
+            children: [
+              FutureBuilder(
+                  future: getActiveQRCodes(),
+                  builder: (context, snapshot) {
+                    switch (snapshot.connectionState) {
+                      case ConnectionState.none:
+                      case ConnectionState.waiting:
+                        return const Center(
+                          child: CircularProgressIndicator(
+                            color: Color(0xff1a1a1a),
+                          ),
+                        );
+                      default:
+                        return snapshot.data == null
+                            ? Container(
+                                height: MediaQuery.of(context).size.height,
+                                padding: const EdgeInsets.all(10),
+                                alignment: Alignment.center,
+                                child: Center(
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: const [
+                                      SizedBox(
+                                        height: 8,
+                                      ),
+                                      Icon(Icons.wifi_off_outlined),
+                                      SizedBox(
+                                        width: 5,
+                                      ),
+                                      Text(
+                                        "Check your internet connection.",
+                                        style: TextStyle(
+                                            fontFamily: "Spartan",
+                                            color:
+                                                Color.fromARGB(255, 24, 24, 24),
+                                            fontWeight: FontWeight.bold),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              )
+                            : QRList(snapshot.data);
+                    }
+                  }),
+            ],
           ),
         ),
       ),
+      ),
     );
   }
+}
+
+
+Widget QRList(location) {
+  // @override
+  // Widget build(BuildContext context) {
+  return ListView.builder(
+      shrinkWrap: true,
+      itemCount: (location as List<dynamic>).length,
+      itemBuilder: (BuildContext context, int index) {
+        return Card(
+          elevation: 4,
+          child: ListTile(
+            leading: const Icon(Icons.qr_code),
+            trailing: Text(
+              "${location[index]['status']}",
+              style: TextStyle(color: location[index]['status'] == 'Active' ? Colors.green : Colors.red, fontSize: 15),
+            ),
+            title: Text(
+              "${location[index]['amount']}",
+              style: TextStyle(fontWeight: FontWeight.bold),
+            ),
+            subtitle: Text("${Jiffy(location[index]['created_at']).yMMMMd}"),
+            onTap: () {
+              Get.off(
+                () => QRDetails(id: location[index]['id']),
+                transition: Transition.cupertino,
+                duration: const Duration(milliseconds: 600),
+                curve: Curves.easeOut,
+              );
+            },
+          ),
+        );
+      });
+  // }
 }

@@ -15,18 +15,18 @@ class CustomElevatedButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return InkWell(
       onTap: onTap,
-      highlightColor: Color(0xFF303030),
+      highlightColor: const Color(0xFF1a1a1a),
       customBorder: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(8),
       ),
       child: Ink(
         height: height,
         decoration: BoxDecoration(
-          color: Color(0xFF303030),
+          color: const Color(0xFF1a1a1a),
           borderRadius: BorderRadius.circular(8),
           boxShadow: const [
             BoxShadow(
-              color: Color(0x80303030),
+              color: Color(0x801a1a1a),
               offset: Offset(0, 10),
               blurRadius: 20,
             ),

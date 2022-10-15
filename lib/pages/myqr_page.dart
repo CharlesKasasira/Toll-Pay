@@ -3,19 +3,14 @@ import 'dart:convert';
 // ignore: unnecessary_import
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
-import 'package:google_fonts/google_fonts.dart';
-import 'package:http/http.dart' as http;
 import 'package:jiffy/jiffy.dart';
 import 'package:supabase/supabase.dart';
 import 'package:tollpay/components/auth_required_state.dart';
-import 'package:tollpay/models/weather.dart';
-import 'package:tollpay/pages/payment_page.dart';
 import 'package:tollpay/pages/qr_details.dart';
 import 'package:tollpay/utils/color_constants.dart';
 import 'package:tollpay/utils/constants.dart';
+import 'package:tollpay/widgets/appbar_avatar.dart';
 
 class MyQRCodes extends StatefulWidget {
   const MyQRCodes({Key? key}) : super(key: key);
@@ -77,28 +72,30 @@ class _MyQRCodesState extends AuthRequiredState<MyQRCodes> {
       backgroundColor: ColorConstants.kprimary,
       extendBodyBehindAppBar: true,
       appBar: AppBar(
-        backgroundColor: Color(0x00000000),
-        elevation: 0,
-        foregroundColor: Colors.black,
-        title: Text("My QR Codes"),
+        shadowColor: const Color.fromARGB(100, 158, 158, 158),
+        backgroundColor: const Color(0xff1a1a1a),
+        elevation: 1,
+        foregroundColor: Colors.white,
+        title: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: const [
+            Text(
+              "My QR Codes",
+              style: TextStyle(fontWeight: FontWeight.w400),
+            ),
+            SizedBox(
+              width: 10,
+            ),
+            AppBarAvatar()
+          ],
+        ),
         leading: Builder(builder: (context) {
           return Container(
             width: 25,
             height: 25,
             margin: const EdgeInsets.only(left: 10.0, top: 10.0, bottom: 4),
-            decoration: BoxDecoration(
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.grey.withOpacity(0.2),
-                    spreadRadius: 2,
-                    blurRadius: 3,
-                    offset: Offset(0, 3), // changes position of shadow
-                  ),
-                ],
-                color: Colors.white,
-                borderRadius: BorderRadius.all(Radius.circular(25))),
-            child: new IconButton(
-              icon: new Icon(Icons.arrow_back, color: Colors.black),
+            child: IconButton(
+              icon: const Icon(Icons.arrow_back),
               onPressed: () => Navigator.of(context).pop(),
             ),
           );
@@ -120,7 +117,6 @@ class _MyQRCodesState extends AuthRequiredState<MyQRCodes> {
               FutureBuilder(
                   future: getActiveQRCodes(),
                   builder: (context, snapshot) {
-                    print("This is ${snapshot.data}");
                     switch (snapshot.connectionState) {
                       case ConnectionState.none:
                       case ConnectionState.waiting:
@@ -181,9 +177,9 @@ Widget QRList(location) {
           elevation: 4,
           child: ListTile(
             leading: const Icon(Icons.qr_code),
-            trailing: const Text(
-              "active",
-              style: TextStyle(color: Colors.green, fontSize: 15),
+            trailing: Text(
+              "${location[index]['status']}",
+              style: TextStyle(color: location[index]['status'] == 'Active' ? Colors.green : Colors.red, fontSize: 15),
             ),
             title: Text(
               "${location[index]['amount']}",
@@ -203,5 +199,4 @@ Widget QRList(location) {
       });
   // }
 }
-// "${location[0]['created_at']}
 
