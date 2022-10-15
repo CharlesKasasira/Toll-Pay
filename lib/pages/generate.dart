@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 import 'package:supabase/supabase.dart';
 import 'package:tollpay/pages/organisation/organisation_dashboard.dart';
+import 'package:tollpay/widgets/appbar_avatar.dart';
 
 import '../utils/constants.dart';
 
@@ -98,37 +99,15 @@ class GeneratePageState extends State<GeneratePage> {
         ),
         title: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            const Text(
-              "Get Token",
+          children: const [
+            Text(
+              "Generate Token",
               style: TextStyle(fontWeight: FontWeight.w400),
             ),
-            const SizedBox(
+            SizedBox(
               width: 10,
             ),
-            if (_avatarUrl == null || _avatarUrl!.isEmpty)
-              ClipRRect(
-                borderRadius: BorderRadius.circular(75.0),
-                child: Container(
-                  width: 32,
-                  height: 32,
-                  alignment: Alignment.bottomCenter,
-                  decoration: const BoxDecoration(
-                    color: Color.fromARGB(255, 200, 200, 200),
-                  ),
-                  child: Image.asset("assets/images/avatar_icon.png"),
-                ),
-              )
-            else
-              ClipRRect(
-                borderRadius: BorderRadius.circular(75.0),
-                child: Image.network(
-                  _avatarUrl!,
-                  width: 32,
-                  height: 32,
-                  fit: BoxFit.cover,
-                ),
-              ),
+            AppBarAvatar()
           ],
         ),
       ),

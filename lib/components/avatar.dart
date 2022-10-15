@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:tollpay/controllers/user_controllers.dart';
 import 'package:tollpay/utils/constants.dart';
 
 class Avatar extends StatefulWidget {
@@ -17,56 +19,56 @@ class Avatar extends StatefulWidget {
 }
 
 class _AvatarState extends State<Avatar> {
+  // final UserController _userController = Get.find();
   bool _isLoading = false;
 
   @override
   Widget build(BuildContext context) {
+    // print(_userController);
     return Padding(
         padding: const EdgeInsets.all(8.0),
         child: Stack(children: <Widget>[
-          Row(
-              mainAxisAlignment: MainAxisAlignment.center,
+          Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+            Column(
               children: [
-                Column(
-                  children: [
-                    if (widget.imageUrl == null || widget.imageUrl!.isEmpty)
-                      Container(
-                        child: ClipRRect(
-                          borderRadius: BorderRadius.circular(75.0),
-                          child: Container(
-                            width: 120,
-                            height: 120,
-                            alignment: Alignment.bottomCenter,
-                            decoration: BoxDecoration(
-                              color: Color.fromARGB(255, 200, 200, 200),
-                            ),
-                            child: Image.asset("assets/images/avatar_icon.png"),
-                          ), 
-                        ),
+                if (widget.imageUrl == null || widget.imageUrl!.isEmpty)
+                  Container(
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(75.0),
+                      child: Container(
+                        width: 120,
+                        height: 120,
+                        alignment: Alignment.bottomCenter,
                         decoration: BoxDecoration(
-                          border: Border.all(),
-                          borderRadius: BorderRadius.circular(75.0), 
+                          color: Color.fromARGB(255, 200, 200, 200),
                         ),
-                      )
-                    else
-                      Container(
-                        child: ClipRRect(
-                          borderRadius: BorderRadius.circular(75.0),
-                          child: Image.network(
-                            widget.imageUrl!,
-                            width: 120,
-                            height: 120,
-                            fit: BoxFit.cover,
-                          ),
-                        ),
-                        decoration: BoxDecoration(
-                          border: Border.all(),
-                          borderRadius: BorderRadius.circular(75.0), 
-                        ),
+                        child: Image.asset("assets/images/avatar_icon.png"),
                       ),
-                  ],
-                ),
-              ]),
+                    ),
+                    decoration: BoxDecoration(
+                      border: Border.all(),
+                      borderRadius: BorderRadius.circular(75.0),
+                    ),
+                  )
+                else
+                  Container(
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(75.0),
+                      child: Image.network(
+                        widget.imageUrl!,
+                        width: 120,
+                        height: 120,
+                        fit: BoxFit.cover,
+                      ),
+                    ),
+                    decoration: BoxDecoration(
+                      border: Border.all(),
+                      borderRadius: BorderRadius.circular(75.0),
+                    ),
+                  ),
+              ],
+            ),
+          ]),
           Padding(
             padding: const EdgeInsets.only(top: 80.0, right: 90.0),
             child: Row(

@@ -6,6 +6,7 @@ import 'package:tollpay/components/avatar.dart';
 import 'package:tollpay/pages/home_page.dart';
 import 'package:tollpay/pages/organisation/organisation_dashboard.dart';
 import 'package:tollpay/utils/constants.dart';
+import 'package:tollpay/widgets/appbar_avatar.dart';
 
 class AccountPage extends StatefulWidget {
   const AccountPage({Key? key}) : super(key: key);
@@ -45,7 +46,7 @@ class _AccountPageState extends AuthRequiredState<AccountPage> {
     final data = response.data;
     if (data != null) {
       _fullNameController.text = (data['username'] ?? '') as String;
-      _emailController.text = (data['email'] ?? '') as String;
+      _emailController.text = supabase.auth.user()!.email as String;
       _phoneController.text = (data['phone'] ?? '') as String;
       _avatarUrl = (data['avatar_url'] ?? '') as String;
     }
@@ -135,51 +136,31 @@ class _AccountPageState extends AuthRequiredState<AccountPage> {
         backgroundColor: const Color(0xffF5F5F5),
         appBar: AppBar(
           shadowColor: const Color.fromARGB(100, 158, 158, 158),
-        backgroundColor: Color(0xff1a1a1a),
+          backgroundColor: Color(0xff1a1a1a),
           elevation: 0,
           foregroundColor: Colors.white,
           title: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            const Text(
-              "Home",
-              style: TextStyle(fontWeight: FontWeight.w400),
-            ),
-            const SizedBox(
-              width: 10,
-            ),
-            if (_avatarUrl == null || _avatarUrl!.isEmpty)
-              ClipRRect(
-                borderRadius: BorderRadius.circular(75.0),
-                child: Container(
-                  width: 32,
-                  height: 32,
-                  alignment: Alignment.bottomCenter,
-                  decoration: const BoxDecoration(
-                    color: Color.fromARGB(255, 200, 200, 200),
-                  ),
-                  child: Image.asset("assets/images/avatar_icon.png"),
-                ),
-              )
-            else
-              ClipRRect(
-                borderRadius: BorderRadius.circular(75.0),
-                child: Image.network(
-                  _avatarUrl!,
-                  width: 32,
-                  height: 32,
-                  fit: BoxFit.cover,
-                ),
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              const Text(
+                "Home",
+                style: TextStyle(fontWeight: FontWeight.w400),
               ),
-          ],
-        ),
+              const SizedBox(
+                width: 10,
+              ),
+              AppBarAvatar()
+            ],
+          ),
           leading: Builder(builder: (context) {
             return Container(
               width: 25,
               height: 25,
               margin: const EdgeInsets.only(left: 10.0, top: 10.0, bottom: 4),
               child: IconButton(
-                icon: const Icon(Icons.arrow_back,),
+                icon: const Icon(
+                  Icons.arrow_back,
+                ),
                 onPressed: () {
                   Get.off(
                     () => const OrganisationHomePage(),
@@ -286,11 +267,17 @@ class _AccountPageState extends AuthRequiredState<AccountPage> {
                 onPressed: _updateProfile,
                 child: Row(
                   children: const [
-                    Icon(Icons.delete, color: Color(0xffE71111),),
+                    Icon(
+                      Icons.delete,
+                      color: Color(0xffE71111),
+                    ),
                     SizedBox(
                       width: 8,
                     ),
-                    Text("Delete Account", style: TextStyle(color: Color(0xffE71111)),)
+                    Text(
+                      "Delete Account",
+                      style: TextStyle(color: Color(0xffE71111)),
+                    )
                   ],
                 )),
             const SizedBox(height: 18),

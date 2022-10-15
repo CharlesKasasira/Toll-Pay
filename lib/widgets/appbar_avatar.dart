@@ -14,7 +14,7 @@ class _AppBarAvatarState extends State<AppBarAvatar> {
   String? _userId;
   var _user;
 
-  //get users Profile
+  // get users Profile
   Future<void> _getProfile(String userId) async {
     setState(() {});
     final response = await supabase
@@ -43,9 +43,10 @@ class _AppBarAvatarState extends State<AppBarAvatar> {
       _getProfile(user.id);
     }
   }
-  
+
   @override
   Widget build(BuildContext context) {
+    _getProfile(supabase.auth.user()!.id);
     if (_avatarUrl == null || _avatarUrl!.isEmpty) {
       return ClipRRect(
         borderRadius: BorderRadius.circular(75.0),

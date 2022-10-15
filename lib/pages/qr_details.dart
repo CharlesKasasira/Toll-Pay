@@ -5,6 +5,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:http/http.dart' as http;
 import 'package:jiffy/jiffy.dart';
@@ -15,6 +16,9 @@ import 'package:tollpay/pages/payment_page.dart';
 import 'package:tollpay/utils/color_constants.dart';
 import 'package:tollpay/utils/constants.dart';
 import 'package:qr_flutter/qr_flutter.dart';
+import 'package:tollpay/widgets/appbar_avatar.dart';
+
+import 'organisation/organisation_dashboard.dart';
 
 class QRDetails extends StatefulWidget {
   var id;
@@ -78,32 +82,35 @@ class _QRDetailsState extends AuthRequiredState<QRDetails> {
       backgroundColor: ColorConstants.kprimary,
       extendBodyBehindAppBar: true,
       appBar: AppBar(
-        backgroundColor: Color(0x00000000),
+        shadowColor: const Color.fromARGB(100, 158, 158, 158),
+        backgroundColor: Color(0xff1a1a1a),
         elevation: 0,
-        foregroundColor: Colors.black,
-        title: Text("QR Code Details"),
-        leading: Builder(builder: (context) {
-          return Container(
-            width: 25,
-            height: 25,
-            margin: const EdgeInsets.only(left: 10.0, top: 10.0, bottom: 4),
-            decoration: BoxDecoration(
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.grey.withOpacity(0.2),
-                    spreadRadius: 2,
-                    blurRadius: 3,
-                    offset: Offset(0, 3), // changes position of shadow
-                  ),
-                ],
-                color: Colors.white,
-                borderRadius: BorderRadius.all(Radius.circular(25))),
-            child: new IconButton(
-              icon: new Icon(Icons.arrow_back, color: Colors.black),
-              onPressed: () => Navigator.of(context).pop(),
-            ),
-          );
-        }),
+        foregroundColor: Colors.white,
+        title: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: const [
+              Text(
+                "QR Details",
+                style: TextStyle(fontWeight: FontWeight.w400),
+              ),
+              SizedBox(
+                width: 10,
+              ),
+              AppBarAvatar()
+            ],
+          ),
+        leading: IconButton(
+                icon: const Icon(Icons.arrow_back),
+                // onPressed: () => Navigator.of(context).pop(),
+                onPressed: () {
+                  Get.off(
+                    () => const OrganisationHomePage(),
+                    transition: Transition.cupertino,
+                    duration: const Duration(milliseconds: 600),
+                    curve: Curves.easeOut,
+                  );
+                },
+              ),
       ),
       body: SafeArea(
         minimum: EdgeInsets.only(top: 30),

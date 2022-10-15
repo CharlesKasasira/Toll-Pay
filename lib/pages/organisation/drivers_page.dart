@@ -5,6 +5,7 @@ import 'package:get/get.dart';
 import 'package:tollpay/pages/organisation/add_driver.dart';
 import 'package:tollpay/pages/organisation/organisation_dashboard.dart';
 import 'package:tollpay/utils/get_drivers.dart';
+import 'package:tollpay/widgets/appbar_avatar.dart';
 import 'package:tollpay/widgets/button.dart';
 import 'package:tollpay/widgets/drivers_list.dart';
 import 'package:tollpay/widgets/empty_widget.dart';
@@ -59,29 +60,7 @@ class _DriversPageState extends State<DriversPage> {
               const SizedBox(
                 width: 10,
               ),
-              if (_avatarUrl == null || _avatarUrl!.isEmpty)
-                ClipRRect(
-                  borderRadius: BorderRadius.circular(75.0),
-                  child: Container(
-                    width: 32,
-                    height: 32,
-                    alignment: Alignment.bottomCenter,
-                    decoration: const BoxDecoration(
-                      color: Color.fromARGB(255, 200, 200, 200),
-                    ),
-                    child: Image.asset("assets/images/avatar_icon.png"),
-                  ),
-                )
-              else
-                ClipRRect(
-                  borderRadius: BorderRadius.circular(75.0),
-                  child: Image.network(
-                    _avatarUrl!,
-                    width: 32,
-                    height: 32,
-                    fit: BoxFit.cover,
-                  ),
-                ),
+              AppBarAvatar()
             ],
           ),
           leading: Builder(builder: (context) {

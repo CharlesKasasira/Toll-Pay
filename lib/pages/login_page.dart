@@ -2,7 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:tollpay/components/auth_state.dart';
-import 'package:tollpay/pages/controllers/auth_controllers.dart';
+import 'package:tollpay/controllers/auth_controllers.dart';
 import 'package:tollpay/pages/forgot_password.dart';
 import 'package:tollpay/pages/signup_as_page.dart';
 import 'package:tollpay/pages/signup_page.dart';

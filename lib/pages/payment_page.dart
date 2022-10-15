@@ -5,8 +5,10 @@ import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'package:otp_text_field/otp_field.dart';
 import 'package:otp_text_field/style.dart';
+import 'package:tollpay/controllers/user_controllers.dart';
 import 'package:tollpay/pages/generate.dart';
 import 'package:tollpay/pages/organisation/organisation_dashboard.dart';
+import 'package:tollpay/widgets/appbar_avatar.dart';
 import 'package:tollpay/widgets/button.dart';
 
 class PaymentPage extends StatefulWidget {
@@ -24,7 +26,7 @@ class PaymentPage extends StatefulWidget {
 }
 
 class _PaymentPageState extends State<PaymentPage> {
-  var myAnswer = "";
+  
   String? _avatarUrl;
   bool isAndroid = false;
   late final TextEditingController _phoneNumberController;
@@ -59,9 +61,6 @@ class _PaymentPageState extends State<PaymentPage> {
         <String, String>{"mobile_money_company_id": "1", "phone": phone},
       ),
     );
-    // Navigator.of(context)
-    //     .pushNamedAndRemoveUntil('/make-payment', (route) => false);
-    // return null;
   }
 
   Future<http.Response>? makePayment(String secretCode) {
@@ -169,37 +168,10 @@ class _PaymentPageState extends State<PaymentPage> {
               const SizedBox(
                 width: 10,
               ),
-              if (_avatarUrl == null || _avatarUrl!.isEmpty)
-                ClipRRect(
-                  borderRadius: BorderRadius.circular(75.0),
-                  child: Container(
-                    width: 32,
-                    height: 32,
-                    alignment: Alignment.bottomCenter,
-                    decoration: const BoxDecoration(
-                      color: Color.fromARGB(255, 200, 200, 200),
-                    ),
-                    child: Image.asset("assets/images/avatar_icon.png"),
-                  ),
-                )
-              else
-                ClipRRect(
-                  borderRadius: BorderRadius.circular(75.0),
-                  child: Image.network(
-                    _avatarUrl!,
-                    width: 32,
-                    height: 32,
-                    fit: BoxFit.cover,
-                  ),
-                ),
+              AppBarAvatar()
             ],
           ),
-          leading: Builder(builder: (context) {
-            return Container(
-              width: 25,
-              height: 25,
-              margin: const EdgeInsets.only(left: 10.0, top: 10.0, bottom: 4),
-              child: IconButton(
+          leading: IconButton(
                 icon: const Icon(Icons.arrow_back),
                 // onPressed: () => Navigator.of(context).pop(),
                 onPressed: () {
@@ -211,9 +183,7 @@ class _PaymentPageState extends State<PaymentPage> {
                   );
                 },
               ),
-            );
-          }),
-        ),
+            ),
         body: Padding(
           padding: const EdgeInsets.only(
             left: 15.0,

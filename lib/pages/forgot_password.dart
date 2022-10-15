@@ -2,7 +2,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:supabase/supabase.dart';
 import 'package:tollpay/components/auth_state.dart';
-import 'package:tollpay/pages/controllers/auth_controllers.dart';
+import 'package:tollpay/controllers/auth_controllers.dart';
 import 'package:tollpay/pages/login_page.dart';
 import 'package:tollpay/utils/constants.dart';
 import 'package:flutter/services.dart';
