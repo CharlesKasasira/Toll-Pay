@@ -5,9 +5,9 @@ import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'package:otp_text_field/otp_field.dart';
 import 'package:otp_text_field/style.dart';
-import 'package:tollpay/controllers/user_controllers.dart';
 import 'package:tollpay/pages/generate.dart';
 import 'package:tollpay/pages/organisation/organisation_dashboard.dart';
+import 'package:tollpay/utils/constants.dart';
 import 'package:tollpay/widgets/appbar_avatar.dart';
 import 'package:tollpay/widgets/button.dart';
 
@@ -26,9 +26,8 @@ class PaymentPage extends StatefulWidget {
 }
 
 class _PaymentPageState extends State<PaymentPage> {
-  
   String? _avatarUrl;
-  bool isAndroid = false;
+  bool isAndroid = true;
   late final TextEditingController _phoneNumberController;
   late final TextEditingController _plateNumberController;
   late final TextEditingController _tripsController;
@@ -155,35 +154,35 @@ class _PaymentPageState extends State<PaymentPage> {
         extendBodyBehindAppBar: true,
         appBar: AppBar(
           shadowColor: const Color.fromARGB(100, 158, 158, 158),
-          backgroundColor: Color(0xff1a1a1a),
+          backgroundColor: ksecondary,
           elevation: 0,
           foregroundColor: Colors.white,
           title: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              const Text(
+            children: const [
+              Text(
                 "Get Token",
                 style: TextStyle(fontWeight: FontWeight.w400),
               ),
-              const SizedBox(
+              SizedBox(
                 width: 10,
               ),
               AppBarAvatar()
             ],
           ),
           leading: IconButton(
-                icon: const Icon(Icons.arrow_back),
-                // onPressed: () => Navigator.of(context).pop(),
-                onPressed: () {
-                  Get.off(
-                    () => const OrganisationHomePage(),
-                    transition: Transition.cupertino,
-                    duration: const Duration(milliseconds: 600),
-                    curve: Curves.easeOut,
-                  );
-                },
-              ),
-            ),
+            icon: const Icon(Icons.arrow_back),
+            onPressed: () {
+              Get.back();
+              // Get.off(
+              //   () => const OrganisationHomePage(),
+              //   transition: Transition.cupertino,
+              //   duration: const Duration(milliseconds: 600),
+              //   curve: Curves.easeOut,
+              // );
+            },
+          ),
+        ),
         body: Padding(
           padding: const EdgeInsets.only(
             left: 15.0,
@@ -452,79 +451,73 @@ class _PaymentPageState extends State<PaymentPage> {
                 const SizedBox(
                   height: 20,
                 ),
-
                 CustomElevatedButton(
-                    onTap: (){
-                      getMtnSecretCode(_phoneNumberController.text);
-                      showModalBottomSheet(
-                          shape: const RoundedRectangleBorder(
-                              borderRadius: BorderRadius.vertical(
-                                  top: Radius.circular(25.0))),
-                          // backgroundColor: Colors.grey,
-                          context: context,
-                          isScrollControlled: true,
-                          builder: (context) => Padding(
-                                padding: EdgeInsets.only(
-                                    top: 20,
-                                    right: 20,
-                                    left: 20,
-                                    bottom: MediaQuery.of(context)
-                                        .viewInsets
-                                        .bottom),
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: [
-                                    Center(
-                                      child: Text(
-                                        'Enter Secret Code',
-                                      ),
+                  onTap: () {
+                    getMtnSecretCode(_phoneNumberController.text);
+                    showModalBottomSheet(
+                        shape: const RoundedRectangleBorder(
+                            borderRadius: BorderRadius.vertical(
+                                top: Radius.circular(25.0))),
+                        // backgroundColor: Colors.grey,
+                        context: context,
+                        isScrollControlled: true,
+                        builder: (context) => Padding(
+                              padding: EdgeInsets.only(
+                                  top: 20,
+                                  right: 20,
+                                  left: 20,
+                                  bottom:
+                                      MediaQuery.of(context).viewInsets.bottom),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  Center(
+                                    child: Text(
+                                      'Enter Secret Code',
                                     ),
-                                    const SizedBox(height: 10),
-                                    OTPTextField(
-                                      length: 6,
-                                      width: MediaQuery.of(context).size.width,
-                                      fieldWidth: 30,
-                                      style: TextStyle(fontSize: 14),
-                                      textFieldAlignment:
-                                          MainAxisAlignment.spaceAround,
-                                      fieldStyle: FieldStyle.underline,
-                                      onCompleted: (pin) {
-                                        // print("Completed: " + pin);
-                                        makePayment(pin);
-                                      },
-                                    ),
-                                    const SizedBox(
-                                      height: 10,
-                                    ),
-                                    Container(
-                                        width:
-                                            MediaQuery.of(context).size.width -
-                                                36,
-                                        height: 40,
-                                        decoration: BoxDecoration(
-                                            borderRadius:
-                                                BorderRadius.circular(8),
-                                            color: Colors.black),
-                                        child: TextButton(
-                                          child: const Text(
-                                            "Cancel",
-                                            style:
-                                                TextStyle(color: Colors.white),
-                                          ),
-                                          onPressed: () =>
-                                              Navigator.pop(context),
-                                        )),
-                                    const SizedBox(
-                                      height: 10,
-                                    )
-                                  ],
-                                ),
-                              ));
-                    },
-                    text: "Continue",
-                  ),
-
+                                  ),
+                                  const SizedBox(height: 10),
+                                  OTPTextField(
+                                    length: 6,
+                                    width: MediaQuery.of(context).size.width,
+                                    fieldWidth: 30,
+                                    style: TextStyle(fontSize: 14),
+                                    textFieldAlignment:
+                                        MainAxisAlignment.spaceAround,
+                                    fieldStyle: FieldStyle.underline,
+                                    onCompleted: (pin) {
+                                      // print("Completed: " + pin);
+                                      makePayment(pin);
+                                    },
+                                  ),
+                                  const SizedBox(
+                                    height: 10,
+                                  ),
+                                  Container(
+                                      width: MediaQuery.of(context).size.width -
+                                          36,
+                                      height: 40,
+                                      decoration: BoxDecoration(
+                                          borderRadius:
+                                              BorderRadius.circular(8),
+                                          color: Colors.black),
+                                      child: TextButton(
+                                        child: const Text(
+                                          "Cancel",
+                                          style: TextStyle(color: Colors.white),
+                                        ),
+                                        onPressed: () => Navigator.pop(context),
+                                      )),
+                                  const SizedBox(
+                                    height: 10,
+                                  )
+                                ],
+                              ),
+                            ));
+                  },
+                  text: "Continue",
+                ),
                 const SizedBox(
                   height: 18,
                 )

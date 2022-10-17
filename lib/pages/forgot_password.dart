@@ -61,14 +61,6 @@ class _ForgotPageState extends AuthState<ForgotPage> {
 
   @override
   Widget build(BuildContext context) {
-    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.dark.copyWith(
-            statusBarColor: Colors.white,
-            /* set Status bar color in Android devices. */
-            statusBarIconBrightness: Brightness.dark,
-            /* set Status bar icons color in Android devices.*/
-            statusBarBrightness:
-                Brightness.dark) /* set Status bar icon color in iOS. */
-        );
     return GestureDetector(
       onTap: () {
         _focusEmail.unfocus();
@@ -108,14 +100,8 @@ class _ForgotPageState extends AuthState<ForgotPage> {
                   TextFormField(
                   controller: _emailController,
                   focusNode: _focusEmail,
-                  decoration: const InputDecoration(
-                    isDense: true,
-                    labelText: 'Enter email',
-                    floatingLabelBehavior: FloatingLabelBehavior.never,
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.all(Radius.circular(8)),
-                    ),
-                  ),
+                  decoration: inputDecorationConst.copyWith(
+                                labelText: "Email",),
                 )],
               ),
               const SizedBox(height: 18),

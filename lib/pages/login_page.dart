@@ -139,19 +139,12 @@ class _LoginPageState extends AuthState<LoginPage> {
                             validator: (value) => Validator.validateEmail(
                               email: value,
                             ),
-                            decoration: const InputDecoration(
-                              isDense: true,
-                              floatingLabelBehavior:
-                                  FloatingLabelBehavior.never,
-                              labelText: 'Email',
-                              border: OutlineInputBorder(
-                                borderRadius:
-                                    BorderRadius.all(Radius.circular(8)),
-                              ),
-                            ),
+                            decoration: inputDecorationConst.copyWith(
+                                labelText: "Email",),
                           ),
                         ],
                       ),
+                      
                       const SizedBox(height: 18),
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -165,8 +158,9 @@ class _LoginPageState extends AuthState<LoginPage> {
                             validator: (value) => Validator.validatePassword(
                               password: value,
                             ),
-                            decoration: InputDecoration(
-                              suffixIcon: Padding(
+                            decoration: inputDecorationConst.copyWith(
+                                labelText: "Password",
+                                suffixIcon: Padding(
                                 padding: const EdgeInsets.only(right: 15),
                                 child: GestureDetector(
                                   onTap: _togglePasswordVisibility,
@@ -179,15 +173,7 @@ class _LoginPageState extends AuthState<LoginPage> {
                               ),
                               suffixIconConstraints:
                                   const BoxConstraints(maxWidth: 50),
-                              isDense: true,
-                              floatingLabelBehavior:
-                                  FloatingLabelBehavior.never,
-                              labelText: 'Password',
-                              border: const OutlineInputBorder(
-                                borderRadius:
-                                    BorderRadius.all(Radius.circular(8)),
                               ),
-                            ),
                           ),
                         ],
                       ),

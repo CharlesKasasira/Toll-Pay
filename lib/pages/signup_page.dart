@@ -135,14 +135,8 @@ class _SignupPageState extends AuthState<SignupPage> {
                         controller: _emailController,
                         focusNode: _focusEmail,
                         keyboardType: TextInputType.emailAddress,
-                        decoration: const InputDecoration(
-                          isDense: true,
-                          floatingLabelBehavior: FloatingLabelBehavior.never,
-                          labelText: 'Enter email',
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.all(Radius.circular(8)),
-                          ),
-                        ),
+                        decoration: inputDecorationConst.copyWith(
+                                labelText: "Enter Email",),
                       ),
                     ],
                   ),
@@ -155,14 +149,8 @@ class _SignupPageState extends AuthState<SignupPage> {
                       TextFormField(
                         controller: _namesController,
                         focusNode: _focusNames,
-                        decoration: const InputDecoration(
-                          isDense: true,
-                          floatingLabelBehavior: FloatingLabelBehavior.never,
-                          labelText: 'Enter name',
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.all(Radius.circular(8)),
-                          ),
-                        ),
+                        decoration: inputDecorationConst.copyWith(
+                                labelText: "Enter Full Names",),
                       ),
                     ],
                   ),
@@ -176,14 +164,8 @@ class _SignupPageState extends AuthState<SignupPage> {
                         keyboardType: TextInputType.phone,
                         controller: _phoneNumberController,
                         focusNode: _focusPhoneNumber,
-                        decoration: const InputDecoration(
-                          isDense: true,
-                          floatingLabelBehavior: FloatingLabelBehavior.never,
-                          labelText: 'Enter phone number',
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.all(Radius.circular(8)),
-                          ),
-                        ),
+                        decoration: inputDecorationConst.copyWith(
+                                labelText: "Enter Phone Number",),
                       ),
                     ],
                   ),
@@ -197,27 +179,22 @@ class _SignupPageState extends AuthState<SignupPage> {
                         controller: _passwordController,
                         obscureText: !_showPassword,
                         focusNode: _focusPassword,
-                        decoration: InputDecoration(
-                          suffixIcon: Padding(
-                            padding: const EdgeInsets.only(right: 15),
-                            child: GestureDetector(
-                              onTap: _togglePasswordVisibility,
-                              child: SvgPicture.asset(
-                                      _showPassword ?
+                        decoration: inputDecorationConst.copyWith(
+                                labelText: "Password",
+                                suffixIcon: Padding(
+                                padding: const EdgeInsets.only(right: 15),
+                                child: GestureDetector(
+                                  onTap: _togglePasswordVisibility,
+                                  child: SvgPicture.asset(_showPassword ?
                                     "assets/icon/password_invisible.svg" : "assets/icon/password_visible.svg",
-                                      height: 15,
-                                      width: 20,
-                                    ),
-                            ),
-                            ),
-                          suffixIconConstraints: const BoxConstraints(maxWidth: 50),
-                          floatingLabelBehavior: FloatingLabelBehavior.never,
-                          isDense: true,
-                          labelText: 'Enter Password',
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.all(Radius.circular(8)),
-                          ),
-                        ),
+                                    height: 15,
+                                    width: 20,
+                                  ),
+                                ),
+                              ),
+                              suffixIconConstraints:
+                                  const BoxConstraints(maxWidth: 50),
+                              ),
                       ),
                     ],
                   ),

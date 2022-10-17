@@ -7,10 +7,12 @@ import 'package:jiffy/jiffy.dart';
 import 'package:otp_text_field/otp_field.dart';
 import 'package:otp_text_field/style.dart';
 import 'package:tollpay/pages/generate.dart';
+import 'package:tollpay/pages/organisation/add_car.dart';
 import 'package:tollpay/pages/organisation/organisation_dashboard.dart';
 import 'package:tollpay/pages/qr_details.dart';
 import 'package:tollpay/utils/constants.dart';
 import 'package:tollpay/widgets/appbar_avatar.dart';
+import 'package:tollpay/widgets/button.dart';
 
 class CarsPage extends StatefulWidget {
   var user;
@@ -38,8 +40,8 @@ class _CarsPageState extends State<CarsPage> {
   final _trips = FocusNode();
   var activeQrCodes;
 
-  Future getActiveQRCodes() async {
-    final response = await supabase.from('qrcodes').select().order('created_at', ascending: false).execute();
+  Future getCars() async {
+    final response = await supabase.from('cars').select().order('created_at', ascending: false).execute();
 
     final data = response.data;
     final error = response.error;
@@ -229,8 +231,21 @@ class _CarsPageState extends State<CarsPage> {
               vertical: 18,
             ),
             children: [
+              CustomElevatedButton(
+                      onTap: () {
+                        Get.to(
+                          () => const AddCar(),
+                          transition: Transition.cupertino,
+                          duration: const Duration(milliseconds: 600),
+                          curve: Curves.easeOut,
+                        );
+                      },
+                      text: "Add New Car"),
+                      const SizedBox(
+                  height: 20,
+                ),
               FutureBuilder(
-                  future: getActiveQRCodes(),
+                  future: getCars(),
                   builder: (context, snapshot) {
                     switch (snapshot.connectionState) {
                       case ConnectionState.none:
@@ -292,16 +307,17 @@ Widget QRList(location) {
         return Card(
           elevation: 4,
           child: ListTile(
-            leading: const Icon(Icons.qr_code),
-            trailing: Text(
-              "${location[index]['status']}",
-              style: TextStyle(color: location[index]['status'] == 'Active' ? Colors.green : Colors.red, fontSize: 15),
-            ),
+            leading: const Icon(Icons.car_crash),
+            // trailing: Text(
+            //   "${location[index]['status']}",
+            //   style: TextStyle(color: location[index]['status'] == 'Active' ? Colors.green : Colors.red, fontSize: 15),
+            // ),
             title: Text(
-              "${location[index]['amount']}",
+              "${location[index]['plate_number']}",
               style: TextStyle(fontWeight: FontWeight.bold),
             ),
-            subtitle: Text("${Jiffy(location[index]['created_at']).yMMMMd}"),
+            // subtitle: Text("${Jiffy(location[index]['created_at']).yMMMMd}"),
+            subtitle: Text("Class ${location[index]['class']}"),
             onTap: () {
               Get.off(
                 () => QRDetails(id: location[index]['id']),

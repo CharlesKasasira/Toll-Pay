@@ -4,6 +4,7 @@ import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
 import 'package:get/get.dart';
 import 'package:tollpay/pages/operator/operator_dashboard.dart';
 import 'package:tollpay/utils/constants.dart';
+import 'package:tollpay/widgets/appbar_avatar.dart';
 
 class ScanPage extends StatefulWidget {
   @override
@@ -83,42 +84,20 @@ class _ScanPageState extends State<ScanPage> {
       backgroundColor: const Color(0xfff5f5f5),
       appBar: AppBar(
         shadowColor: const Color.fromARGB(100, 158, 158, 158),
-        backgroundColor: Color(0xff1a1a1a),
+        backgroundColor: ksecondary,
         elevation: 0,
         foregroundColor: Colors.white,
         title: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            const Text(
+          children: const [
+            Text(
               "QR Scanner",
               style: TextStyle(fontWeight: FontWeight.w400),
             ),
-            const SizedBox(
+            SizedBox(
               width: 10,
             ),
-            if (_avatarUrl == null || _avatarUrl!.isEmpty)
-              ClipRRect(
-                borderRadius: BorderRadius.circular(75.0),
-                child: Container(
-                  width: 32,
-                  height: 32,
-                  alignment: Alignment.bottomCenter,
-                  decoration: const BoxDecoration(
-                    color: Color.fromARGB(255, 200, 200, 200),
-                  ),
-                  child: Image.asset("assets/images/avatar_icon.png"),
-                ),
-              )
-            else
-              ClipRRect(
-                borderRadius: BorderRadius.circular(75.0),
-                child: Image.network(
-                  _avatarUrl!,
-                  width: 32,
-                  height: 32,
-                  fit: BoxFit.cover,
-                ),
-              ),
+            AppBarAvatar()
           ],
         ),
         leading: Builder(builder: (context) {
@@ -138,7 +117,7 @@ class _ScanPageState extends State<ScanPage> {
               },
             ),
           );
-        }),
+        },),
       ),
       body: Container(
         padding: const EdgeInsets.all(20.0),

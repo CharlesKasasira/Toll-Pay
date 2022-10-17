@@ -141,12 +141,12 @@ class _AccountPageState extends AuthRequiredState<AccountPage> {
           foregroundColor: Colors.white,
           title: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              const Text(
-                "Home",
+            children: const [
+              Text(
+                "Profile",
                 style: TextStyle(fontWeight: FontWeight.w400),
               ),
-              const SizedBox(
+              SizedBox(
                 width: 10,
               ),
               AppBarAvatar()
@@ -162,12 +162,13 @@ class _AccountPageState extends AuthRequiredState<AccountPage> {
                   Icons.arrow_back,
                 ),
                 onPressed: () {
-                  Get.off(
-                    () => const OrganisationHomePage(),
-                    transition: Transition.cupertino,
-                    duration: const Duration(milliseconds: 600),
-                    curve: Curves.easeOut,
-                  );
+                  Get.back();
+                  // Get.off(
+                  //   () => const OrganisationHomePage(),
+                  //   transition: Transition.cupertino,
+                  //   duration: const Duration(milliseconds: 600),
+                  //   curve: Curves.easeOut,
+                  // );
                 },
               ),
             );

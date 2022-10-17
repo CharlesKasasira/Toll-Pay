@@ -1,12 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:tollpay/components/avatar.dart';
-import 'package:supabase/supabase.dart';
-import 'package:tollpay/components/auth_required_state.dart';
 import 'package:tollpay/pages/account_page.dart';
 import 'package:tollpay/pages/chat_page.dart';
 import 'package:tollpay/pages/maps_page.dart';
 import 'package:tollpay/pages/payment_page.dart';
-import 'package:tollpay/pages/scan_qr.dart';
 import 'package:tollpay/utils/constants.dart';
 
 class MyDrawer extends StatefulWidget {
@@ -166,17 +162,7 @@ class _MyDrawerState extends State<MyDrawer> {
           const Divider(
             thickness: 1,
           ),
-          ListTile(
-            leading: const Icon(Icons.settings_outlined),
-            title: const Text('Settings'),
-            onTap: () async {
-              final response = await supabase.auth.signOut();
-              final error = response.error;
-              if (error != null) {
-                context.showErrorSnackBar(message: error.message);
-              }
-            },
-          ),
+          
           ListTile(
             leading: const Icon(Icons.logout),
             title: const Text('Log Out'),

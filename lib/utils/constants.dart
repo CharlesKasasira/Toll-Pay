@@ -2,14 +2,16 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
+import 'color_constants.dart';
 
 final supabase = Supabase.instance.client;
 
+//colors
+const kTinGrey = Color(0xFF909090);
+const ksecondary = Color(0xff1a1a1a);
+
 /// Simple preloader inside a Center widget
-const preloader =
-    Center(child: CircularProgressIndicator(color: Colors.black));
-
-
+const preloader = Center(child: CircularProgressIndicator(color: Colors.black));
 
 extension ShowSnackBar on BuildContext {
   void showSnackBar({
@@ -36,9 +38,6 @@ extension ShowSnackBar on BuildContext {
     showSnackBar(message: message, backgroundColor: Colors.green);
   }
 }
-
-
-
 
 Future kDefaultDialog(String title, String message,
     {VoidCallback? onYesPressed}) async {
@@ -104,3 +103,42 @@ Future kDefaultDialog(String title, String message,
     );
   }
 }
+
+const inputDecorationConst = InputDecoration(
+  isDense: true,
+  floatingLabelBehavior: FloatingLabelBehavior.never,
+  labelStyle: TextStyle(
+    fontFamily: "NunitoSans",
+    color: kTinGrey,
+  ),
+  border: OutlineInputBorder(
+    borderRadius: BorderRadius.all(Radius.circular(8)),
+  ),
+  errorBorder: OutlineInputBorder(
+    borderSide: BorderSide(color: Colors.red)
+  )
+  // enabledBorder: UnderlineInputBorder(
+  //   borderSide: BorderSide(
+  //     color: kChristmasSilver,
+  //     width: 2,
+  //   ),
+  // ),
+  // focusedBorder: UnderlineInputBorder(
+  //   borderSide: BorderSide(
+  //     color: kOffBlack,
+  //     width: 2,
+  //   ),
+  // ),
+  // errorBorder: UnderlineInputBorder(
+  //   borderSide: BorderSide(
+  //     color: kFireOpal,
+  //     width: 2,
+  //   ),
+  // ),
+  // focusedErrorBorder: UnderlineInputBorder(
+  //   borderSide: BorderSide(
+  //     color: kFireOpal,
+  //     width: 2,
+  //   ),
+  // ),
+);

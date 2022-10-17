@@ -1,24 +1,16 @@
-import 'dart:convert';
-
 // ignore: unnecessary_import
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
-import 'package:google_fonts/google_fonts.dart';
-import 'package:http/http.dart' as http;
 import 'package:jiffy/jiffy.dart';
+import 'package:qr_flutter/qr_flutter.dart';
 import 'package:supabase/supabase.dart';
 import 'package:tollpay/components/auth_required_state.dart';
-import 'package:tollpay/models/weather.dart';
-import 'package:tollpay/pages/payment_page.dart';
+import 'package:tollpay/pages/organisation/organisation_dashboard.dart';
 import 'package:tollpay/utils/color_constants.dart';
 import 'package:tollpay/utils/constants.dart';
-import 'package:qr_flutter/qr_flutter.dart';
 import 'package:tollpay/widgets/appbar_avatar.dart';
-
-import 'organisation/organisation_dashboard.dart';
 
 class QRDetails extends StatefulWidget {
   var id;
@@ -71,49 +63,47 @@ class _QRDetailsState extends AuthRequiredState<QRDetails> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    // getActiveQRCodes();
   }
 
   @override
   Widget build(BuildContext context) {
-    print(activeQrCodes);
     getActiveQRCodes();
     return Scaffold(
       backgroundColor: ColorConstants.kprimary,
       extendBodyBehindAppBar: true,
       appBar: AppBar(
         shadowColor: const Color.fromARGB(100, 158, 158, 158),
-        backgroundColor: Color(0xff1a1a1a),
+        backgroundColor: ksecondary,
         elevation: 0,
         foregroundColor: Colors.white,
         title: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: const [
-              Text(
-                "QR Details",
-                style: TextStyle(fontWeight: FontWeight.w400),
-              ),
-              SizedBox(
-                width: 10,
-              ),
-              AppBarAvatar()
-            ],
-          ),
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: const [
+            Text(
+              "QR Details",
+              style: TextStyle(fontWeight: FontWeight.w400),
+            ),
+            SizedBox(
+              width: 10,
+            ),
+            AppBarAvatar()
+          ],
+        ),
         leading: IconButton(
-                icon: const Icon(Icons.arrow_back),
-                // onPressed: () => Navigator.of(context).pop(),
-                onPressed: () {
-                  Get.off(
-                    () => const OrganisationHomePage(),
-                    transition: Transition.cupertino,
-                    duration: const Duration(milliseconds: 600),
-                    curve: Curves.easeOut,
-                  );
-                },
-              ),
+          icon: const Icon(Icons.arrow_back),
+          onPressed: () {
+            Get.back();
+            // Get.off(
+            //   () => const OrganisationHomePage(),
+            //   transition: Transition.cupertino,
+            //   duration: const Duration(milliseconds: 600),
+            //   curve: Curves.easeOut,
+            // );
+          },
+        ),
       ),
       body: SafeArea(
-        minimum: EdgeInsets.only(top: 30),
+        minimum: const EdgeInsets.only(top: 30),
         child: Padding(
           padding: const EdgeInsets.only(
             left: 10.0,
@@ -179,25 +169,25 @@ class _QRDetailsState extends AuthRequiredState<QRDetails> {
 
 Widget QRList(location) {
   return Column(
-          children: [
-            Container(
-              padding: const EdgeInsets.all(12),
-              decoration: BoxDecoration(
-                color: Colors.white,
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.grey.withOpacity(0.2),
-                    spreadRadius: 2,
-                    blurRadius: 3,
-                    offset: const Offset(0, 3),
-                  ),
-                ],
-                borderRadius: const BorderRadius.all(Radius.circular(12)),
-              ),
-              child: QrImage(
-                //plce where the QR Image will be shown
-                embeddedImage: const AssetImage('assets/images/qr-icon.png'),
-                data: """
+    children: [
+      Container(
+        padding: const EdgeInsets.all(12),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          boxShadow: [
+            BoxShadow(
+              color: Colors.grey.withOpacity(0.2),
+              spreadRadius: 2,
+              blurRadius: 3,
+              offset: const Offset(0, 3),
+            ),
+          ],
+          borderRadius: const BorderRadius.all(Radius.circular(12)),
+        ),
+        child: QrImage(
+          //plce where the QR Image will be shown
+          embeddedImage: const AssetImage('assets/images/qr-icon.png'),
+          data: """
                   ${location[0]['qrcode_id']}
                   Amount: ${location[0]['amount']} 
                   Name: ${location[0]['username']}
@@ -206,21 +196,21 @@ Widget QRList(location) {
                   ----------------------------
                   status: ${location[0]['status']}
                 """,
-              ),
-            ),
-            const SizedBox(
-              height: 10,
-            ),
-            ListTile(
-              leading: const Icon(Icons.qr_code),
-              title: Text(
-                "${location[0]['amount']}",
-                style: const TextStyle(fontWeight: FontWeight.bold),
-              ),
-              subtitle: Text("${Jiffy(location[0]['created_at']).yMMMMd}"),
-            ),
-          ],
-        );
+        ),
+      ),
+      const SizedBox(
+        height: 10,
+      ),
+      ListTile(
+        leading: const Icon(Icons.qr_code),
+        title: Text(
+          "${location[0]['amount']}",
+          style: const TextStyle(fontWeight: FontWeight.bold),
+        ),
+        subtitle: Text("${Jiffy(location[0]['created_at']).yMMMMd}"),
+      ),
+    ],
+  );
   // }
 }
 // "${location[0]['created_at']}

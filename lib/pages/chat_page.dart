@@ -7,9 +7,7 @@ import 'package:tollpay/models/profile.dart';
 import 'package:tollpay/utils/constants.dart';
 import 'package:tollpay/widgets/appbar_avatar.dart';
 
-/// Page to chat with someone.
-///
-/// Displays chat bubbles as a ListView and TextField to enter new chat.
+
 class ChatPage extends StatefulWidget {
   const ChatPage({Key? key}) : super(key: key);
 
@@ -24,14 +22,12 @@ class ChatPage extends StatefulWidget {
 }
 
 class _ChatPageState extends State<ChatPage> {
-  String? _avatarUrl;
   late final Stream<List<Message>> _messagesStream;
   final Map<String, Profile> _profileCache = {};
 
   @override
   void initState() {
     final myUserId = supabase.auth.currentUser!.id;
-    print("my id is $myUserId");
     _messagesStream = supabase
         .from('messages')
         .stream(['id'])
@@ -39,7 +35,7 @@ class _ChatPageState extends State<ChatPage> {
         .execute()
         .map((maps) => maps
             .map((map) => Message.fromMap(map: map, myUserId: myUserId))
-            .toList());
+            .toList(),);
     super.initState();
   }
 
@@ -55,7 +51,6 @@ class _ChatPageState extends State<ChatPage> {
         .execute();
     final data = res.data;
     if (data != null) {
-      print(data);
       final profile = Profile.fromMap(data as Map<String, dynamic>);
       setState(() {
         _profileCache[profileId] = profile;
@@ -68,7 +63,7 @@ class _ChatPageState extends State<ChatPage> {
     return Scaffold(
       appBar: AppBar(
         shadowColor: const Color.fromARGB(100, 158, 158, 158),
-        backgroundColor: Color(0xff1a1a1a),
+        backgroundColor: ksecondary,
         elevation: 0,
         foregroundColor: Colors.white,
         title: Row(
@@ -94,7 +89,7 @@ class _ChatPageState extends State<ChatPage> {
               onPressed: () => Navigator.of(context).pop(),
             ),
           );
-        }),
+        },),
       ),
       body: StreamBuilder<List<Message>>(
         stream: _messagesStream,

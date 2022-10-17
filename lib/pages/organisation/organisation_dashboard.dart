@@ -1,5 +1,3 @@
-
-
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
@@ -32,6 +30,7 @@ class _OrganisationHomePageState
   String? lastName;
   String? username;
   var activeQrCodes;
+  var registeredCar;
   var _user;
 
   Future getActiveQRCodes() async {
@@ -44,6 +43,19 @@ class _OrganisationHomePageState
       activeQrCodes = data.length;
     } else {
       activeQrCodes = "0";
+    }
+  }
+
+  Future getRegisteredCars() async {
+    final response = await supabase.from('cars').select().execute();
+
+    final data = response.data;
+    final error = response.error;
+
+    if (data != null) {
+      registeredCar = data.length;
+    } else {
+      registeredCar = "0";
     }
   }
 
@@ -77,6 +89,7 @@ class _OrganisationHomePageState
       _userId = user.id;
       _getProfile(user.id);
       getActiveQRCodes();
+      getRegisteredCars();
     }
   }
 
@@ -84,6 +97,7 @@ class _OrganisationHomePageState
   void initState() {
     // TODO: implement initState
     getActiveQRCodes();
+    getRegisteredCars();
     super.initState();
   }
 
@@ -148,10 +162,10 @@ class _OrganisationHomePageState
                   //       fontFamily: "NunitoSans"),
                   // ),
                   Consumer<WrongUser>(
-                builder: (context, cart, child) {
-                  return Text('${cart.getUser}');
-                },
-)
+                    builder: (context, cart, child) {
+                      return Text('${cart.getUser}');
+                    },
+                  )
                 ],
               ),
               const Text(
@@ -191,7 +205,8 @@ class _OrganisationHomePageState
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               Column(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   const SizedBox(
@@ -237,37 +252,14 @@ class _OrganisationHomePageState
                   ),
                   Container(
                     padding: const EdgeInsets.all(10),
-                  width: (MediaQuery.of(context).size.width - 50) / 2,
-                child: FutureBuilder(
-                  future: fetchWeather(),
-                  builder: (context, snapshot) {
-                    switch (snapshot.connectionState) {
-                      case ConnectionState.none:
-                      case ConnectionState.waiting:
-                        return Container(
-                            // height: 180,
-                            padding: const EdgeInsets.all(10),
-                            alignment: Alignment.center,
-                            decoration: BoxDecoration(
-                              color: Colors.white,
-                              borderRadius: BorderRadius.circular(8),
-                              boxShadow: [
-                                BoxShadow(
-                                  color: Colors.grey.withOpacity(0.1),
-                                  spreadRadius: 2,
-                                  blurRadius: 3,
-                                  offset: const Offset(
-                                      0, 3), // changes position of shadow
-                                ),
-                              ],
-                            ),
-                            child: const Center(
-                                child: CircularProgressIndicator(
-                              color: Color(0xff1a1a1a),
-                            )));
-                      default:
-                        return snapshot.data == null
-                            ? Container(
+                    width: (MediaQuery.of(context).size.width - 50) / 2,
+                    child: FutureBuilder(
+                      future: fetchWeather(),
+                      builder: (context, snapshot) {
+                        switch (snapshot.connectionState) {
+                          case ConnectionState.none:
+                          case ConnectionState.waiting:
+                            return Container(
                                 // height: 180,
                                 padding: const EdgeInsets.all(10),
                                 alignment: Alignment.center,
@@ -280,40 +272,64 @@ class _OrganisationHomePageState
                                       spreadRadius: 2,
                                       blurRadius: 3,
                                       offset: const Offset(
-                                        0,
-                                        3,
-                                      ), // changes position of shadow
+                                          0, 3), // changes position of shadow
                                     ),
                                   ],
                                 ),
-                                child: Center(
-                                  child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: const [
-                                      SizedBox(
-                                        height: 8,
+                                child: const Center(
+                                    child: CircularProgressIndicator(
+                                  color: Color(0xff1a1a1a),
+                                )));
+                          default:
+                            return snapshot.data == null
+                                ? Container(
+                                    // height: 180,
+                                    padding: const EdgeInsets.all(10),
+                                    alignment: Alignment.center,
+                                    decoration: BoxDecoration(
+                                      color: Colors.white,
+                                      borderRadius: BorderRadius.circular(8),
+                                      boxShadow: [
+                                        BoxShadow(
+                                          color: Colors.grey.withOpacity(0.1),
+                                          spreadRadius: 2,
+                                          blurRadius: 3,
+                                          offset: const Offset(
+                                            0,
+                                            3,
+                                          ), // changes position of shadow
+                                        ),
+                                      ],
+                                    ),
+                                    child: Center(
+                                      child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        children: const [
+                                          SizedBox(
+                                            height: 8,
+                                          ),
+                                          Icon(Icons.wifi_off_outlined),
+                                          SizedBox(
+                                            width: 5,
+                                          ),
+                                          Text(
+                                            "Check your internet connection.",
+                                            style: TextStyle(
+                                                fontFamily: "Spartan",
+                                                color: Color.fromARGB(
+                                                    255, 24, 24, 24),
+                                                fontWeight: FontWeight.bold),
+                                          ),
+                                        ],
                                       ),
-                                      Icon(Icons.wifi_off_outlined),
-                                      SizedBox(
-                                        width: 5,
-                                      ),
-                                      Text(
-                                        "Check your internet connection.",
-                                        style: TextStyle(
-                                            fontFamily: "Spartan",
-                                            color:
-                                                Color.fromARGB(255, 24, 24, 24),
-                                            fontWeight: FontWeight.bold),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              )
-                            : getWeather(snapshot.data);
-                    }
-                  },
-                ),
-              ),
+                                    ),
+                                  )
+                                : getWeather(snapshot.data);
+                        }
+                      },
+                    ),
+                  ),
                 ],
               ),
               const SizedBox(
@@ -423,14 +439,15 @@ class _OrganisationHomePageState
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               Column(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   const SizedBox(
                                     height: 10,
                                   ),
                                   Text(
-                                    '10',
+                                    "${registeredCar}",
                                     style: GoogleFonts.roboto(
                                         textStyle:
                                             const TextStyle(letterSpacing: .5),
@@ -555,5 +572,3 @@ class _OrganisationHomePageState
     );
   }
 }
-
-
