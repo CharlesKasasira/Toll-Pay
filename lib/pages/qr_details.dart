@@ -93,12 +93,6 @@ class _QRDetailsState extends AuthRequiredState<QRDetails> {
           icon: const Icon(Icons.arrow_back),
           onPressed: () {
             Get.back();
-            // Get.off(
-            //   () => const OrganisationHomePage(),
-            //   transition: Transition.cupertino,
-            //   duration: const Duration(milliseconds: 600),
-            //   curve: Curves.easeOut,
-            // );
           },
         ),
       ),
@@ -185,16 +179,8 @@ Widget QRList(location) {
           borderRadius: const BorderRadius.all(Radius.circular(12)),
         ),
         child: QrImage(
-          //plce where the QR Image will be shown
           embeddedImage: const AssetImage('assets/images/qr-icon.png'),
-          data: """
-                  ${location[0]['qrcode_id']}
-                  Amount: ${location[0]['amount']} 
-                  Name: ${location[0]['username']}
-                  Plate Number: ${location[0]['plate_number']}
-
-                  ----------------------------
-                  status: ${location[0]['status']}
+          data: """${location[0]['qrcode_id']} \n\n Amount: ${location[0]['amount']} \n Name: ${location[0]['username']} \n Plate Number: ${location[0]['plate_number']} \n ---------------------------- \nstatus: ${location[0]['status']}
                 """,
         ),
       ),

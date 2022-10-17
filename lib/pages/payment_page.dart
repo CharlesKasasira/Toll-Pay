@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'package:otp_text_field/otp_field.dart';
@@ -10,6 +11,7 @@ import 'package:tollpay/pages/organisation/organisation_dashboard.dart';
 import 'package:tollpay/utils/constants.dart';
 import 'package:tollpay/widgets/appbar_avatar.dart';
 import 'package:tollpay/widgets/button.dart';
+import 'package:tollpay/widgets/myseparator.dart';
 
 class PaymentPage extends StatefulWidget {
   var user;
@@ -26,7 +28,6 @@ class PaymentPage extends StatefulWidget {
 }
 
 class _PaymentPageState extends State<PaymentPage> {
-  String? _avatarUrl;
   bool isAndroid = true;
   late final TextEditingController _phoneNumberController;
   late final TextEditingController _plateNumberController;
@@ -97,6 +98,11 @@ class _PaymentPageState extends State<PaymentPage> {
     return null;
   }
 
+  void _tripsOnChanged(String val) {
+    var amt = feesPerCar[dropdownCar];
+    var amount = 2 * int.parse(amt!);
+  }
+
   String dropdownvalue = 'Class 1';
 
   // List of items in our dropdown menu
@@ -116,14 +122,16 @@ class _PaymentPageState extends State<PaymentPage> {
     "Class 5": "18,000",
   };
 
+  String dropdownCar = 'Range Rover';
+  // List of cars in our dropdown menu
   List<String> cars = [
     'Range Rover',
     'Truck',
   ];
 
   Map<String, String> feesPerCar = {
-    "Range Rover": "5,000",
-    "Truck": "10,000",
+    "Range Rover": "5000",
+    "Truck": "10000",
   };
 
   dynamic selected = 1;
@@ -187,7 +195,7 @@ class _PaymentPageState extends State<PaymentPage> {
           padding: const EdgeInsets.only(
             left: 15.0,
             right: 15.0,
-            top: 30.0,
+            top: 15.0,
           ),
           child: Container(
             child: ListView(
@@ -200,7 +208,7 @@ class _PaymentPageState extends State<PaymentPage> {
                   children: [
                     const Text(
                       "Pay for a registered Car",
-                      style: TextStyle(fontWeight: FontWeight.bold),
+                      style: TextStyle(),
                     ),
                     Switch(
                       // thumb color (round icon)
@@ -226,22 +234,25 @@ class _PaymentPageState extends State<PaymentPage> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           const Text(
-                            "Vehicle Type",
+                            "Vehicle Class",
                             style: TextStyle(),
                           ),
                           const SizedBox(
                             height: 5,
                           ),
                           Container(
-                            padding: EdgeInsets.symmetric(
+                            padding: const EdgeInsets.symmetric(
                                 horizontal: 10, vertical: 5),
                             decoration: BoxDecoration(
-                                color: Colors.white,
-                                borderRadius: BorderRadius.circular(10)),
+                              border: Border.all(color: kTinGrey),
+                              borderRadius: BorderRadius.circular(10),
+                            ),
                             child: DropdownButton(
-                              // Initial Value
+                              hint: const Text("Select Car Class"),
+                              isDense: true,
                               isExpanded: true,
                               value: dropdownvalue,
+                              dropdownColor: Colors.white,
                               onChanged: (String? newValue) {
                                 setState(() {
                                   dropdownvalue = newValue!;
@@ -251,7 +262,7 @@ class _PaymentPageState extends State<PaymentPage> {
                               // add extra sugar..
                               icon: Icon(Icons.arrow_drop_down),
                               iconSize: 42,
-                              underline: SizedBox(),
+                              underline: const SizedBox(),
 
                               // Array list of items
                               items: items.map((String items) {
@@ -310,28 +321,25 @@ class _PaymentPageState extends State<PaymentPage> {
                         child: DropdownButton(
                           // Initial Value
                           isExpanded: true,
-                          value: dropdownvalue,
+                          value: dropdownCar,
                           onChanged: (String? newValue) {
                             setState(() {
-                              dropdownvalue = newValue!;
+                              dropdownCar = newValue!;
                             });
                           },
 
                           // add extra sugar..
-                          icon: Icon(Icons.arrow_drop_down),
+                          icon: const Icon(Icons.arrow_drop_down),
                           iconSize: 42,
-                          underline: SizedBox(),
+                          underline: const SizedBox(),
 
                           // Array list of items
-                          items: items.map((String item) {
+                          items: cars.map((String item) {
                             return DropdownMenuItem(
                               value: item,
                               child: Text(item),
                             );
                           }).toList(),
-
-                          // After selecting the desired option,it will
-                          // change button value to selected value
                         ),
                       ),
                     ],
@@ -349,13 +357,10 @@ class _PaymentPageState extends State<PaymentPage> {
                     TextFormField(
                       controller: _tripsController,
                       focusNode: _trips,
-                      decoration: const InputDecoration(
-                        isDense: true,
-                        floatingLabelBehavior: FloatingLabelBehavior.never,
-                        labelText: 'Enter trips',
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.all(Radius.circular(12)),
-                        ),
+                      keyboardType: TextInputType.number,
+                      onChanged: _tripsOnChanged,
+                      decoration: inputDecorationConst.copyWith(
+                        labelText: "trips",
                       ),
                     ),
                   ],
@@ -366,62 +371,140 @@ class _PaymentPageState extends State<PaymentPage> {
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(
+                    const Text(
                       "Amount to Pay",
-                      style: TextStyle(fontSize: 20),
                     ),
-                    SizedBox(
-                      width: 10,
+                    const SizedBox(
+                      height: 10,
                     ),
                     Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Text("Ugx "),
-                        Text(
-                          "${feesPerItems[dropdownvalue]}",
-                          style: TextStyle(
-                              fontSize: 30, fontWeight: FontWeight.bold),
-                        ),
+                        const Text("Class fees"),
+                        Text(!isAndroid
+                              ? "${feesPerItems[dropdownvalue]}"
+                              : "${feesPerCar[dropdownCar]}", style: const TextStyle(fontWeight: FontWeight.bold),)
+                      ],
+                    ),
+                    const SizedBox(
+                      height: 5,
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        const Text("trips"),
+                        Text(_tripsController.text, style: const TextStyle(fontWeight: FontWeight.bold),)
+                      ],
+                    ),
+                    const SizedBox(height: 10,),
+                    const MySeparator(color: Colors.grey),
+                    const SizedBox(height: 10,),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        const Text("total"),
+                        Text(!isAndroid
+                              ? "${feesPerItems[dropdownvalue]}"
+                              : "${feesPerCar[dropdownCar]}", style: const TextStyle(fontWeight: FontWeight.bold),)
                       ],
                     ),
                   ],
                 ),
-                const SizedBox(height: 12),
+                const SizedBox(
+                  height: 20,
+                ),
+                const Divider(
+                  color: kTinGrey,
+                ),
+                const SizedBox(
+                  height: 20,
+                ),
                 Row(
-                  children: [
-                    const Text(
+                  children: const [
+                    Text(
                       "Choose Payment Method",
-                      style: TextStyle(fontSize: 20),
                     ),
                   ],
                 ),
-                Column(
-                    children: List.generate(
-                  checkListItems.length,
-                  (index) => CheckboxListTile(
-                    controlAffinity: ListTileControlAffinity.leading,
+                const SizedBox(
+                  height: 10,
+                ),
+                Container(
+                  margin: const EdgeInsets.only(left: 15),
+                  padding: const EdgeInsets.only(
+                      top: 10, bottom: 10, left: 10, right: 2),
+                  decoration: BoxDecoration(
+                      color: const Color(0xffffcc00),
+                      border: Border.all(
+                          color: selected == 2 ? kTinGrey : ksecondary),
+                      borderRadius: BorderRadius.circular(8)),
+                  child: CheckboxListTile(
+                    activeColor: ksecondary,
+                    // checkboxShape: ,
+                    controlAffinity: ListTileControlAffinity.trailing,
+                    secondary: SvgPicture.asset(
+                      "assets/icon/mtn.svg",
+                      width: 50,
+                    ),
                     contentPadding: EdgeInsets.zero,
                     dense: true,
                     title: Text(
-                      "${checkListItems[index]["title"]}",
+                      "${checkListItems[0]["title"]}",
                       style: const TextStyle(
                         fontSize: 16.0,
                         color: Colors.black,
                       ),
                     ),
-                    value: checkListItems[index]["value"] == true,
+                    value: checkListItems[0]["value"] == true,
                     onChanged: (value) {
                       setState(() {
                         for (var element in checkListItems) {
                           element["value"] = false;
                         }
-                        checkListItems[index]["value"] = value;
-                        selected = checkListItems[index]["id"];
-                        // selected =
-                        //     "${checkListItems[index]["id"]}, ${checkListItems[index]["title"]}, ${checkListItems[index]["value"]}";
+                        checkListItems[0]["value"] = value;
+                        selected = checkListItems[0]["id"];
                       });
                     },
                   ),
-                )),
+                ),
+                const SizedBox(
+                  height: 10,
+                ),
+                Container(
+                  margin: const EdgeInsets.only(left: 15),
+                  padding: const EdgeInsets.only(
+                      top: 10, bottom: 10, left: 10, right: 2),
+                  decoration: BoxDecoration(
+                      color: const Color(0xffee1c25),
+                      border: Border.all(
+                          color: selected == 1 ? kTinGrey : ksecondary),
+                      borderRadius: BorderRadius.circular(8)),
+                  child: CheckboxListTile(
+                    activeColor: ksecondary,
+                    // checkboxShape: ,
+                    controlAffinity: ListTileControlAffinity.trailing,
+                    secondary: SvgPicture.asset("assets/icon/airtel.svg"),
+                    contentPadding: EdgeInsets.zero,
+                    dense: true,
+                    title: Text(
+                      "${checkListItems[1]["title"]}",
+                      style: const TextStyle(
+                        fontSize: 16.0,
+                        color: Colors.white,
+                      ),
+                    ),
+                    value: checkListItems[1]["value"] == true,
+                    onChanged: (value) {
+                      setState(() {
+                        for (var element in checkListItems) {
+                          element["value"] = false;
+                        }
+                        checkListItems[1]["value"] = value;
+                        selected = checkListItems[1]["id"];
+                      });
+                    },
+                  ),
+                ),
                 const SizedBox(
                   height: 20,
                 ),
@@ -435,19 +518,16 @@ class _PaymentPageState extends State<PaymentPage> {
                         controller: _phoneNumberController,
                         focusNode: _focusPhoneNumber,
                         keyboardType: TextInputType.number,
-                        decoration: const InputDecoration(
-                          floatingLabelBehavior: FloatingLabelBehavior.never,
-                          labelText: 'Enter phone number',
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.all(Radius.circular(12)),
-                          ),
+                        decoration: inputDecorationConst.copyWith(
+                          labelText: 'Enter phone Number',
                         ),
                       ),
                     ],
                   )
                 else
                   const Text(
-                      "When using Airtel money, please initiate the transaction by getting the secret cod"),
+                    "When using Airtel money, please initiate the transaction by getting the secret code",
+                  ),
                 const SizedBox(
                   height: 20,
                 ),

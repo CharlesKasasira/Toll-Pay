@@ -13,16 +13,6 @@ class ScanPage extends StatefulWidget {
 
 class _ScanPageState extends State<ScanPage> {
   bool _loading = false;
-  String? _avatarUrl;
-
-  void _moveBack() {
-    Get.off(
-      () => const OperatorHomePage(),
-      transition: Transition.cupertino,
-      duration: const Duration(milliseconds: 600),
-      curve: Curves.easeInOut,
-    );
-  }
 
   Future updateQRCode(String code) async {
     setState(() {
@@ -74,6 +64,10 @@ class _ScanPageState extends State<ScanPage> {
 
       return null;
     }
+
+     setState(() {
+          _loading = true;
+        });
   }
 
   var getResult = 'Not yet scanned';
@@ -93,9 +87,6 @@ class _ScanPageState extends State<ScanPage> {
             Text(
               "QR Scanner",
               style: TextStyle(fontWeight: FontWeight.w400),
-            ),
-            SizedBox(
-              width: 10,
             ),
             AppBarAvatar()
           ],
@@ -122,26 +113,37 @@ class _ScanPageState extends State<ScanPage> {
       body: Container(
         padding: const EdgeInsets.all(20.0),
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
+          // mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: <Widget>[
             const Text(
-              "Result",
-              style: TextStyle(fontSize: 25.0, fontWeight: FontWeight.bold),
-              textAlign: TextAlign.center,
+              "Scan QR code",
+              style: TextStyle(fontWeight: FontWeight.bold),
             ),
-            Align(
-              alignment: Alignment.topLeft,
-              child: Text(
-                getResult,
-                style: const TextStyle(
-                  fontSize: 20.0,
-                ),
-                textAlign: TextAlign.left,
+            Text(
+              getResult,
+              style: const TextStyle(
+                fontSize: 20.0,
               ),
+              textAlign: TextAlign.left,
             ),
+            const SizedBox(height: 10,),
+            if (getResult == "Not yet scanned")
+              Container(
+                width: MediaQuery.of(context).size.width - 50,
+                height: MediaQuery.of(context).size.width -50,
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(8)
+                ),
+                child: const Icon(Icons.qr_code, size: 150,),
+              ),
             const SizedBox(
-              height: 20.0,
+              height: 10.0,
+            ),
+            const Text("Align the QR code with the frame to scan and confim ", textAlign: TextAlign.center, style: TextStyle(color: Colors.grey),),
+            const SizedBox(
+              height: 10.0,
             ),
             TextButton(
               onPressed: () async {

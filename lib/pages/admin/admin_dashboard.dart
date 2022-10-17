@@ -9,10 +9,12 @@ import 'package:supabase/supabase.dart';
 import 'package:tollpay/components/auth_required_state.dart';
 import 'package:tollpay/models/weather.dart';
 import 'package:tollpay/pages/myqr_page.dart';
+import 'package:tollpay/pages/organisation/bar_chart.dart';
 import 'package:tollpay/pages/payment_page.dart';
 import 'package:tollpay/utils/color_constants.dart';
 import 'package:tollpay/utils/constants.dart';
 import 'package:tollpay/utils/fetch_weather.dart';
+import 'package:tollpay/utils/price_point.dart';
 import 'package:tollpay/widgets/drawer.dart';
 import 'package:tollpay/widgets/organization_drawer.dart';
 
@@ -104,9 +106,9 @@ class _AdminHomePageState
       extendBodyBehindAppBar: true,
       appBar: AppBar(
         // backgroundColor: ColorConstants.ktransparent,
-        backgroundColor: Colors.white,
-        elevation: 2,
-        foregroundColor: Colors.black,
+        backgroundColor: Color(0xff1a1a1a),
+        elevation: 0,
+        foregroundColor: Colors.white,
         title: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
@@ -143,22 +145,22 @@ class _AdminHomePageState
             height: 25,
             margin: const EdgeInsets.only(left: 10.0, top: 10.0, bottom: 5),
             child: IconButton(
-              icon: const Icon(Icons.menu, color: Colors.black),
+              icon: const Icon(Icons.menu,),
               onPressed: () => Scaffold.of(context).openDrawer(),
             ),
           );
         }),
       ),
       body: SafeArea(
-        minimum: EdgeInsets.only(top: 30),
+        minimum: const EdgeInsets.only(top: 30),
         child: Padding(
           padding: const EdgeInsets.only(
-            // left: 10.0,
-            // right: 10.0,
+            left: 10.0,
+            right: 10.0,
             top: 8.0,
           ),
           child: ListView(
-            // padding: const EdgeInsets.symmetric(vertical: 18),
+            padding: const EdgeInsets.symmetric(horizontal: 10),
             children: [
               Padding(
                 padding: const EdgeInsets.only(left: 8.0, right: 8, top: 10),
@@ -246,231 +248,74 @@ class _AdminHomePageState
               const SizedBox(
                 height: 20,
               ),
-              Padding(
-                padding: const EdgeInsets.only(left: 8.0, right: 8),
-                child: GestureDetector(
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => const MyQRCodes(),
-                      ),
-                    );
-                  },
-                  child: Container(
-                    padding: const EdgeInsets.all(10),
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(10.0),
-                      gradient: const LinearGradient(
-                        colors: [
-                          Color.fromARGB(255, 15, 113, 48),
-                          Color.fromARGB(200, 15, 113, 48)
-                        ],
-                        begin: Alignment.topLeft,
-                        end: Alignment.bottomRight,
-                      ),
-                    ),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Column(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                const SizedBox(
-                                  height: 10,
-                                ),
-                                Text(
-                                  '${activeQrCodes}',
-                                  style: GoogleFonts.roboto(
-                                      textStyle:
-                                          const TextStyle(letterSpacing: .5),
-                                      fontSize: 18,
-                                      color: Colors.white),
-                                ),
-                                const SizedBox(
-                                  height: 10,
-                                ),
-                                Text(
-                                  'Active QR Codes',
-                                  style: GoogleFonts.roboto(
-                                      textStyle:
-                                          const TextStyle(letterSpacing: .5),
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 22,
-                                      color: Colors.white),
-                                ),
-                              ],
-                            ),
-                            const Icon(
-                              Icons.qr_code,
-                              color: Colors.white,
-                              size: 60,
-                            )
-                          ],
-                        ),
-                        const SizedBox(
-                          height: 10,
-                        )
-                      ],
-                    ),
-                  ),
-                ),
-              ),
-              const SizedBox(
-                height: 20,
-              ),
-              Padding(
-                padding: const EdgeInsets.only(left: 8.0, right: 8),
-                child: Container(
-                  padding: const EdgeInsets.all(10),
+
+              Container(
+                  alignment: Alignment.center,
+                  padding: const EdgeInsets.only(
+                      top: 20, left: 10, right: 10, bottom: 10),
                   decoration: BoxDecoration(
+                    color: Colors.white,
                     borderRadius: BorderRadius.circular(10.0),
-                    gradient: LinearGradient(
-                      colors: [Colors.blue, Colors.blue.shade300],
-                      begin: Alignment.topLeft,
-                      end: Alignment.bottomRight,
-                    ),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.grey.withOpacity(0.1),
+                        spreadRadius: 2,
+                        blurRadius: 3,
+                        offset:
+                            const Offset(0, 3), // changes position of shadow
+                      ),
+                    ],
                   ),
                   child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
+                      const Text(
+                        "Scanned Cars per day",
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold, fontSize: 20),
+                      ),
+                      const SizedBox(
+                        height: 15,
+                      ),
                       Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Column(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              const SizedBox(
-                                height: 10,
-                              ),
-                              Text(
-                                '10',
-                                style: GoogleFonts.roboto(
-                                    textStyle: const TextStyle(letterSpacing: .5),
-                                    fontSize: 18,
-                                    color: Colors.white),
-                              ),
-                              const SizedBox(
-                                height: 10,
-                              ),
-                              Text(
-                                'Registered Cars',
-                                style: GoogleFonts.roboto(
-                                    textStyle: const TextStyle(letterSpacing: .5),
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 22,
-                                    color: Colors.white),
-                              ),
-                            ],
+                          const SizedBox(
+                            width: 12,
                           ),
-                          const Icon(
-                            Icons.car_rental,
-                            color: Colors.white,
-                            size: 60,
-                          )
+                          Container(
+                              padding: const EdgeInsets.all(5),
+                              decoration: BoxDecoration(
+                                color: Color(0xffd7eb00),
+                                borderRadius: BorderRadius.circular(5.0),
+                              ),
+                              child: Text(
+                                "This week",
+                                style: TextStyle(fontWeight: FontWeight.bold),
+                              )),
+                          const SizedBox(
+                            width: 10,
+                          ),
+                          Container(
+                              padding: const EdgeInsets.all(5),
+                              decoration: BoxDecoration(
+                                // color: Color(0xffd7eb00),
+                                borderRadius: BorderRadius.circular(5.0),
+                              ),
+                              child: Text(
+                                "Last week",
+                                style: TextStyle(),
+                              ))
                         ],
                       ),
                       const SizedBox(
-                        height: 10,
-                      )
+                        height: 15,
+                      ),
+                      BarChartWidget(points: pricePoints),
                     ],
-                  ),
-                ),
-              ),
+                  )),
               const SizedBox(
-                height: 20,
+                height: 10,
               ),
-              Container(
-                child: FutureBuilder(
-                  future: fetchWeather(),
-                  builder: (context, snapshot) {
-                    switch (snapshot.connectionState) {
-                      case ConnectionState.none:
-                      case ConnectionState.waiting:
-                        return Padding(
-                          padding: const EdgeInsets.only(left: 8.0, right: 8),
-                          child: Container(
-                              height: 180,
-                              padding: const EdgeInsets.all(10),
-                              alignment: Alignment.center,
-                              decoration: BoxDecoration(
-                                color: Colors.white,
-                                borderRadius: BorderRadius.circular(8),
-                                boxShadow: [
-                                  BoxShadow(
-                                    color: Colors.grey.withOpacity(0.1),
-                                    spreadRadius: 2,
-                                    blurRadius: 3,
-                                    offset: const Offset(
-                                        0, 3), // changes position of shadow
-                                  ),
-                                ],
-                              ),
-                              child: const Center(
-                                  child: CircularProgressIndicator(
-                                color: Color(0xff1a1a1a),
-                              ))),
-                        );
-                      default:
-                        return snapshot.data == null
-                            ? Padding(
-                              padding: const EdgeInsets.only(left: 8.0, right: 8),
-                              child: Container(
-                                  height: 180,
-                                  padding: const EdgeInsets.all(10),
-                                  alignment: Alignment.center,
-                                  decoration: BoxDecoration(
-                                    color: Colors.white,
-                                    borderRadius: BorderRadius.circular(8),
-                                    boxShadow: [
-                                      BoxShadow(
-                                        color: Colors.grey.withOpacity(0.1),
-                                        spreadRadius: 2,
-                                        blurRadius: 3,
-                                        offset: const Offset(
-                                          0,
-                                          3,
-                                        ), // changes position of shadow
-                                      ),
-                                    ],
-                                  ),
-                                  child: Center(
-                                    child: Row(
-                                      mainAxisAlignment: MainAxisAlignment.center,
-                                      children: const [
-                                        SizedBox(
-                                          height: 8,
-                                        ),
-                                        Icon(Icons.wifi_off_outlined),
-                                        SizedBox(
-                                          width: 5,
-                                        ),
-                                        Text(
-                                          "Check your internet connection.",
-                                          style: TextStyle(
-                                              fontFamily: "Spartan",
-                                              color:
-                                                  Color.fromARGB(255, 24, 24, 24),
-                                              fontWeight: FontWeight.bold),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                ),
-                            )
-                            : getLocationScreen(snapshot.data);
-                    }
-                  },
-                ),
-              ),
-              const SizedBox(
-                height: 20,
-              ),
+              
               Expanded(
                 child: Container(
                   color: Colors.white,

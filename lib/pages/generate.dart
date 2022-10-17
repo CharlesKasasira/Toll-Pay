@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:qr_flutter/qr_flutter.dart';
-import 'package:supabase/supabase.dart';
 import 'package:tollpay/pages/organisation/organisation_dashboard.dart';
+import 'package:tollpay/utils/constants.dart';
 import 'package:tollpay/widgets/appbar_avatar.dart';
-
-import '../utils/constants.dart';
 
 class GeneratePage extends StatefulWidget {
   var amount;
@@ -58,21 +56,14 @@ class GeneratePageState extends State<GeneratePage> {
 
   @override
   Widget build(BuildContext context) {
-    String qrData = """
-      QR${new DateTime.now()}
-      Amount: ${widget.amount} 
-      Name: ${widget.username}
-      Plate Number: ${widget.plate}
-
-      ----------------------------
-      Active
+    String qrData = """ QR${new DateTime.now()} \n Amount: ${widget.amount} \n Name: ${widget.username} \n Plate Number: ${widget.plate} \n ----------------------------\n Active
     """;
 
     return Scaffold(
       backgroundColor: const Color(0xffF6F6F6),
       appBar: AppBar(
         shadowColor: const Color.fromARGB(100, 158, 158, 158),
-        backgroundColor: Color(0xff1a1a1a),
+        backgroundColor: const Color(0xff1a1a1a),
         elevation: 0,
         foregroundColor: Colors.white,
         leading: Builder(
