@@ -3,19 +3,19 @@ import 'package:flutter/services.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:get/get.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
-import 'package:tollpay/pages/account_page.dart';
-import 'package:tollpay/pages/admin/admin_dashboard.dart';
-import 'package:tollpay/pages/chat_page.dart';
-import 'package:tollpay/pages/forgot_password.dart';
-import 'package:tollpay/pages/generate.dart';
-import 'package:tollpay/pages/home_page.dart';
-import 'package:tollpay/pages/login_page.dart';
-import 'package:tollpay/pages/maps_page.dart';
-import 'package:tollpay/pages/operator/operator_dashboard.dart';
-import 'package:tollpay/pages/organisation/organisation_dashboard.dart';
-import 'package:tollpay/pages/payment_page.dart';
-import 'package:tollpay/pages/signup_page.dart';
-import 'package:tollpay/pages/splash_page.dart';
+import 'package:tollpay/screens/account_page.dart';
+import 'package:tollpay/screens/admin/admin_dashboard.dart';
+import 'package:tollpay/screens/chat_page.dart';
+import 'package:tollpay/screens/forgot_password.dart';
+import 'package:tollpay/screens/generate.dart';
+import 'package:tollpay/screens/home_page.dart';
+import 'package:tollpay/screens/login_page.dart';
+import 'package:tollpay/screens/maps_page.dart';
+import 'package:tollpay/screens/operator/operator_dashboard.dart';
+import 'package:tollpay/screens/organisation/organisation_dashboard.dart';
+import 'package:tollpay/screens/payment_page.dart';
+import 'package:tollpay/screens/signup_page.dart';
+import 'package:tollpay/screens/splash_page.dart';
 
 
 Map<String, WidgetBuilder> get routes {

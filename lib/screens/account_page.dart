@@ -3,8 +3,8 @@ import 'package:get/get.dart';
 import 'package:supabase/supabase.dart';
 import 'package:tollpay/components/auth_required_state.dart';
 import 'package:tollpay/components/avatar.dart';
-import 'package:tollpay/pages/home_page.dart';
-import 'package:tollpay/pages/organisation/organisation_dashboard.dart';
+import 'package:tollpay/screens/home_page.dart';
+import 'package:tollpay/screens/organisation/organisation_dashboard.dart';
 import 'package:tollpay/utils/constants.dart';
 import 'package:tollpay/widgets/appbar_avatar.dart';
 

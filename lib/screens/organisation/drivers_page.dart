@@ -2,8 +2,8 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:tollpay/pages/organisation/add_driver.dart';
-import 'package:tollpay/pages/organisation/organisation_dashboard.dart';
+import 'package:tollpay/screens/organisation/add_driver.dart';
+import 'package:tollpay/screens/organisation/organisation_dashboard.dart';
 import 'package:tollpay/utils/get_drivers.dart';
 import 'package:tollpay/widgets/appbar_avatar.dart';
 import 'package:tollpay/widgets/button.dart';

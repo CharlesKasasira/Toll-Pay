@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
 import 'package:get/get.dart';
-import 'package:tollpay/pages/operator/operator_dashboard.dart';
+import 'package:tollpay/screens/operator/operator_dashboard.dart';
 import 'package:tollpay/utils/constants.dart';
 import 'package:tollpay/widgets/appbar_avatar.dart';
 

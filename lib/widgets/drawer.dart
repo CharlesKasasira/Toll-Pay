@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:tollpay/pages/account_page.dart';
-import 'package:tollpay/pages/chat_page.dart';
-import 'package:tollpay/pages/maps_page.dart';
-import 'package:tollpay/pages/payment_page.dart';
+import 'package:tollpay/screens/account_page.dart';
+import 'package:tollpay/screens/chat_page.dart';
+import 'package:tollpay/screens/maps_page.dart';
+import 'package:tollpay/screens/payment_page.dart';
 import 'package:tollpay/utils/constants.dart';
 
 class MyDrawer extends StatefulWidget {

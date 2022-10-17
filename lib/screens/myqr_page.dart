@@ -1,26 +1,25 @@
+import 'dart:convert';
+
 // ignore: unnecessary_import
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:jiffy/jiffy.dart';
-import 'package:qr_flutter/qr_flutter.dart';
 import 'package:supabase/supabase.dart';
 import 'package:tollpay/components/auth_required_state.dart';
-import 'package:tollpay/pages/organisation/organisation_dashboard.dart';
+import 'package:tollpay/screens/qr_details.dart';
 import 'package:tollpay/utils/color_constants.dart';
 import 'package:tollpay/utils/constants.dart';
 import 'package:tollpay/widgets/appbar_avatar.dart';
 
-class QRDetails extends StatefulWidget {
-  var id;
-  QRDetails({Key? key, this.id}) : super(key: key);
+class MyQRCodes extends StatefulWidget {
+  const MyQRCodes({Key? key}) : super(key: key);
 
   @override
-  _QRDetailsState createState() => _QRDetailsState();
+  _MyQRCodesState createState() => _MyQRCodesState();
 }
 
-class _QRDetailsState extends AuthRequiredState<QRDetails> {
+class _MyQRCodesState extends AuthRequiredState<MyQRCodes> {
   String? _userId;
   String? _avatarUrl;
   String? firstName;
@@ -29,8 +28,7 @@ class _QRDetailsState extends AuthRequiredState<QRDetails> {
   var activeQrCodes;
 
   Future getActiveQRCodes() async {
-    final response =
-        await supabase.from('qrcodes').select().eq('id', widget.id).execute();
+    final response = await supabase.from('qrcodes').select().order('created_at', ascending: false).execute();
 
     final data = response.data;
     final error = response.error;
@@ -63,24 +61,26 @@ class _QRDetailsState extends AuthRequiredState<QRDetails> {
   void initState() {
     // TODO: implement initState
     super.initState();
+    // getActiveQRCodes();
   }
 
   @override
   Widget build(BuildContext context) {
+    print(activeQrCodes);
     getActiveQRCodes();
     return Scaffold(
       backgroundColor: ColorConstants.kprimary,
       extendBodyBehindAppBar: true,
       appBar: AppBar(
         shadowColor: const Color.fromARGB(100, 158, 158, 158),
-        backgroundColor: ksecondary,
-        elevation: 0,
+        backgroundColor: const Color(0xff1a1a1a),
+        elevation: 1,
         foregroundColor: Colors.white,
         title: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: const [
             Text(
-              "QR Details",
+              "My QR Codes",
               style: TextStyle(fontWeight: FontWeight.w400),
             ),
             SizedBox(
@@ -89,15 +89,20 @@ class _QRDetailsState extends AuthRequiredState<QRDetails> {
             AppBarAvatar()
           ],
         ),
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back),
-          onPressed: () {
-            Get.back();
-          },
-        ),
+        leading: Builder(builder: (context) {
+          return Container(
+            width: 25,
+            height: 25,
+            margin: const EdgeInsets.only(left: 10.0, top: 10.0, bottom: 4),
+            child: IconButton(
+              icon: const Icon(Icons.arrow_back),
+              onPressed: () => Navigator.of(context).pop(),
+            ),
+          );
+        }),
       ),
       body: SafeArea(
-        minimum: const EdgeInsets.only(top: 30),
+        minimum: EdgeInsets.only(top: 30),
         child: Padding(
           padding: const EdgeInsets.only(
             left: 10.0,
@@ -112,7 +117,6 @@ class _QRDetailsState extends AuthRequiredState<QRDetails> {
               FutureBuilder(
                   future: getActiveQRCodes(),
                   builder: (context, snapshot) {
-                    print("This is ${snapshot.data}");
                     switch (snapshot.connectionState) {
                       case ConnectionState.none:
                       case ConnectionState.waiting:
@@ -161,129 +165,38 @@ class _QRDetailsState extends AuthRequiredState<QRDetails> {
   }
 }
 
+
 Widget QRList(location) {
-  return Column(
-    children: [
-      Container(
-        padding: const EdgeInsets.all(12),
-        decoration: BoxDecoration(
-          color: Colors.white,
-          boxShadow: [
-            BoxShadow(
-              color: Colors.grey.withOpacity(0.2),
-              spreadRadius: 2,
-              blurRadius: 3,
-              offset: const Offset(0, 3),
+  // @override
+  // Widget build(BuildContext context) {
+  return ListView.builder(
+      shrinkWrap: true,
+      itemCount: (location as List<dynamic>).length,
+      itemBuilder: (BuildContext context, int index) {
+        return Card(
+          elevation: 4,
+          child: ListTile(
+            leading: const Icon(Icons.qr_code),
+            trailing: Text(
+              "${location[index]['status']}",
+              style: TextStyle(color: location[index]['status'] == 'Active' ? Colors.green : Colors.red, fontSize: 15),
             ),
-          ],
-          borderRadius: const BorderRadius.all(Radius.circular(12)),
-        ),
-        child: QrImage(
-          embeddedImage: const AssetImage('assets/images/qr-icon.png'),
-          data: """${location[0]['qrcode_id']} \n\n Amount: ${location[0]['amount']} \n Name: ${location[0]['username']} \n Plate Number: ${location[0]['plate_number']} \n ---------------------------- \nstatus: ${location[0]['status']}
-                """,
-        ),
-      ),
-      const SizedBox(
-        height: 10,
-      ),
-      ListTile(
-        leading: const Icon(Icons.qr_code),
-        title: Text(
-          "${location[0]['amount']}",
-          style: const TextStyle(fontWeight: FontWeight.bold),
-        ),
-        subtitle: Text("${Jiffy(location[0]['created_at']).yMMMMd}"),
-      ),
-    ],
-  );
+            title: Text(
+              "${location[index]['amount']}",
+              style: TextStyle(fontWeight: FontWeight.bold),
+            ),
+            subtitle: Text("${Jiffy(location[index]['created_at']).yMMMMd}"),
+            onTap: () {
+              Get.off(
+                () => QRDetails(id: location[index]['id']),
+                transition: Transition.cupertino,
+                duration: const Duration(milliseconds: 600),
+                curve: Curves.easeOut,
+              );
+            },
+          ),
+        );
+      });
   // }
 }
-// "${location[0]['created_at']}
 
-Widget getLocationScreen(location) {
-  Map<String, IconData> descList = {
-    'Clouds': Icons.cloud_outlined,
-    'Rain': FontAwesomeIcons.cloudRain,
-    'Snow': FontAwesomeIcons.snowflake,
-    'Drizzle': FontAwesomeIcons.cloudShowersHeavy,
-    'Clear': FontAwesomeIcons.cloudShowersHeavy,
-  };
-
-  return Container(
-    height: 180,
-    padding: const EdgeInsets.all(10),
-    alignment: Alignment.center,
-    // width: MediaQuery.of().size.width,
-    decoration: BoxDecoration(
-      color: Colors.white,
-      borderRadius: BorderRadius.circular(8),
-      boxShadow: [
-        BoxShadow(
-          color: Colors.grey.withOpacity(0.1),
-          spreadRadius: 2,
-          blurRadius: 3,
-          offset: const Offset(0, 3), // changes position of shadow
-        ),
-      ],
-    ),
-
-    child: Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      crossAxisAlignment: CrossAxisAlignment.center,
-      children: [
-        Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Image.network(
-              "http://openweathermap.org/img/wn/${location.icon}@2x.png",
-            ),
-            Text(
-              "${location.description}",
-              style: const TextStyle(
-                fontSize: 14,
-              ),
-            ),
-          ],
-        ),
-        const SizedBox(
-          width: 10,
-        ),
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.end,
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Text(
-              "${location.temp}",
-              style: const TextStyle(
-                fontSize: 40,
-                fontWeight: FontWeight.bold,
-                color: ColorConstants.ksecondary,
-              ),
-            ),
-            const SizedBox(
-              height: 5,
-            ),
-            const Text(
-              "ENTEBBE",
-              style: TextStyle(
-                fontSize: 26,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-            const Text(
-              "Uganda",
-              style: TextStyle(
-                fontSize: 15,
-                color: Color.fromARGB(255, 62, 62, 62),
-              ),
-            ),
-          ],
-        ),
-        const SizedBox(
-          width: 10,
-        ),
-      ],
-    ),
-  );
-}

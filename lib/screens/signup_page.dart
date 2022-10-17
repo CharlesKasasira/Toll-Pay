@@ -2,21 +2,21 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:supabase/supabase.dart';
 import 'package:tollpay/components/auth_state.dart';
-import 'package:tollpay/pages/login_page.dart';
+import 'package:tollpay/screens/login_page.dart';
 import 'package:tollpay/utils/constants.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 
 import '../widgets/button.dart';
 
-class SignUpOrg extends StatefulWidget {
-  const SignUpOrg({Key? key}) : super(key: key);
+class SignupPage extends StatefulWidget {
+  const SignupPage({Key? key}) : super(key: key);
 
   @override
-  _SignUpOrgState createState() => _SignUpOrgState();
+  _SignupPageState createState() => _SignupPageState();
 }
 
-class _SignUpOrgState extends AuthState<SignUpOrg> {
+class _SignupPageState extends AuthState<SignupPage> {
   bool _isLoading = false;
   late final TextEditingController _emailController;
   late final TextEditingController _passwordController;
@@ -55,7 +55,7 @@ class _SignUpOrgState extends AuthState<SignUpOrg> {
       _passwordController.text,
       userMetadata: {
         "username": username,
-        "roles": "organization",
+        "roles": "driver",
         "phone": phoneNumber
       }
     );
@@ -145,14 +145,14 @@ class _SignUpOrgState extends AuthState<SignUpOrg> {
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const Text('Organisation Name'),
+                      const Text('Full Name'),
                       const SizedBox(height: 5),
                       TextFormField(
                         cursorColor: ksecondary,
                         controller: _namesController,
                         focusNode: _focusNames,
                         decoration: inputDecorationConst.copyWith(
-                                labelText: "Enter Organisation Name",),
+                                labelText: "Enter Full Names",),
                       ),
                     ],
                   ),

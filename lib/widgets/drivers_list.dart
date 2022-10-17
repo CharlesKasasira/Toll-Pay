@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:jiffy/jiffy.dart';
-import 'package:tollpay/pages/qr_details.dart';
+import 'package:tollpay/screens/qr_details.dart';
 
 Widget driversList(location) {
   return ListView.builder(

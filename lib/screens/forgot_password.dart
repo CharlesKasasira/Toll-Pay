@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:supabase/supabase.dart';
 import 'package:tollpay/components/auth_state.dart';
 import 'package:tollpay/controllers/auth_controllers.dart';
-import 'package:tollpay/pages/login_page.dart';
+import 'package:tollpay/screens/login_page.dart';
 import 'package:tollpay/utils/constants.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';

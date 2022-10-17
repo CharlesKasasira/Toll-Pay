@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:qr_flutter/qr_flutter.dart';
-import 'package:tollpay/pages/organisation/organisation_dashboard.dart';
+import 'package:tollpay/screens/organisation/organisation_dashboard.dart';
 import 'package:tollpay/utils/constants.dart';
 import 'package:tollpay/widgets/appbar_avatar.dart';
 

@@ -1,10 +1,10 @@
 import 'package:flutter/animation.dart';
 import 'package:get/get.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
-import 'package:tollpay/pages/admin/admin_dashboard.dart';
-import 'package:tollpay/pages/home_page.dart';
-import 'package:tollpay/pages/operator/operator_dashboard.dart';
-import 'package:tollpay/pages/organisation/organisation_dashboard.dart';
+import 'package:tollpay/screens/admin/admin_dashboard.dart';
+import 'package:tollpay/screens/home_page.dart';
+import 'package:tollpay/screens/operator/operator_dashboard.dart';
+import 'package:tollpay/screens/organisation/organisation_dashboard.dart';
 import 'package:tollpay/utils/constants.dart';
 
 class AuthController extends GetxController {

@@ -10,7 +10,7 @@ import 'package:http/http.dart' as http;
 import 'package:supabase/supabase.dart';
 import 'package:tollpay/components/auth_required_state.dart';
 import 'package:tollpay/models/weather.dart';
-import 'package:tollpay/pages/payment_page.dart';
+import 'package:tollpay/screens/payment_page.dart';
 import 'package:tollpay/utils/color_constants.dart';
 import 'package:tollpay/utils/constants.dart';
 import 'package:tollpay/utils/fetch_weather.dart';
