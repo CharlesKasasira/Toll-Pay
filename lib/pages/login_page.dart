@@ -132,6 +132,7 @@ class _LoginPageState extends AuthState<LoginPage> {
                           const Text('Email'),
                           const SizedBox(height: 5),
                           TextFormField(
+                            cursorColor: ksecondary,
                             controller: _emailController,
                             focusNode: _focusEmail,
                             keyboardType: TextInputType.emailAddress,
@@ -151,6 +152,7 @@ class _LoginPageState extends AuthState<LoginPage> {
                           const Text('Password'),
                           const SizedBox(height: 5),
                           TextFormField(
+                            cursorColor: ksecondary,
                             controller: _passwordController,
                             obscureText: !_showPassword,
                             focusNode: _focusPassword,

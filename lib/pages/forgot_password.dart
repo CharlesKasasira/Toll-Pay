@@ -68,7 +68,7 @@ class _ForgotPageState extends AuthState<ForgotPage> {
       child: Scaffold(
         backgroundColor: Colors.white,
         body: Container(
-          padding: EdgeInsets.only(left: 18, right: 18),
+          padding: const EdgeInsets.only(left: 18, right: 18),
           alignment: Alignment.center,
           height: MediaQuery.of(context).size.height,
           child: Center(
@@ -98,6 +98,7 @@ class _ForgotPageState extends AuthState<ForgotPage> {
                   const Text('Email'),
                     const SizedBox(height: 5),
                   TextFormField(
+                  cursorColor: ksecondary,
                   controller: _emailController,
                   focusNode: _focusEmail,
                   decoration: inputDecorationConst.copyWith(

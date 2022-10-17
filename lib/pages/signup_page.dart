@@ -132,6 +132,7 @@ class _SignupPageState extends AuthState<SignupPage> {
                       const Text('Email'),
                       const SizedBox(height: 5),
                       TextFormField(
+                        cursorColor: ksecondary,
                         controller: _emailController,
                         focusNode: _focusEmail,
                         keyboardType: TextInputType.emailAddress,
@@ -147,6 +148,7 @@ class _SignupPageState extends AuthState<SignupPage> {
                       const Text('Full Name'),
                       const SizedBox(height: 5),
                       TextFormField(
+                        cursorColor: ksecondary,
                         controller: _namesController,
                         focusNode: _focusNames,
                         decoration: inputDecorationConst.copyWith(
@@ -161,6 +163,7 @@ class _SignupPageState extends AuthState<SignupPage> {
                       const Text('Phone Number'),
                       const SizedBox(height: 5),
                       TextFormField(
+                        cursorColor: ksecondary,
                         keyboardType: TextInputType.phone,
                         controller: _phoneNumberController,
                         focusNode: _focusPhoneNumber,
@@ -176,6 +179,7 @@ class _SignupPageState extends AuthState<SignupPage> {
                       const Text('Password'),
                       const SizedBox(height: 5),
                       TextFormField(
+                        cursorColor: ksecondary,
                         controller: _passwordController,
                         obscureText: !_showPassword,
                         focusNode: _focusPassword,

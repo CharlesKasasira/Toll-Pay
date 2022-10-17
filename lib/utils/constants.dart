@@ -9,6 +9,7 @@ final supabase = Supabase.instance.client;
 //colors
 const kTinGrey = Color(0xFF909090);
 const ksecondary = Color(0xff1a1a1a);
+const kGreen = Color(0xff005620);
 
 /// Simple preloader inside a Center widget
 const preloader = Center(child: CircularProgressIndicator(color: Colors.black));
@@ -115,7 +116,12 @@ const inputDecorationConst = InputDecoration(
     borderRadius: BorderRadius.all(Radius.circular(8)),
   ),
   errorBorder: OutlineInputBorder(
-    borderSide: BorderSide(color: Colors.red)
+    borderSide: BorderSide(color: Colors.red),
+    borderRadius: BorderRadius.all(Radius.circular(8)),
+  ),
+  focusedBorder: OutlineInputBorder(
+    borderRadius: BorderRadius.all(Radius.circular(8)),
+    borderSide: BorderSide(color: ksecondary),
   )
   // enabledBorder: UnderlineInputBorder(
   //   borderSide: BorderSide(
@@ -141,4 +147,5 @@ const inputDecorationConst = InputDecoration(
   //     width: 2,
   //   ),
   // ),
+
 );
