@@ -2,14 +2,14 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:supabase/supabase.dart';
 import 'package:tollpay/components/auth_state.dart';
-import 'package:tollpay/screens/login_page.dart';
-import 'package:tollpay/screens/signup_as_organisation.dart';
-import 'package:tollpay/screens/signup_page.dart';
+import 'package:tollpay/screens/authentication/login_page.dart';
+import 'package:tollpay/screens/authentication/signup_as_organisation.dart';
+import 'package:tollpay/screens/authentication/signup_page.dart';
 import 'package:tollpay/utils/constants.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 
-import '../widgets/button.dart';
+import '../../widgets/button.dart';
 
 class SignUpAsPage extends StatefulWidget {
   const SignUpAsPage({Key? key}) : super(key: key);

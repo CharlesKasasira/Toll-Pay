@@ -3,12 +3,12 @@ import 'package:flutter/material.dart';
 import 'package:supabase/supabase.dart';
 import 'package:tollpay/components/auth_state.dart';
 import 'package:tollpay/controllers/auth_controllers.dart';
-import 'package:tollpay/screens/login_page.dart';
+import 'package:tollpay/screens/authentication/login_page.dart';
 import 'package:tollpay/utils/constants.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 
-import '../widgets/button.dart';
+import '../../widgets/button.dart';
 
 class ForgotPage extends StatefulWidget {
   const ForgotPage({Key? key}) : super(key: key);

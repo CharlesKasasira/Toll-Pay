@@ -6,15 +6,15 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:tollpay/screens/account_page.dart';
 import 'package:tollpay/screens/admin/admin_dashboard.dart';
 import 'package:tollpay/screens/chat_page.dart';
-import 'package:tollpay/screens/forgot_password.dart';
+import 'package:tollpay/screens/authentication/forgot_password.dart';
 import 'package:tollpay/screens/generate.dart';
 import 'package:tollpay/screens/home_page.dart';
-import 'package:tollpay/screens/login_page.dart';
+import 'package:tollpay/screens/authentication/login_page.dart';
 import 'package:tollpay/screens/maps_page.dart';
 import 'package:tollpay/screens/operator/operator_dashboard.dart';
 import 'package:tollpay/screens/organisation/organisation_dashboard.dart';
 import 'package:tollpay/screens/payment_page.dart';
-import 'package:tollpay/screens/signup_page.dart';
+import 'package:tollpay/screens/authentication/signup_page.dart';
 import 'package:tollpay/screens/splash_page.dart';
 
 
