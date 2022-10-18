@@ -2,7 +2,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
-import 'color_constants.dart';
 
 final supabase = Supabase.instance.client;
 
@@ -10,6 +9,13 @@ final supabase = Supabase.instance.client;
 const kTinGrey = Color(0xFF909090);
 const ksecondary = Color(0xff1a1a1a);
 const kGreen = Color(0xff005620);
+
+const kNunitoSansSemiBold18 = TextStyle(
+  fontFamily: "NunitoSans",
+  fontSize: 18,
+  color: kGreen,
+  fontWeight: FontWeight.w600,
+);
 
 /// Simple preloader inside a Center widget
 const preloader = Center(child: CircularProgressIndicator(color: Colors.black));
@@ -122,30 +128,5 @@ const inputDecorationConst = InputDecoration(
   focusedBorder: OutlineInputBorder(
     borderRadius: BorderRadius.all(Radius.circular(8)),
     borderSide: BorderSide(color: ksecondary),
-  )
-  // enabledBorder: UnderlineInputBorder(
-  //   borderSide: BorderSide(
-  //     color: kChristmasSilver,
-  //     width: 2,
-  //   ),
-  // ),
-  // focusedBorder: UnderlineInputBorder(
-  //   borderSide: BorderSide(
-  //     color: kOffBlack,
-  //     width: 2,
-  //   ),
-  // ),
-  // errorBorder: UnderlineInputBorder(
-  //   borderSide: BorderSide(
-  //     color: kFireOpal,
-  //     width: 2,
-  //   ),
-  // ),
-  // focusedErrorBorder: UnderlineInputBorder(
-  //   borderSide: BorderSide(
-  //     color: kFireOpal,
-  //     width: 2,
-  //   ),
-  // ),
-
+  ),
 );

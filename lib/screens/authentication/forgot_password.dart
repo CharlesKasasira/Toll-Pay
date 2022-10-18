@@ -1,14 +1,11 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:supabase/supabase.dart';
+import 'package:get/get.dart';
 import 'package:tollpay/components/auth_state.dart';
 import 'package:tollpay/controllers/auth_controllers.dart';
 import 'package:tollpay/screens/authentication/login_page.dart';
 import 'package:tollpay/utils/constants.dart';
-import 'package:flutter/services.dart';
-import 'package:get/get.dart';
-
-import '../../widgets/button.dart';
+import 'package:tollpay/utils/validator.dart';
+import 'package:tollpay/widgets/button.dart';
 
 class ForgotPage extends StatefulWidget {
   const ForgotPage({Key? key}) : super(key: key);
@@ -21,6 +18,7 @@ class _ForgotPageState extends AuthState<ForgotPage> {
   final AuthController _authController = AuthController();
   bool _isLoading = false;
   late final TextEditingController _emailController;
+  final _formKey = GlobalKey<FormState>();
   final _focusEmail = FocusNode();
 
   void moveToLogin() {
@@ -33,18 +31,10 @@ class _ForgotPageState extends AuthState<ForgotPage> {
   }
 
   Future<void> _resetPassword() async {
-    _authController.forgotPassword(_emailController.text);
-    _emailController.clear();
-  }
-
-  Future<void> _signIn() async {
-    setState(() {
-      _isLoading = true;
-    });
-
-    setState(() {
-      _isLoading = false;
-    });
+    if (_formKey.currentState!.validate()) {
+      _authController.forgotPassword(_emailController.text);
+      _emailController.clear();
+    }
   }
 
   @override
@@ -77,55 +67,75 @@ class _ForgotPageState extends AuthState<ForgotPage> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Row(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Image.asset(
-                        "assets/images/Toll-Pay.png",
-                        width: 80,
-                      ),
-                    ],
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Image.asset(
+                    "assets/images/Toll-Pay.png",
+                    width: 80,
                   ),
-                const SizedBox(height: 20,),
+                ],
+              ),
+              const SizedBox(
+                height: 20,
+              ),
               const Text(
                 'Forgot Password',
-                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 40),
+                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 30),
               ),
               const SizedBox(height: 18),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const Text('Email'),
+              Form(
+                key: _formKey,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Text('Email'),
                     const SizedBox(height: 5),
-                  TextFormField(
-                  cursorColor: ksecondary,
-                  controller: _emailController,
-                  focusNode: _focusEmail,
-                  decoration: inputDecorationConst.copyWith(
-                                labelText: "Email",),
-                )],
+                    TextFormField(
+                      cursorColor: ksecondary,
+                      controller: _emailController,
+                      focusNode: _focusEmail,
+                      keyboardType: TextInputType.emailAddress,
+                      textInputAction: TextInputAction.next,
+                      validator: (value) => Validator.validateEmail(
+                        email: value,
+                      ),
+                      decoration: inputDecorationConst.copyWith(
+                        labelText: "Email",
+                      ),
+                    )
+                  ],
+                ),
               ),
               const SizedBox(height: 18),
-              
               const SizedBox(height: 18),
               CustomElevatedButton(
-                      onTap: _resetPassword,
-                      text: "SUBMIT",),
-                  const SizedBox(
-                    height: 10,
-                  ),
+                onTap: _resetPassword,
+                text: "SUBMIT",
+              ),
+              const SizedBox(
+                height: 10,
+              ),
               const SizedBox(height: 18),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  const Text("Remember password?,"),
+                  Text(
+                    "Remember password?,",
+                    style: kNunitoSansSemiBold18.copyWith(
+                      color: ksecondary,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
                   TextButton(
                     style: ButtonStyle(
                       foregroundColor:
                           MaterialStateProperty.all<Color>(Colors.blue),
                     ),
                     onPressed: moveToLogin,
-                    child: Text('Login', style: TextStyle(fontSize: 16, color: Color(0xff005620))),
+                    child: const Text(
+                      'Login',
+                      style: kNunitoSansSemiBold18,
+                    ),
                   ),
                 ],
               ),

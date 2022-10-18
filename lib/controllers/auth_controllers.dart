@@ -15,8 +15,18 @@ class AuthController extends GetxController {
     final response = await _authController.client.auth
         .signIn(email: email, password: password);
     if (response.error != null) {
-      kDefaultDialog(
-          "Error", response.error?.message ?? 'Some Unknown Error occurred');
+      if (response.error?.message ==
+          "Failed host lookup: 'ixzongeybqpyreokewbc.supabase.co'") {
+        kDefaultDialog(
+          "Connection Error",
+          'Please check your internet connection',
+        );
+      } else {
+        kDefaultDialog(
+          "Error",
+          response.error?.message ?? 'Some Unknown Error occurred',
+        );
+      }
     } else if (response.user != null) {
       dynamic meta = response.user?.userMetadata;
 
@@ -63,7 +73,52 @@ class AuthController extends GetxController {
 
   Future forgotPassword(String email) async {
     await _authController.client.auth.api.resetPasswordForEmail(email);
-    Get.snackbar("Password reset",
-        "Password reset request has been sent to your email successfully.");
+    Get.snackbar(
+      "Password reset",
+      "Password reset request has been sent to your email successfully.",
+    );
+  }
+
+  Future signUp(
+    String username,
+    String roles,
+    String phoneNumber,
+    String email,
+    String password,
+  ) async {
+    final response = await _authController.client.auth.signUp(
+      email,
+      password,
+      userMetadata: {
+        "username": username,
+        "roles": roles,
+        "phone": phoneNumber
+      },
+    );
+    if (response.error != null &&
+        response.error!.message !=
+            'Thanks for registering, now check your email to complete the process.') {
+      // Handle error
+      if (response.error?.message ==
+          "Failed host lookup: 'ixzongeybqpyreokewbc.supabase.co'") {
+        kDefaultDialog(
+          "Connection Error",
+          'Please check your internet connection',
+        );
+      } else {
+        kDefaultDialog(
+          "Error",
+          response.error?.message ?? 'Some Unknown Error occurred',
+        );
+      }
+    } else {
+      // check is session is null(user already exists) else sign in
+      if (response.data == null) {
+        kDefaultDialog("Error", "User already Exists");
+      } else {
+        kDefaultDialog(
+            "Successful", "You are welcome and can now login to proceed.");
+      }
+    }
   }
 }

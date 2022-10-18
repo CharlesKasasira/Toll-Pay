@@ -57,7 +57,10 @@ class _LoginPageState extends AuthState<LoginPage> {
       _isLoading = true;
     });
 
-    _authController.signIn(_emailController.text.trim(), _passwordController.text.trim());
+    if (_formKey.currentState!.validate()) {
+      _authController.signIn(
+        _emailController.text.trim(), _passwordController.text.trim());
+    }
 
     setState(() {
       _isLoading = false;
@@ -99,132 +102,136 @@ class _LoginPageState extends AuthState<LoginPage> {
               alignment: Alignment.center,
               width: MediaQuery.of(context).size.width,
               child: Center(
-                  child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const SizedBox(height: 50),
-                  Row(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Image.asset(
-                        "assets/images/Toll-Pay.png",
-                        width: 80,
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 20,),
-                  const Text(
-                'Login',
-                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 30),
-              ),
-                  const SizedBox(
-                    height: 10,
-                  ),
-                  Form(
-                    key: _formKey,
-                    child: Column(children: [
-                      const SizedBox(height: 18),
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          const Text('Email'),
-                          const SizedBox(height: 5),
-                          TextFormField(
-                            cursorColor: ksecondary,
-                            controller: _emailController,
-                            focusNode: _focusEmail,
-                            keyboardType: TextInputType.emailAddress,
-                            validator: (value) => Validator.validateEmail(
-                              email: value,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const SizedBox(height: 50),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Image.asset(
+                          "assets/images/Toll-Pay.png",
+                          width: 80,
+                        ),
+                      ],
+                    ),
+                    const SizedBox(
+                      height: 20,
+                    ),
+                    const Text(
+                      'Login',
+                      style:
+                          TextStyle(fontWeight: FontWeight.bold, fontSize: 30),
+                    ),
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    Form(
+                      key: _formKey,
+                      child: Column(children: [
+                        const SizedBox(height: 18),
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            const Text('Email'),
+                            const SizedBox(height: 5),
+                            TextFormField(
+                              cursorColor: ksecondary,
+                              controller: _emailController,
+                              focusNode: _focusEmail,
+                              keyboardType: TextInputType.emailAddress,
+                              textInputAction: TextInputAction.next,
+                              validator: (value) => Validator.validateEmail(
+                                email: value,
+                              ),
+                              decoration: inputDecorationConst.copyWith(
+                                labelText: "Email",
+                              ),
                             ),
-                            decoration: inputDecorationConst.copyWith(
-                                labelText: "Email",),
-                          ),
-                        ],
-                      ),
-                      
-                      const SizedBox(height: 18),
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          const Text('Password'),
-                          const SizedBox(height: 5),
-                          TextFormField(
-                            cursorColor: ksecondary,
-                            controller: _passwordController,
-                            obscureText: !_showPassword,
-                            focusNode: _focusPassword,
-                            validator: (value) => Validator.validatePassword(
-                              password: value,
-                            ),
-                            decoration: inputDecorationConst.copyWith(
+                          ],
+                        ),
+                        const SizedBox(height: 18),
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            const Text('Password'),
+                            const SizedBox(height: 5),
+                            TextFormField(
+                              cursorColor: ksecondary,
+                              controller: _passwordController,
+                              obscureText: !_showPassword,
+                              focusNode: _focusPassword,
+                              validator: (value) => Validator.validatePassword(
+                                password: value,
+                              ),
+                              decoration: inputDecorationConst.copyWith(
                                 labelText: "Password",
                                 suffixIcon: Padding(
-                                padding: const EdgeInsets.only(right: 15),
-                                child: GestureDetector(
-                                  onTap: _togglePasswordVisibility,
-                                  child: SvgPicture.asset(_showPassword ?
-                                    "assets/icon/password_invisible.svg" : "assets/icon/password_visible.svg",
-                                    height: 15,
-                                    width: 20,
+                                  padding: const EdgeInsets.only(right: 15),
+                                  child: GestureDetector(
+                                    onTap: _togglePasswordVisibility,
+                                    child: SvgPicture.asset(
+                                      _showPassword
+                                          ? "assets/icon/password_invisible.svg"
+                                          : "assets/icon/password_visible.svg",
+                                      height: 15,
+                                      width: 20,
+                                    ),
                                   ),
                                 ),
+                                suffixIconConstraints:
+                                    const BoxConstraints(maxWidth: 50),
                               ),
-                              suffixIconConstraints:
-                                  const BoxConstraints(maxWidth: 50),
-                              ),
+                            ),
+                          ],
+                        ),
+                      ]),
+                    ),
+                    const SizedBox(
+                      height: 15,
+                    ),
+                    CustomElevatedButton(
+                      onTap: _signIn,
+                      text: _isLoading ? "Loading" : "LOGIN",
+                    ),
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        TextButton(
+                          onPressed: moveToForgot,
+                          child: const Text(
+                            'Forgot Password?',
+                            style: kNunitoSansSemiBold18,
                           ),
-                        ],
-                      ),
-                    ]),
-                  ),
-                  const SizedBox(
-                    height: 15,
-                  ),
-                  CustomElevatedButton(
-                    onTap: _signIn,
-                    text: _isLoading ? "Loading" : "LOGIN",
-                  ),
-                  const SizedBox(
-                    height: 10,
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      TextButton(
-                        style: ButtonStyle(
-                          foregroundColor:
-                              MaterialStateProperty.all<Color>(Colors.blue),
                         ),
-                        onPressed: moveToForgot,
-                        child: const Text(
-                          'Forgot Password?',
-                          style:
-                              TextStyle(fontSize: 16, color: Color(0xff005620)),
+                      ],
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          "Don't have an account,",
+                          style: kNunitoSansSemiBold18.copyWith(
+                            color: ksecondary,
+                            fontWeight: FontWeight.w500,
+                          ),
                         ),
-                      ),
-                    ],
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      const Text("Don't have an account,",
-                          style: TextStyle(fontSize: 16)),
-                      TextButton(
-                        style: ButtonStyle(
-                          foregroundColor:
-                              MaterialStateProperty.all<Color>(Colors.blue),
+                        TextButton(
+                          onPressed: moveToSignup,
+                          child: const Text(
+                            'Sign Up',
+                            style: kNunitoSansSemiBold18,
+                          ),
                         ),
-                        onPressed: moveToSignup,
-                        child: const Text('Sign Up',
-                            style: TextStyle(color: Color(0xff005620))),
-                      ),
-                    ],
-                  ),
-                ],
-              )),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
             ),
           ),
         ),

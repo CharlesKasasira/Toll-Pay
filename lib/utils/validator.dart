@@ -25,8 +25,36 @@ class Validator {
 
     if (password.isEmpty) {
       return "Password is required";
-    } else if (password.length < 6) {
+    } else if (password.length < 8) {
       return 'Enter a password with length at least 8';
+    }
+
+    return null;
+  }
+
+  static String? validateName({required String? name}) {
+    if (name == null) {
+      return null;
+    }
+
+    if (name.isEmpty) {
+      return "Name is required";
+    } else if (name.length < 3) {
+      return 'Enter a name with length at least 3';
+    }
+
+    return null;
+  }
+
+  static String? validateNumber({required String? phoneNumber}) {
+    if (phoneNumber == null) {
+      return null;
+    }
+
+    if (phoneNumber.isEmpty) {
+      return "Phone Number is required";
+    } else if (phoneNumber.length < 9) {
+      return 'Invalid number';
     }
 
     return null;

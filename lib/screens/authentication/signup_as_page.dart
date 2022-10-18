@@ -80,23 +80,22 @@ class _SignUpAsPageState extends AuthState<SignUpAsPage> {
         resizeToAvoidBottomInset: true,
         body: ListView(children: [
           Container(
-            padding: EdgeInsets.only(left: 18, right: 18, top: 18),
+            padding: const EdgeInsets.only(left: 18, right: 18, top: 18),
             alignment: Alignment.center,
             height: MediaQuery.of(context).size.height,
             child: ListView(children: [
-              SizedBox(
+              const SizedBox(
                 height: 25,
               ),
               Column(
                 mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   Image.asset(
                     "assets/images/Toll-Pay.png",
                     width: 80,
                   ),
                   const SizedBox(height: 18),
-                  const Text("Sign Up As", style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),),
+                  const Text("Sign Up As", style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),),
                   const SizedBox(height: 10),
                   
                   const SizedBox(height: 18),
@@ -139,14 +138,17 @@ class _SignUpAsPageState extends AuthState<SignUpAsPage> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      const Text("Already have an account,"),
+                      Text("Already have an account,", style: kNunitoSansSemiBold18.copyWith(
+                        color: ksecondary,
+                        fontWeight: FontWeight.w500
+                      ),),
                       TextButton(
                         style: ButtonStyle(
                           foregroundColor:
                               MaterialStateProperty.all<Color>(Colors.blue),
                         ),
                         onPressed: moveToLogin,
-                        child: const Text('Login', style: TextStyle(fontSize: 16, color: Color(0xff005620))),
+                        child: const Text('Login', style: kNunitoSansSemiBold18,),
                       ),
                     ],
                   ),
