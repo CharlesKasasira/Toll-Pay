@@ -2,8 +2,9 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:tollpay/screens/organisation/add_driver.dart';
+import 'package:tollpay/screens/organisation/drivers/add_driver.dart';
 import 'package:tollpay/screens/organisation/organisation_dashboard.dart';
+import 'package:tollpay/utils/constants.dart';
 import 'package:tollpay/utils/get_drivers.dart';
 import 'package:tollpay/widgets/appbar_avatar.dart';
 import 'package:tollpay/widgets/button.dart';
@@ -25,8 +26,6 @@ class DriversPage extends StatefulWidget {
 }
 
 class _DriversPageState extends State<DriversPage> {
-  String? _avatarUrl;
-  bool isAndroid = false;
 
   @override
   void initState() {
@@ -46,19 +45,14 @@ class _DriversPageState extends State<DriversPage> {
         backgroundColor: const Color(0xffF6F6F6),
         extendBodyBehindAppBar: true,
         appBar: AppBar(
-          shadowColor: const Color.fromARGB(100, 158, 158, 158),
-          backgroundColor: Color(0xff1a1a1a),
+          backgroundColor: ksecondary,
           elevation: 0,
           foregroundColor: Colors.white,
           title: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              const Text(
+            children: const [
+              Text(
                 "Drivers",
-                style: TextStyle(fontWeight: FontWeight.w400),
-              ),
-              const SizedBox(
-                width: 10,
               ),
               AppBarAvatar()
             ],
@@ -70,15 +64,8 @@ class _DriversPageState extends State<DriversPage> {
               margin: const EdgeInsets.only(left: 10.0, top: 10.0, bottom: 4),
               child: IconButton(
                 icon: const Icon(Icons.arrow_back),
-                // onPressed: () => Navigator.of(context).pop(),
                 onPressed: () {
-                  Get.off(
-                    () => const OrganisationHomePage(),
-                    transition: Transition.cupertino,
-                    duration: const Duration(milliseconds: 600),
-                    curve: Curves.easeOut,
-                  );
-                  // Get.back();
+                  Get.back();
                 },
               ),
             );

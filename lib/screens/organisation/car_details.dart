@@ -1,44 +1,44 @@
-import 'dart:convert';
-
 // ignore: unnecessary_import
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:jiffy/jiffy.dart';
+import 'package:qr_flutter/qr_flutter.dart';
 import 'package:supabase/supabase.dart';
 import 'package:tollpay/components/auth_required_state.dart';
-import 'package:tollpay/screens/qr_details.dart';
+import 'package:tollpay/screens/organisation/organisation_dashboard.dart';
 import 'package:tollpay/utils/color_constants.dart';
 import 'package:tollpay/utils/constants.dart';
 import 'package:tollpay/widgets/appbar_avatar.dart';
 
-class MyQRCodes extends StatefulWidget {
-  const MyQRCodes({Key? key}) : super(key: key);
+class CarDetails extends StatefulWidget {
+  var id;
+  CarDetails({Key? key, this.id}) : super(key: key);
 
   @override
-  _MyQRCodesState createState() => _MyQRCodesState();
+  _CarDetailsState createState() => _CarDetailsState();
 }
 
-class _MyQRCodesState extends AuthRequiredState<MyQRCodes> {
+class _CarDetailsState extends AuthRequiredState<CarDetails> {
   String? _userId;
   String? _avatarUrl;
-  String? firstName;
-  String? lastName;
   String? username;
-  var activeQrCodes;
 
-  Future getActiveQRCodes() async {
-    final response = await supabase.from('qrcodes').select().order('created_at', ascending: false).execute();
+  Future getCarDetails() async {
+    final response =
+        await supabase.from('cars').select().eq('id', widget.id).execute();
 
     final data = response.data;
     final error = response.error;
 
     // print("inside");
     if (data != null) {
-      // print(data);
-      activeQrCodes = data.length;
+      // username = data[0]["username"] as String;
+      print(data);
+      // activeQrCodes = data.length;
     } else {
-      activeQrCodes = "There is no data";
+      // activeQrCodes = "There is no data";
     }
 
     if (error != null) {
@@ -53,7 +53,7 @@ class _MyQRCodesState extends AuthRequiredState<MyQRCodes> {
     // _user = user;
     if (user != null) {
       _userId = user.id;
-      getActiveQRCodes();
+      getCarDetails();
     }
   }
 
@@ -61,26 +61,24 @@ class _MyQRCodesState extends AuthRequiredState<MyQRCodes> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    // getActiveQRCodes();
   }
 
   @override
   Widget build(BuildContext context) {
-    print(activeQrCodes);
-    getActiveQRCodes();
+    getCarDetails();
     return Scaffold(
       backgroundColor: ColorConstants.kprimary,
       extendBodyBehindAppBar: true,
       appBar: AppBar(
         shadowColor: const Color.fromARGB(100, 158, 158, 158),
-        backgroundColor: const Color(0xff1a1a1a),
-        elevation: 1,
+        backgroundColor: ksecondary,
+        elevation: 0,
         foregroundColor: Colors.white,
         title: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: const [
             Text(
-              "My QR Codes",
+              "Car Details",
               style: TextStyle(fontWeight: FontWeight.w400),
             ),
             SizedBox(
@@ -89,17 +87,12 @@ class _MyQRCodesState extends AuthRequiredState<MyQRCodes> {
             AppBarAvatar()
           ],
         ),
-        leading: Builder(builder: (context) {
-          return Container(
-            width: 25,
-            height: 25,
-            margin: const EdgeInsets.only(left: 10.0, top: 10.0, bottom: 4),
-            child: IconButton(
-              icon: const Icon(Icons.arrow_back),
-              onPressed: () => Navigator.of(context).pop(),
-            ),
-          );
-        }),
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back),
+          onPressed: () {
+            Get.back();
+          },
+        ),
       ),
       body: SafeArea(
         minimum: const EdgeInsets.only(top: 30),
@@ -115,7 +108,7 @@ class _MyQRCodesState extends AuthRequiredState<MyQRCodes> {
             ),
             children: [
               FutureBuilder(
-                  future: getActiveQRCodes(),
+                  future: getCarDetails(),
                   builder: (context, snapshot) {
                     switch (snapshot.connectionState) {
                       case ConnectionState.none:
@@ -165,38 +158,36 @@ class _MyQRCodesState extends AuthRequiredState<MyQRCodes> {
   }
 }
 
-
 Widget QRList(location) {
-  // @override
-  // Widget build(BuildContext context) {
-  return ListView.builder(
-      shrinkWrap: true,
-      itemCount: (location as List<dynamic>).length,
-      itemBuilder: (BuildContext context, int index) {
-        return Card(
-          elevation: 4,
-          child: ListTile(
-            leading: const Icon(Icons.qr_code),
-            trailing: Text(
-              "${location[index]['status']}",
-              style: TextStyle(color: location[index]['status'] == 'Active' ? Colors.green : Colors.red, fontSize: 15),
-            ),
-            title: Text(
-              "${location[index]['amount']}",
-              style: TextStyle(fontWeight: FontWeight.bold),
-            ),
-            subtitle: Text("${Jiffy(location[index]['created_at']).yMMMMd}"),
-            onTap: () {
-              Get.to(
-                () => QRDetails(id: location[index]['id']),
-                transition: Transition.cupertino,
-                duration: const Duration(milliseconds: 600),
-                curve: Curves.easeOut,
-              );
-            },
-          ),
-        );
-      });
+  print("location is $location");
+  return Column(
+    crossAxisAlignment: CrossAxisAlignment.start,
+    children: [
+      const SizedBox(
+        height: 10,
+      ),
+      Row(
+        children: [
+          const Text("Class:"),
+          const SizedBox(width: 5,),
+          Text("${location[0]["class"]}"),
+        ],
+      ),
+      Row(
+        children: [
+          const Text("Plate Number:"),
+          const SizedBox(width: 5,),
+          Text("${location[0]["plate_number"]}"),
+        ],
+      ),
+      Row(
+        children: [
+          const Text("Color:"),
+          const SizedBox(width: 5,),
+          Text("${location[0]["color"]}"),
+        ],
+      ),
+    ],
+  );
   // }
 }
-

@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:tollpay/controllers/user_controllers.dart';
 import 'package:tollpay/utils/constants.dart';
 
 class Avatar extends StatefulWidget {

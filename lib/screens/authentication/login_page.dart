@@ -1,6 +1,8 @@
 // ignore_for_file: unnecessary_statements
 
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+import 'package:get/get.dart';
 import 'package:tollpay/components/auth_state.dart';
 import 'package:tollpay/controllers/auth_controllers.dart';
 import 'package:tollpay/screens/authentication/forgot_password.dart';
@@ -8,8 +10,6 @@ import 'package:tollpay/screens/authentication/signup_as_page.dart';
 import 'package:tollpay/utils/constants.dart';
 import 'package:tollpay/utils/validator.dart';
 import 'package:tollpay/widgets/button.dart';
-import 'package:flutter_svg/flutter_svg.dart';
-import 'package:get/get.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
@@ -59,7 +59,9 @@ class _LoginPageState extends AuthState<LoginPage> {
 
     if (_formKey.currentState!.validate()) {
       _authController.signIn(
-        _emailController.text.trim(), _passwordController.text.trim());
+        _emailController.text.trim(),
+        _passwordController.text.trim(),
+      );
     }
 
     setState(() {
@@ -89,7 +91,9 @@ class _LoginPageState extends AuthState<LoginPage> {
       backgroundColor: Colors.white,
       body: GestureDetector(
         onTap: () {
-          FocusScope.of(context).unfocus();
+          // FocusScope.of(context).unfocus();
+          _focusEmail.unfocus();
+          _focusPassword.unfocus();
         },
         child: SafeArea(
           // minimum: const EdgeInsets.only(top: 60),

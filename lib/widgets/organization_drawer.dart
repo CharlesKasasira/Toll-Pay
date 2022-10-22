@@ -1,16 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:tollpay/components/avatar.dart';
-import 'package:supabase/supabase.dart';
-import 'package:tollpay/components/auth_required_state.dart';
+import 'package:get/get.dart';
+import 'package:tollpay/controllers/auth_controllers.dart';
 import 'package:tollpay/screens/account_page.dart';
 import 'package:tollpay/screens/chat_page.dart';
 import 'package:tollpay/screens/maps_page.dart';
 import 'package:tollpay/screens/organisation/cars_page.dart';
-import 'package:tollpay/screens/organisation/drivers_page.dart';
+import 'package:tollpay/screens/organisation/drivers/drivers_page.dart';
+import 'package:tollpay/screens/organisation/org_report.dart';
 import 'package:tollpay/screens/payment_page.dart';
-import 'package:tollpay/screens/scan_qr.dart';
 import 'package:tollpay/utils/constants.dart';
-import 'package:get/get.dart';
 
 class OrganisationDrawer extends StatefulWidget {
   var user;
@@ -32,8 +30,7 @@ class OrganisationDrawer extends StatefulWidget {
 }
 
 class _OrganisationDrawerState extends State<OrganisationDrawer> {
-  final _firstNameController = TextEditingController();
-  final _lastNameController = TextEditingController();
+  final AuthController _authController = AuthController();
   // String? username;
   String? _userId;
   String? _avatarUrl;
@@ -50,18 +47,10 @@ class _OrganisationDrawerState extends State<OrganisationDrawer> {
         .single()
         .execute();
     final error = response.error;
-    // if (error != null && response.status != 406) {
-    //   context.showErrorSnackBar(message: error.message);
-    // }
     final data = response.data;
     if (data != null) {
-      _firstNameController.text = (data['first_name'] ?? '') as String;
-      print(data['first_name']);
-      _lastNameController.text = (data['last_name'] ?? '') as String;
-      // username = (data['username'] ?? '') as String;
       _avatarUrl = (data['avatar_url'] ?? '') as String;
     }
-    print(data);
     setState(() {
       _loading = false;
     });
@@ -74,8 +63,8 @@ class _OrganisationDrawerState extends State<OrganisationDrawer> {
         padding: EdgeInsets.zero,
         children: [
           DrawerHeader(
-            decoration: BoxDecoration(
-              color: Color(0xff1A1A1A),
+            decoration: const BoxDecoration(
+              color: ksecondary,
             ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -125,59 +114,59 @@ class _OrganisationDrawerState extends State<OrganisationDrawer> {
             leading: const Icon(Icons.payment_outlined),
             title: const Text('Make Payment'),
             onTap: () {
-              Get.off(
-                    () => PaymentPage(
-                      user: widget.user,
-                      firstName: widget.firstName,
-                      lastName: widget.lastName,
-                      username: widget.username,
-                    ),
-                    transition: Transition.cupertino,
-                    duration: const Duration(milliseconds: 600),
-                    curve: Curves.easeOut,
-                  );
+              Get.back();
+              Get.to(
+                () => PaymentPage(
+                  user: widget.user,
+                  firstName: widget.firstName,
+                  lastName: widget.lastName,
+                  username: widget.username,
+                ),
+                transition: Transition.cupertino,
+                duration: const Duration(milliseconds: 600),
+                curve: Curves.easeOut,
+              );
             },
           ),
           ListTile(
             leading: const Icon(Icons.groups_outlined),
             title: const Text('Drivers'),
-            onTap: () { 
-              Navigator.of(context).pop();
-              Get.off(
-                    () => DriversPage(
-                      user: widget.user,
-                        firstName: widget.firstName,
-                        lastName: widget.lastName
-                    ),
-                    transition: Transition.cupertino,
-                    duration: const Duration(milliseconds: 600),
-                    curve: Curves.easeOut,
-                  );
+            onTap: () {
+              Get.back();
+              Get.to(
+                () => DriversPage(
+                    user: widget.user,
+                    firstName: widget.firstName,
+                    lastName: widget.lastName),
+                transition: Transition.cupertino,
+                duration: const Duration(milliseconds: 600),
+                curve: Curves.easeOut,
+              );
             },
           ),
           ListTile(
             leading: const Icon(Icons.car_crash_outlined),
             title: const Text('Cars'),
             onTap: () {
+              Get.back();
               Get.to(
-                    () => CarsPage(
-                      user: widget.user,
-                        firstName: widget.firstName,
-                        lastName: widget.lastName
-                    ),
-                    transition: Transition.cupertino,
-                    duration: const Duration(milliseconds: 600),
-                    curve: Curves.easeOut,
-                  );
+                () => CarsPage(),
+                transition: Transition.cupertino,
+                duration: const Duration(milliseconds: 600),
+                curve: Curves.easeOut,
+              );
             },
           ),
           ListTile(
             leading: const Icon(Icons.map_outlined),
             title: const Text('Map'),
             onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => const MyMap()),
+              Get.back();
+              Get.to(
+                () => MyMap(),
+                transition: Transition.cupertino,
+                duration: const Duration(milliseconds: 600),
+                curve: Curves.easeOut,
               );
             },
           ),
@@ -185,9 +174,23 @@ class _OrganisationDrawerState extends State<OrganisationDrawer> {
             leading: const Icon(Icons.chat_outlined),
             title: const Text('Chat'),
             onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => const ChatPage()),
+              Get.back();
+              Get.to(
+                () => const ChatPage(),
+                transition: Transition.cupertino,
+                duration: const Duration(milliseconds: 600),
+                curve: Curves.easeOut,
+              );
+            },
+          ),
+          ListTile(
+            leading: const Icon(Icons.report_outlined),
+            title: const Text('Reports'),
+            onTap: () {
+              Get.back();
+              Get.to(
+                () => OrganisationReport(),
+                curve: Curves.easeOut,
               );
             },
           ),
@@ -195,12 +198,13 @@ class _OrganisationDrawerState extends State<OrganisationDrawer> {
             leading: const Icon(Icons.person_outline),
             title: const Text('Profile'),
             onTap: () {
-              Get.off(
-                    () => const AccountPage(),
-                    transition: Transition.cupertino,
-                    duration: const Duration(milliseconds: 600),
-                    curve: Curves.easeOut,
-                  );
+              Get.back();
+              Get.to(
+                () => const AccountPage(),
+                transition: Transition.cupertino,
+                duration: const Duration(milliseconds: 600),
+                curve: Curves.easeOut,
+              );
             },
           ),
           const SizedBox(
@@ -213,11 +217,7 @@ class _OrganisationDrawerState extends State<OrganisationDrawer> {
             leading: const Icon(Icons.logout),
             title: const Text('Log Out'),
             onTap: () async {
-              final response = await supabase.auth.signOut();
-              final error = response.error;
-              if (error != null) {
-                context.showErrorSnackBar(message: error.message);
-              }
+              _authController.signOut();
             },
           ),
         ],

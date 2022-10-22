@@ -5,22 +5,22 @@ import 'package:tollpay/screens/organisation/drivers/driver_details.dart';
 import 'package:tollpay/screens/qr_details.dart';
 import 'package:tollpay/widgets/list_avatar.dart';
 
-Widget driversList(location) {
+Widget logsList(location) {
   return ListView.builder(
       shrinkWrap: true,
       itemCount: (location as List<dynamic>).length,
       itemBuilder: (BuildContext context, int index) {
-        return Card(
-          elevation: 1,
-          child: ListTile(
-            leading: ListAvatar(
-              avatar: location[index]['avatarUrl'],
-            ),
+        return Column(
+          children: [
+            ListTile(
+            // leading: ListAvatar(
+            //   avatar: location[index]['avatarUrl'],
+            // ),
             title: Text(
-              "${location[index]['username']}",
+              "${location[index]['description']}",
               style: TextStyle(fontWeight: FontWeight.bold),
             ),
-            subtitle: Text("${location[index]['phone']}"),
+            subtitle: Text("${location[index]['status']}"),
             onTap: () {
               Get.to(
                 () => DriversDetails(id: location[index]['id']),
@@ -30,6 +30,8 @@ Widget driversList(location) {
               );
             },
           ),
+          Divider(thickness: 2,)
+          ]
         );
       });
   // }

@@ -2,6 +2,7 @@ import 'package:flutter/animation.dart';
 import 'package:get/get.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:tollpay/screens/admin/admin_dashboard.dart';
+import 'package:tollpay/screens/authentication/login_page.dart';
 import 'package:tollpay/screens/home_page.dart';
 import 'package:tollpay/screens/operator/operator_dashboard.dart';
 import 'package:tollpay/screens/organisation/organisation_dashboard.dart';
@@ -92,7 +93,8 @@ class AuthController extends GetxController {
       userMetadata: {
         "username": username,
         "roles": roles,
-        "phone": phoneNumber
+        "phone": phoneNumber,
+        "email": email
       },
     );
     if (response.error != null &&
@@ -120,5 +122,16 @@ class AuthController extends GetxController {
             "Successful", "You are welcome and can now login to proceed.");
       }
     }
+  }
+
+  void signOut() {
+    kDefaultDialog(
+      "Sign out",
+      "Are you sure you want to sign out?",
+      onYesPressed: () {
+        Get.offAll(const LoginPage());
+        _authController.client.auth.signOut();
+      },
+    );
   }
 }

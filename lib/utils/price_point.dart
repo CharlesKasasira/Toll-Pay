@@ -8,14 +8,19 @@ class PricePoint {
   PricePoint({required this.x, required this.y});
 }
 
-List<PricePoint> get pricePoints {
-  final Random random = Random();
-  final randomNumbers = <double>[1, 2, 7, 4, 9, 6, 3];
-  // for (var i = 0; i <= 6; i++) {
-  //   randomNumbers.add(random.nextDouble());
-  // }
+List<PricePoint> get lastWeekPoints {
+  final qrCodes = <double>[1, 2, 7, 4, 9, 6, 3];
 
-  return randomNumbers
+  return qrCodes
+      .mapIndexed(
+          (index, element) => PricePoint(x: index.toDouble(), y: element),)
+      .toList();
+}
+
+List<PricePoint> get thisWeekPoints {
+  final qrCodes = <double>[5, 2, 3, 4, 4, 2, 0];
+
+  return qrCodes
       .mapIndexed(
           (index, element) => PricePoint(x: index.toDouble(), y: element),)
       .toList();

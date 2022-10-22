@@ -3,11 +3,13 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:http/http.dart' as http;
 import 'package:supabase/supabase.dart';
 import 'package:tollpay/components/auth_required_state.dart';
 import 'package:tollpay/models/weather.dart';
+import 'package:tollpay/screens/admin/operators.dart';
 import 'package:tollpay/screens/myqr_page.dart';
 import 'package:tollpay/screens/organisation/bar_chart.dart';
 import 'package:tollpay/screens/payment_page.dart';
@@ -15,6 +17,8 @@ import 'package:tollpay/utils/color_constants.dart';
 import 'package:tollpay/utils/constants.dart';
 import 'package:tollpay/utils/fetch_weather.dart';
 import 'package:tollpay/utils/price_point.dart';
+import 'package:tollpay/widgets/admin_drawer.dart';
+import 'package:tollpay/widgets/appbar_avatar.dart';
 import 'package:tollpay/widgets/drawer.dart';
 import 'package:tollpay/widgets/organization_drawer.dart';
 
@@ -25,8 +29,7 @@ class AdminHomePage extends StatefulWidget {
   _AdminHomePageState createState() => _AdminHomePageState();
 }
 
-class _AdminHomePageState
-    extends AuthRequiredState<AdminHomePage> {
+class _AdminHomePageState extends AuthRequiredState<AdminHomePage> {
   String? _userId;
   String? _avatarUrl;
   String? firstName;
@@ -35,17 +38,18 @@ class _AdminHomePageState
   var activeQrCodes;
   var _user;
   bool _loading = false;
+  var operators = 0;
 
   Future getActiveQRCodes() async {
-    final response = await supabase.from('qrcodes').select().execute();
+    final response = await supabase.from('profiles').select().eq("roles", "operator").execute();
 
     final data = response.data;
     final error = response.error;
 
     if (data != null) {
-      activeQrCodes = data.length;
+      operators = data.length as int;
     } else {
-      activeQrCodes = "0";
+      operators = 0;
     }
 
     if (error != null) {
@@ -100,7 +104,6 @@ class _AdminHomePageState
 
   @override
   Widget build(BuildContext context) {
-    print(activeQrCodes);
     return Scaffold(
       backgroundColor: ColorConstants.kprimary,
       extendBodyBehindAppBar: true,
@@ -111,33 +114,7 @@ class _AdminHomePageState
         foregroundColor: Colors.white,
         title: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            const Text("Home"),
-            const SizedBox(width: 10,),
-            if (_avatarUrl == null || _avatarUrl!.isEmpty)
-                  ClipRRect(
-                    borderRadius: BorderRadius.circular(75.0),
-                    child: Container(
-                      width: 32,
-                      height: 32,
-                      alignment: Alignment.bottomCenter,
-                      decoration: const BoxDecoration(
-                        color: Color.fromARGB(255, 200, 200, 200),
-                      ),
-                      child: Image.asset("assets/images/avatar_icon.png"),
-                    ),
-                  )
-                else
-                  ClipRRect(
-                    borderRadius: BorderRadius.circular(75.0),
-                    child: Image.network(
-                      _avatarUrl!,
-                      width: 32,
-                      height: 32,
-                      fit: BoxFit.cover,
-                    ),
-                  ),
-          ],
+          children: const [Text("Home"), AppBarAvatar()],
         ),
         leading: Builder(builder: (context) {
           return Container(
@@ -145,7 +122,9 @@ class _AdminHomePageState
             height: 25,
             margin: const EdgeInsets.only(left: 10.0, top: 10.0, bottom: 5),
             child: IconButton(
-              icon: const Icon(Icons.menu,),
+              icon: const Icon(
+                Icons.menu,
+              ),
               onPressed: () => Scaffold.of(context).openDrawer(),
             ),
           );
@@ -162,72 +141,76 @@ class _AdminHomePageState
           child: ListView(
             padding: const EdgeInsets.symmetric(horizontal: 10),
             children: [
-              Padding(
-                padding: const EdgeInsets.only(left: 8.0, right: 8, top: 10),
-                child: Row(
-                  children: [
-                    const Text(
-                      'Hello, ',
-                      style: TextStyle(
-                        fontSize: 18,
-                      ),
+              Row(
+                children: [
+                  const Text(
+                    'Hello, ',
+                    style: TextStyle(
+                      fontSize: 18,
                     ),
-                    Text(
-                      '$username',
-                      style: const TextStyle(
-                        fontSize: 18,
-                      ),
-                    ),
-                  ],
-                ),
+                  ),
+                  Text(
+                    '$username',
+                    style: kNunitoSansSemiBold18.copyWith(color: ksecondary),
+                  ),
+                ],
               ),
-              Padding(
-                padding: const EdgeInsets.only(left: 8.0, right: 8),
-                child: const Text("Welcome to your dashboard"),
+              const Text(
+                "Welcome to your dashboard",
+                style: TextStyle(color: kTinGrey),
               ),
               const SizedBox(height: 18),
-              Padding(
-                padding: const EdgeInsets.only(left: 8.0, right: 8),
+              GestureDetector(
+                onTap: () {
+                  Get.to(
+                    () => OperatorsPage(),
+                    curve: Curves.easeOut,
+                  );
+                },
                 child: Container(
+                  height: 150,
                   padding: const EdgeInsets.all(10),
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(10.0),
                     gradient: const LinearGradient(
-                      colors: [Colors.black, Color(0xff636363)],
+                      colors: [ksecondary, Color.fromARGB(255, 64, 64, 64)],
                       begin: Alignment.topLeft,
                       end: Alignment.bottomRight,
                     ),
                   ),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Column(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            mainAxisAlignment: MainAxisAlignment.spaceAround,
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               const SizedBox(
                                 height: 10,
                               ),
                               Text(
-                                '13',
+                                '$operators',
                                 style: GoogleFonts.roboto(
-                                    textStyle: const TextStyle(letterSpacing: .5),
+                                    textStyle:
+                                        const TextStyle(letterSpacing: .5),
                                     fontSize: 18,
                                     color: Colors.white),
                               ),
                               const SizedBox(
-                                height: 10,
+                                height: 15,
                               ),
                               Text(
                                 'Operators',
                                 style: GoogleFonts.roboto(
-                                    textStyle: const TextStyle(letterSpacing: .5),
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 22,
-                                    color: Colors.white,),
+                                  textStyle: const TextStyle(letterSpacing: .5),
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 22,
+                                  color: Colors.white,
+                                ),
                               ),
                             ],
                           ),
@@ -248,7 +231,6 @@ class _AdminHomePageState
               const SizedBox(
                 height: 20,
               ),
-
               Container(
                   alignment: Alignment.center,
                   padding: const EdgeInsets.only(
@@ -309,41 +291,43 @@ class _AdminHomePageState
                       const SizedBox(
                         height: 15,
                       ),
-                      BarChartWidget(points: pricePoints),
+                      BarChartWidget(points: lastWeekPoints),
                     ],
                   )),
               const SizedBox(
                 height: 10,
               ),
-              
               Expanded(
                 child: Container(
                   color: Colors.white,
                   child: Padding(
-                    padding: const EdgeInsets.only(left: 8.0, right:8),
+                    padding: const EdgeInsets.only(left: 8.0, right: 8),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        const SizedBox(height: 10,),
+                        const SizedBox(
+                          height: 10,
+                        ),
                         const Text(
                           "Recent Activity",
-                          style: TextStyle(fontSize: 20,),
+                          style: TextStyle(
+                            fontSize: 20,
+                          ),
                         ),
                         const Divider(),
                         ListView.builder(
-                          shrinkWrap: true,
-                          
-                          itemCount: 2,
-                          itemBuilder: (context, index) {
-                            return const Card(
-                              elevation: 1,
-                              child: ListTile(
-                                title: Text("23 October 2022"),
-                                subtitle: Text("active"),
-                                leading: Icon(Icons.qr_code),
-                              ),
-                            );
-                          })
+                            shrinkWrap: true,
+                            itemCount: 2,
+                            itemBuilder: (context, index) {
+                              return const Card(
+                                elevation: 1,
+                                child: ListTile(
+                                  title: Text("23 October 2022"),
+                                  subtitle: Text("active"),
+                                  leading: Icon(Icons.qr_code),
+                                ),
+                              );
+                            })
                       ],
                     ),
                   ),
@@ -353,7 +337,7 @@ class _AdminHomePageState
           ),
         ),
       ),
-      drawer: OrganisationDrawer(
+      drawer: AdminDrawer(
         user: _user,
         imageUrl: _avatarUrl,
         firstName: firstName,

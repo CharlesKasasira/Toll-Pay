@@ -4,15 +4,18 @@ import 'package:supabase/supabase.dart';
 import 'package:tollpay/screens/account_page.dart';
 import 'package:tollpay/utils/constants.dart';
 
-class AppBarAvatar extends StatefulWidget {
-  const AppBarAvatar({Key? key}) : super(key: key);
+class ListAvatar extends StatefulWidget {
+  var avatar;
+  ListAvatar({Key? key, required this.avatar}) : super(key: key);
 
   @override
-  State<AppBarAvatar> createState() => _AppBarAvatarState();
+  State<ListAvatar> createState() => _ListAvatarState();
 }
 
-class _AppBarAvatarState extends State<AppBarAvatar> {
+class _ListAvatarState extends State<ListAvatar> {
   String? _avatarUrl;
+  String? username;
+  DateTime? created_at;
   String? _userId;
   var _user;
 
@@ -31,9 +34,9 @@ class _AppBarAvatarState extends State<AppBarAvatar> {
       context.showErrorSnackBar(message: error.message);
     }
     final data = response.data;
-    if(data != null){
-      _avatarUrl = (data['avatar_url'] ?? '') as String;
-    }
+    _avatarUrl = (data['avatar_url'] ?? '') as String;
+    username = (data['username'] ?? '') as String;
+    created_at = (data['created_at'] ?? '') as DateTime;
 
     setState(() {});
   }
@@ -44,14 +47,14 @@ class _AppBarAvatarState extends State<AppBarAvatar> {
     _user = user;
     if (user != null) {
       _userId = user.id;
-      _getProfile(supabase.auth.user()!.id);
+      _getProfile(user.id);
     }
   }
 
   @override
   Widget build(BuildContext context) {
     _getProfile(supabase.auth.user()!.id);
-    if (_avatarUrl == null || _avatarUrl!.isEmpty) {
+    if (widget.avatar == null) {
       return GestureDetector(
         onTap: () {
           Get.to(
@@ -62,8 +65,8 @@ class _AppBarAvatarState extends State<AppBarAvatar> {
         child: ClipRRect(
           borderRadius: BorderRadius.circular(75.0),
           child: Container(
-            width: 32,
-            height: 32,
+            width: 40,
+            height: 40,
             alignment: Alignment.bottomCenter,
             decoration: const BoxDecoration(
               color: Color.fromARGB(255, 200, 200, 200),
@@ -83,9 +86,9 @@ class _AppBarAvatarState extends State<AppBarAvatar> {
         child: ClipRRect(
           borderRadius: BorderRadius.circular(75.0),
           child: Image.network(
-            _avatarUrl!,
-            width: 32,
-            height: 32,
+            "https://ixzongeybqpyreokewbc.supabase.co/storage/v1/object/public/avatars/2022-10-08T10:23:43.002626.jpg",
+            width: 40,
+            height: 40,
             fit: BoxFit.cover,
           ),
         ),

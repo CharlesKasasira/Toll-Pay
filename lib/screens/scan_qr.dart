@@ -65,9 +65,9 @@ class _ScanPageState extends State<ScanPage> {
       return null;
     }
 
-     setState(() {
-          _loading = true;
-        });
+    setState(() {
+      _loading = true;
+    });
   }
 
   var getResult = 'Not yet scanned';
@@ -91,24 +91,21 @@ class _ScanPageState extends State<ScanPage> {
             AppBarAvatar()
           ],
         ),
-        leading: Builder(builder: (context) {
-          return Container(
-            width: 25,
-            height: 25,
-            margin: const EdgeInsets.only(left: 10.0, top: 10.0, bottom: 4),
-            child: IconButton(
-              icon: const Icon(Icons.arrow_back),
-              onPressed: () {
-                Get.off(
-                  () => const OperatorHomePage(),
-                  transition: Transition.cupertino,
-                  duration: const Duration(milliseconds: 600),
-                  curve: Curves.easeOut,
-                );
-              },
-            ),
-          );
-        },),
+        leading: Builder(
+          builder: (context) {
+            return Container(
+              width: 25,
+              height: 25,
+              margin: const EdgeInsets.only(left: 10.0, top: 10.0, bottom: 4),
+              child: IconButton(
+                icon: const Icon(Icons.arrow_back),
+                onPressed: () {
+                  Get.back();
+                },
+              ),
+            );
+          },
+        ),
       ),
       body: Container(
         padding: const EdgeInsets.all(20.0),
@@ -127,21 +124,29 @@ class _ScanPageState extends State<ScanPage> {
               ),
               textAlign: TextAlign.left,
             ),
-            const SizedBox(height: 10,),
+            const SizedBox(
+              height: 10,
+            ),
             if (getResult == "Not yet scanned")
               Container(
                 width: MediaQuery.of(context).size.width - 50,
-                height: MediaQuery.of(context).size.width -50,
+                height: MediaQuery.of(context).size.width - 50,
                 decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(8)
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(8)),
+                child: const Icon(
+                  Icons.qr_code,
+                  size: 150,
                 ),
-                child: const Icon(Icons.qr_code, size: 150,),
               ),
             const SizedBox(
               height: 10.0,
             ),
-            const Text("Align the QR code with the frame to scan and confim ", textAlign: TextAlign.center, style: TextStyle(color: Colors.grey),),
+            const Text(
+              "Align the QR code with the frame to scan and confim ",
+              textAlign: TextAlign.center,
+              style: TextStyle(color: Colors.grey),
+            ),
             const SizedBox(
               height: 10.0,
             ),

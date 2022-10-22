@@ -136,19 +136,14 @@ class _AccountPageState extends AuthRequiredState<AccountPage> {
         backgroundColor: const Color(0xffF5F5F5),
         appBar: AppBar(
           shadowColor: const Color.fromARGB(100, 158, 158, 158),
-          backgroundColor: Color(0xff1a1a1a),
+          backgroundColor: ksecondary,
           elevation: 0,
           foregroundColor: Colors.white,
           title: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: const [
               Text(
-                "Profile",
-                style: TextStyle(fontWeight: FontWeight.w400),
-              ),
-              SizedBox(
-                width: 10,
-              ),
+                "Profile",),
               AppBarAvatar()
             ],
           ),

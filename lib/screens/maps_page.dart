@@ -1,103 +1,68 @@
+import 'dart:async';
+
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:geolocator/geolocator.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:flutter_polyline_points/flutter_polyline_points.dart';
+import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:location/location.dart';
+import 'package:tollpay/utils/constants.dart';
+import 'dart:ui' as ui;
 
 class MyMap extends StatefulWidget {
-  const MyMap({Key? key}) : super(key: key);
-
   @override
-  State<MyMap> createState() => _MyMapState();
+  _MyMapState createState() => _MyMapState();
 }
 
+double _originLatitude = 0.3111;
+double _originLongitude = 32.5217;
+double _destLatitude = 0.0451;
+double _destLongitude = 32.4427;
+
+// Markers to show points on the map
+Map<MarkerId, Marker> markers = {};
+
+
+PolylinePoints polylinePoints = PolylinePoints();
+Map<PolylineId, Polyline> polylines = {};
+
 class _MyMapState extends State<MyMap> {
-  late GoogleMapController mapController;
-  final LatLng _center = const LatLng(0.0451, 32.4427);
+  // Google Maps controller
+  Completer<GoogleMapController> _controller = Completer();
+  BitmapDescriptor? icon;
+  // Configure map position and zoom
+  static final CameraPosition _kGooglePlex = CameraPosition(
+    target: LatLng(0.03111, 32.5222),
+    zoom: 11,
+  );
 
-  final Set<Marker> _markers = <Marker>{
-    Marker(
-        markerId: MarkerId('1'),
-        position: LatLng(0.0451, 32.4427),
-        infoWindow: InfoWindow(
-          title: 'Entebbe Toll',
-        )),
-        
-  };
+  
 
-  Future<Position> _determinePosition() async {
-    bool serviceEnabled;
-    LocationPermission permission;
-
-    serviceEnabled = await Geolocator.isLocationServiceEnabled();
-
-    if (!serviceEnabled) {
-      return Future.error('Location services are disabled');
-    }
-
-    permission = await Geolocator.checkPermission();
-
-    if (permission == LocationPermission.denied) {
-      permission = await Geolocator.requestPermission();
-
-      if (permission == LocationPermission.denied) {
-        return Future.error("Location permission denied");
-      }
-    }
-
-    if (permission == LocationPermission.deniedForever) {
-      return Future.error('Location permissions are permanently denied');
-    }
-
-    Position position = await Geolocator.getCurrentPosition();
-
-    // print("this is the position ${position}");
-    _markers.add(Marker(
-        markerId: const MarkerId('currentLocation'),
-        position: LatLng(position.latitude, position.longitude),
-        infoWindow: InfoWindow(
-          title: 'You',
-        )),);
-
-    setState(() {});
-
-    return position;
-  }
-
-  // Position position =  Geolocator.getCurrentPosition();
-
-  // LatLng currentLatLng;
-  // Completer<GoogleMapController> _controller = Completer();
-
-  LocationData? currentLocation;
-
-  void getCurrentLocation() async {
-    Location location = Location();
-
-    location.getLocation().then(
-      (location) {
-        currentLocation = location;
-      },
-    );
-    // print("Reached herer");
-    // print(currentLocation);
-  }
-
+  @override
   void initState() {
-    // getPolyPoints();
-    _determinePosition();
-    getCurrentLocation();
-    super.initState();
-  }
 
-  void _onMapCreated(GoogleMapController controller) {
-    mapController = controller;
+    /// add origin marker origin marker
+    _addMarker(
+      LatLng(_originLatitude, _originLongitude),
+      "origin",
+      BitmapDescriptor.defaultMarker,
+    );
+
+    // Add destination marker
+    _addMarker(
+      LatLng(_destLatitude, _destLongitude),
+      "destination",
+      BitmapDescriptor.defaultMarker,
+    );
+
+    _getPolyline();
+
+    super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    print("the markers are");
-    print(_markers);
-    int count = 0;
     return Scaffold(
       extendBodyBehindAppBar: true,
       appBar: AppBar(
@@ -118,40 +83,86 @@ class _MyMapState extends State<MyMap> {
                   offset: Offset(0, 3), // changes position of shadow
                 ),
               ],
-              borderRadius: BorderRadius.all(Radius.circular(25))),
-          child: new IconButton(
-            icon: new Icon(Icons.arrow_back, color: Colors.black),
-            onPressed: () =>
-                Navigator.of(context).popUntil((_) => count++ >= 2),
+              borderRadius: const BorderRadius.all(Radius.circular(25))),
+          child: IconButton(
+              icon: const Icon(Icons.arrow_back, color: Colors.black),
+              onPressed: () => Get.back()),
+        ),
+      ),
+      body: Stack(children: [
+        GoogleMap(
+          mapType: MapType.normal,
+          initialCameraPosition: _kGooglePlex,
+          myLocationEnabled: true,
+          tiltGesturesEnabled: true,
+          compassEnabled: true,
+          scrollGesturesEnabled: true,
+          zoomGesturesEnabled: true,
+          polylines: Set<Polyline>.of(polylines.values),
+          markers: Set<Marker>.of(markers.values),
+          onMapCreated: (GoogleMapController controller) {
+            _controller.complete(controller);
+          },
+        ),
+        Align(
+          alignment: Alignment.bottomCenter,
+          child: Container(
+            width: MediaQuery.of(context).size.width - 20,
+            height: 100,
+            margin: const EdgeInsets.only(bottom: 8),
+            decoration: BoxDecoration(
+                color: Colors.white, borderRadius: BorderRadius.circular(8)),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: const [
+                Text("32 mi (51 km)"),
+                Text(
+                  "Busega - Airport",
+                  style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+                )
+              ],
+            ),
           ),
-        ),
-        // title: Text("Map"),
-      ),
-      body: GoogleMap(
-        onMapCreated: _onMapCreated,
-        // markers: {
-        //   const Marker(
-        //       markerId: MarkerId('1'),
-        //       position: LatLng(0.0451, 32.4427),
-        //       infoWindow: InfoWindow(
-        //         title: 'Entebbe Toll',
-        //       )),
-        //   const Marker(
-        //       markerId: MarkerId('2'),
-        //       position: LatLng(0.0351, 32.4427),
-        //       infoWindow: InfoWindow(
-        //         title: 'Entebbe Toll',
-        //       )),
-        // },
-        markers: _markers,
-        myLocationEnabled: true,
-        compassEnabled: true,
-        mapType: MapType.normal,
-        initialCameraPosition: CameraPosition(
-          target: _center,
-          zoom: 11.0,
-        ),
-      ),
+        )
+      ]),
     );
+  }
+
+  // This method will add markers to the map based on the LatLng position
+  _addMarker(LatLng position, String id, BitmapDescriptor descriptor) {
+    MarkerId markerId = MarkerId(id);
+    Marker marker =
+        Marker(markerId: markerId, icon: descriptor, position: position);
+    markers[markerId] = marker;
+  }
+
+  _addPolyLine(List<LatLng> polylineCoordinates) {
+    PolylineId id = PolylineId("poly");
+    Polyline polyline = Polyline(
+        polylineId: id,
+        points: polylineCoordinates,
+        width: 3,
+        color: ksecondary);
+    polylines[id] = polyline;
+    setState(() {});
+  }
+
+  void _getPolyline() async {
+    List<LatLng> polylineCoordinates = [];
+
+    PolylineResult result = await polylinePoints.getRouteBetweenCoordinates(
+      dotenv.env['GOOGLE_MAPS_APIKEY']!,
+      PointLatLng(_originLatitude, _originLongitude),
+      PointLatLng(_destLatitude, _destLongitude),
+      travelMode: TravelMode.driving,
+    );
+    if (result.points.isNotEmpty) {
+      result.points.forEach((PointLatLng point) {
+        polylineCoordinates.add(LatLng(point.latitude, point.longitude));
+      });
+    } else {
+      print(result.errorMessage);
+    }
+    _addPolyLine(polylineCoordinates);
   }
 }

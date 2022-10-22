@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:tollpay/components/avatar.dart';
 import 'package:supabase/supabase.dart';
 import 'package:tollpay/components/auth_required_state.dart';
+import 'package:tollpay/controllers/auth_controllers.dart';
 import 'package:tollpay/screens/account_page.dart';
 import 'package:tollpay/screens/chat_page.dart';
 import 'package:tollpay/screens/maps_page.dart';
@@ -30,6 +31,7 @@ class OperatorDrawer extends StatefulWidget {
 }
 
 class _OperatorDrawerState extends State<OperatorDrawer> {
+  final AuthController _authController = AuthController();
   final _firstNameController = TextEditingController();
   final _lastNameController = TextEditingController();
   String? _userId;
@@ -121,7 +123,7 @@ class _OperatorDrawerState extends State<OperatorDrawer> {
                 Text(
                   "${widget.user.email}",
                   style: const TextStyle(
-                      color: Colors.white, fontWeight: FontWeight.normal),
+                      color: Colors.white, fontWeight: FontWeight.normal,),
                 ),
               ],
             ),
@@ -130,16 +132,26 @@ class _OperatorDrawerState extends State<OperatorDrawer> {
             leading: const Icon(Icons.qr_code_scanner_outlined),
             title: const Text('QR Scanner'),
             onTap: () {
-              _goToScan();
+              Get.back();
+              Get.to(
+                () => ScanPage(),
+                transition: Transition.cupertino,
+                duration: const Duration(milliseconds: 600),
+                curve: Curves.easeOut,
+              );
+              // _goToScan();
             },
           ),
           ListTile(
-            leading: const Icon(Icons.person_outline),
+            leading: const Icon(Icons.message_outlined),
             title: const Text('Chat'),
             onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => const ChatPage()),
+              Get.back();
+              Get.to(
+                () => const ChatPage(),
+                transition: Transition.cupertino,
+                duration: const Duration(milliseconds: 600),
+                curve: Curves.easeOut,
               );
             },
           ),
@@ -147,9 +159,12 @@ class _OperatorDrawerState extends State<OperatorDrawer> {
             leading: const Icon(Icons.person_outline),
             title: const Text('Profile'),
             onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => const AccountPage()),
+              Get.back();
+              Get.to(
+                () => const AccountPage(),
+                transition: Transition.cupertino,
+                duration: const Duration(milliseconds: 600),
+                curve: Curves.easeOut,
               );
             },
           ),
@@ -160,16 +175,11 @@ class _OperatorDrawerState extends State<OperatorDrawer> {
             thickness: 1,
           ),
           ListTile(
-            leading: const Icon(Icons.logout),
-            title: const Text('Log Out'),
-            onTap: () async {
-              final response = await supabase.auth.signOut();
-              final error = response.error;
-              if (error != null) {
-                context.showErrorSnackBar(message: error.message);
-              }
-            },
-          ),
+              leading: const Icon(Icons.logout),
+              title: const Text('Log Out'),
+              onTap: () async {
+                _authController.signOut();
+              }),
         ],
       ),
     );

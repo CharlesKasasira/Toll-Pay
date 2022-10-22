@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:jiffy/jiffy.dart';
+import 'package:tollpay/screens/admin/operator_details.dart';
 import 'package:tollpay/screens/organisation/drivers/driver_details.dart';
 import 'package:tollpay/screens/qr_details.dart';
 import 'package:tollpay/widgets/list_avatar.dart';
 
-Widget driversList(location) {
+Widget operatorsList(location) {
   return ListView.builder(
       shrinkWrap: true,
       itemCount: (location as List<dynamic>).length,
@@ -23,7 +24,7 @@ Widget driversList(location) {
             subtitle: Text("${location[index]['phone']}"),
             onTap: () {
               Get.to(
-                () => DriversDetails(id: location[index]['id']),
+                () => OperatorDetails(id: location[index]['id']),
                 transition: Transition.cupertino,
                 duration: const Duration(milliseconds: 600),
                 curve: Curves.easeOut,

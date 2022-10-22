@@ -15,11 +15,6 @@ class _SplashPageState extends AuthState<SplashPage> with SingleTickerProviderSt
   late AnimationController animationController;
   late Animation<double> animation;
 
-  // startTime() async {
-  //   var _duration = new Duration(seconds: 2);
-  //   return new Timer(_duration, navigationPage);
-  // }
-
   @override
   void initState() {
     Future.delayed(const Duration(seconds: 2), () {
@@ -43,7 +38,7 @@ class _SplashPageState extends AuthState<SplashPage> with SingleTickerProviderSt
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xfff5f5f5),
+      backgroundColor: const Color(0xffffffff),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -52,9 +47,8 @@ class _SplashPageState extends AuthState<SplashPage> with SingleTickerProviderSt
             "assets/images/TollPay-logo.png",
             // width: 150,
             width: animation.value * 250,
-                height: animation.value * 250,
+            height: animation.value * 250,
           ),
-          // Text("Toll Pay", style: TextStyle(fontSize: 30, color: Colors.white),),
         ],
       ),),
     );

@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:tollpay/controllers/auth_controllers.dart';
 import 'package:tollpay/screens/account_page.dart';
 import 'package:tollpay/screens/chat_page.dart';
 import 'package:tollpay/screens/maps_page.dart';
@@ -25,6 +27,7 @@ class MyDrawer extends StatefulWidget {
 }
 
 class _MyDrawerState extends State<MyDrawer> {
+  final AuthController _authController = AuthController();
   final _firstNameController = TextEditingController();
   final _lastNameController = TextEditingController();
   String? _userId;
@@ -116,13 +119,15 @@ class _MyDrawerState extends State<MyDrawer> {
             leading: const Icon(Icons.payment_outlined),
             title: const Text('Make Payment'),
             onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (context) => PaymentPage(
+              Get.back();
+              Get.to(
+                () => PaymentPage(
                         user: widget.user,
                         firstName: widget.firstName,
-                        lastName: widget.lastName)),
+                        lastName: widget.lastName),
+                transition: Transition.cupertino,
+                duration: const Duration(milliseconds: 600),
+                curve: Curves.easeOut,
               );
             },
           ),
@@ -130,19 +135,12 @@ class _MyDrawerState extends State<MyDrawer> {
             leading: const Icon(Icons.map_outlined),
             title: const Text('Map'),
             onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => const MyMap()),
-              );
-            },
-          ),
-          ListTile(
-            leading: const Icon(Icons.person_outline),
-            title: const Text('Profile'),
-            onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => const AccountPage()),
+              Get.back();
+              Get.to(
+                () => MyMap(),
+                transition: Transition.cupertino,
+                duration: const Duration(milliseconds: 600),
+                curve: Curves.easeOut,
               );
             },
           ),
@@ -150,12 +148,29 @@ class _MyDrawerState extends State<MyDrawer> {
             leading: const Icon(Icons.message_outlined),
             title: const Text('Chat'),
             onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => const ChatPage()),
+              Get.back();
+              Get.to(
+                () => const ChatPage(),
+                transition: Transition.cupertino,
+                duration: const Duration(milliseconds: 600),
+                curve: Curves.easeOut,
               );
             },
           ),
+          ListTile(
+            leading: const Icon(Icons.person_outline),
+            title: const Text('Profile'),
+            onTap: () {
+              Get.back();
+              Get.to(
+                () => const AccountPage(),
+                transition: Transition.cupertino,
+                duration: const Duration(milliseconds: 600),
+                curve: Curves.easeOut,
+              );
+            },
+          ),
+          
           const SizedBox(
             height: 20,
           ),
@@ -167,12 +182,8 @@ class _MyDrawerState extends State<MyDrawer> {
             leading: const Icon(Icons.logout),
             title: const Text('Log Out'),
             onTap: () async {
-              final response = await supabase.auth.signOut();
-              final error = response.error;
-              if (error != null) {
-                context.showErrorSnackBar(message: error.message);
-              }
-            },
+              _authController.signOut();
+            }
           ),
         ],
       ),

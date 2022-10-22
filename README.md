@@ -32,9 +32,12 @@ According to UNRA, The payment method adopted shall be custom friendly and this 
 - [x] Generating QR Codes
 - [x] Change User Profile
 - [x] Responsive Design
-- [ ] Sign up as an Organisation (Only UI implemented)
-- [ ] Dynamic QR code
+- [x] Sign up as an Organisation (Only UI implemented)
+- [x] Dynamic QR code
 - [ ] Organisaton Report
+- [ ] Notification systems (push notifications and message alerts)
+- [ ] Optical Character Recognition (OCR)
+- [ ] Dark Mode
 
 
 Table B: Road Toll User Fees

@@ -1,10 +1,8 @@
 import 'package:tollpay/utils/constants.dart';
 
-Future getDrivers() async {
+Future getLogs() async {
   final response =
-      await supabase.from('profiles').select().eq("roles", "driver")
-      .eq("organisation_id", supabase.auth.user()!.id)
-      .execute();
+      await supabase.from('logs').select().execute();
 
   final data = response.data;
   final error = response.error;

@@ -1,8 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/src/foundation/key.dart';
-import 'package:flutter/src/widgets/container.dart';
-import 'package:flutter/src/widgets/framework.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:tollpay/utils/constants.dart';
 import 'package:tollpay/widgets/appbar_avatar.dart';
@@ -20,10 +16,12 @@ class _AddCarState extends State<AddCar> {
   late final TextEditingController _plateController;
   late final TextEditingController _classController;
   late final TextEditingController _colorController;
+  late final TextEditingController _modelController;
 
   final _focusPlate = FocusNode();
   final _focusClass = FocusNode();
   final _focusColor = FocusNode();
+  final _focusModel = FocusNode();
 
   Future<void> _addCar() async {
     setState(() {
@@ -32,12 +30,15 @@ class _AddCarState extends State<AddCar> {
     final plateNumber = _plateController.text;
     final classType = _classController.text;
     final color = _colorController.text;
+    final model = _modelController.text;
 
     final response = await supabase.from("cars").insert([
-      {'owned_by': supabase.auth.user()!.id,
-      'plate_number': plateNumber, 
-      'class': classType,
-      'color': color
+      {
+        'owned_by': supabase.auth.user()!.id,
+        'plate_number': plateNumber,
+        'class': classType,
+        'color': color,
+        'model': model
       }
     ]).execute();
 
@@ -53,10 +54,11 @@ class _AddCarState extends State<AddCar> {
             content: const Text("The car was added successfully"),
             actions: [
               TextButton(
-                  onPressed: () {
-                    Navigator.of(context).pop();
-                  },
-                  child: const Text("OK"))
+                onPressed: () {
+                  Get.back();
+                },
+                child: const Text("OK"),
+              )
             ],
           );
         },
@@ -65,6 +67,7 @@ class _AddCarState extends State<AddCar> {
       _plateController.clear();
       _classController.clear();
       _colorController.clear();
+      _modelController.clear();
     }
 
     setState(() {
@@ -77,6 +80,7 @@ class _AddCarState extends State<AddCar> {
     _plateController = TextEditingController();
     _classController = TextEditingController();
     _colorController = TextEditingController();
+    _modelController = TextEditingController();
     super.initState();
   }
 
@@ -85,6 +89,7 @@ class _AddCarState extends State<AddCar> {
     _plateController.dispose();
     _classController.dispose();
     _colorController.dispose();
+    _modelController.dispose();
     super.dispose();
   }
 
@@ -95,22 +100,20 @@ class _AddCarState extends State<AddCar> {
         _focusPlate.unfocus();
         _focusClass.unfocus();
         _focusColor.unfocus();
+        _focusModel.unfocus();
       },
       child: Scaffold(
         appBar: AppBar(
           shadowColor: const Color.fromARGB(100, 158, 158, 158),
-          backgroundColor: Color(0xff1a1a1a),
+          backgroundColor: ksecondary,
           elevation: 0,
           foregroundColor: Colors.white,
           title: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              const Text(
+            children: const [
+              Text(
                 "Add Car",
                 style: TextStyle(fontWeight: FontWeight.w400),
-              ),
-              const SizedBox(
-                width: 10,
               ),
               AppBarAvatar()
             ],
@@ -133,7 +136,7 @@ class _AddCarState extends State<AddCar> {
         body: ListView(
           children: [
             Container(
-              padding: EdgeInsets.only(left: 18, right: 18, top: 18),
+              padding: const EdgeInsets.only(left: 18, right: 18, top: 18),
               alignment: Alignment.center,
               height: MediaQuery.of(context).size.height,
               child: ListView(
@@ -180,6 +183,28 @@ class _AddCarState extends State<AddCar> {
                               floatingLabelBehavior:
                                   FloatingLabelBehavior.never,
                               labelText: 'Enter class',
+                              border: OutlineInputBorder(
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(8)),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 10),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          const Text('Model'),
+                          const SizedBox(height: 5),
+                          TextFormField(
+                            controller: _modelController,
+                            focusNode: _focusModel,
+                            decoration: const InputDecoration(
+                              isDense: true,
+                              floatingLabelBehavior:
+                                  FloatingLabelBehavior.never,
+                              labelText: 'Enter model',
                               border: OutlineInputBorder(
                                 borderRadius:
                                     BorderRadius.all(Radius.circular(8)),

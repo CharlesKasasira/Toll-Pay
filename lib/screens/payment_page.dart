@@ -7,7 +7,6 @@ import 'package:http/http.dart' as http;
 import 'package:otp_text_field/otp_field.dart';
 import 'package:otp_text_field/style.dart';
 import 'package:tollpay/screens/generate.dart';
-import 'package:tollpay/screens/organisation/organisation_dashboard.dart';
 import 'package:tollpay/utils/constants.dart';
 import 'package:tollpay/widgets/appbar_avatar.dart';
 import 'package:tollpay/widgets/button.dart';
@@ -35,12 +34,21 @@ class _PaymentPageState extends State<PaymentPage> {
   final _focusPhoneNumber = FocusNode();
   final _focusPlateNumber = FocusNode();
   final _trips = FocusNode();
+  List<String> myCars = [];
+
+  String tripNumber = '';
+  String amount = '';
+
+  void _tripOnChanged(String val) {
+    tripNumber = val;
+  }
 
   @override
   void initState() {
     _phoneNumberController = TextEditingController();
     _plateNumberController = TextEditingController();
     _tripsController = TextEditingController();
+    getCars();
     super.initState();
   }
 
@@ -49,6 +57,36 @@ class _PaymentPageState extends State<PaymentPage> {
     _phoneNumberController.dispose();
     _plateNumberController.dispose();
     super.dispose();
+  }
+
+  Future getCars() async {
+    print("here is");
+    final response = await supabase
+        .from('cars')
+        .select()
+        .eq("owned_by", supabase.auth.user()!.id)
+        .order('created_at')
+        .execute();
+
+    final data = response.data;
+    final error = response.error;
+
+    // print("inside");
+    if (data != null) {
+      // print(data);
+      print(" data is $data");
+      data.map((car) => myCars.add("${car.model}"));
+      print(" myCars is $myCars");
+      // activeQrCodes = data.length;
+    } else {
+      // activeQrCodes = "There is no data";
+      print("error");
+    }
+
+    if (error != null) {
+      print("the error is ${error.message}");
+    }
+    return data;
   }
 
   Future<http.Response>? getMtnSecretCode(String phone) {
@@ -83,15 +121,18 @@ class _PaymentPageState extends State<PaymentPage> {
 
     Future.delayed(const Duration(milliseconds: 1000), () {
       Navigator.push(
-          context,
-          MaterialPageRoute(
-              builder: (context) => GeneratePage(
-                  amount: feesPerItems[dropdownvalue],
-                  phone: _phoneNumberController.text,
-                  plate: _plateNumberController.text,
-                  count: _tripsController.text,
-                  username: widget.username,
-                  user: widget.user)));
+        context,
+        MaterialPageRoute(
+          builder: (context) => GeneratePage(
+            amount: feesPerItems[dropdownvalue],
+            phone: _phoneNumberController.text,
+            plate: _plateNumberController.text,
+            count: _tripsController.text,
+            username: widget.username,
+            user: widget.user,
+          ),
+        ),
+      );
       setState(() {});
     });
 
@@ -99,8 +140,22 @@ class _PaymentPageState extends State<PaymentPage> {
   }
 
   void _tripsOnChanged(String val) {
-    var amt = feesPerCar[dropdownCar];
-    var amount = 2 * int.parse(amt!);
+    print("her is ${feesPerItems[dropdownvalue]}");
+    // amount = (int.parse(tripNumber) * int.parse(feesPerCar[newValue]!)).toString();
+    if(isAndroid){
+      setState(() {
+      tripNumber = val;
+      amount = (int.parse(tripNumber) * int.parse(feesPerCar[dropdownCar]!)).toString();
+    });
+    } else {
+      setState(() {
+      tripNumber = val;
+      amount = (int.parse(val) * int.parse(feesPerItems[dropdownvalue]!)).toString();
+    });
+    }
+    
+    // var amt = feesPerCar[dropdownCar];
+    // var amount = 2 * int.parse(amt!);
   }
 
   String dropdownvalue = 'Class 1';
@@ -115,11 +170,11 @@ class _PaymentPageState extends State<PaymentPage> {
   ];
 
   Map<String, String> feesPerItems = {
-    "Class 1": "3,000",
-    "Class 2": "5,000",
-    "Class 3": "10,000",
-    "Class 4": "15,000",
-    "Class 5": "18,000",
+    "Class 1": "3000",
+    "Class 2": "5000",
+    "Class 3": "10000",
+    "Class 4": "15000",
+    "Class 5": "18000",
   };
 
   String dropdownCar = 'Range Rover';
@@ -151,6 +206,8 @@ class _PaymentPageState extends State<PaymentPage> {
 
   @override
   Widget build(BuildContext context) {
+    getCars();
+    print(myCars);
     return GestureDetector(
       onTap: () {
         _focusPhoneNumber.unfocus();
@@ -169,7 +226,7 @@ class _PaymentPageState extends State<PaymentPage> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: const [
               Text(
-                "Get Token",
+                "Make Payment",
                 style: TextStyle(fontWeight: FontWeight.w400),
               ),
               SizedBox(
@@ -182,12 +239,6 @@ class _PaymentPageState extends State<PaymentPage> {
             icon: const Icon(Icons.arrow_back),
             onPressed: () {
               Get.back();
-              // Get.off(
-              //   () => const OrganisationHomePage(),
-              //   transition: Transition.cupertino,
-              //   duration: const Duration(milliseconds: 600),
-              //   curve: Curves.easeOut,
-              // );
             },
           ),
         ),
@@ -256,6 +307,7 @@ class _PaymentPageState extends State<PaymentPage> {
                               onChanged: (String? newValue) {
                                 setState(() {
                                   dropdownvalue = newValue!;
+                                  amount = (int.parse(tripNumber) * int.parse(feesPerItems[newValue]!)).toString();
                                 });
                               },
 
@@ -316,15 +368,17 @@ class _PaymentPageState extends State<PaymentPage> {
                         padding: const EdgeInsets.symmetric(
                             horizontal: 10, vertical: 5),
                         decoration: BoxDecoration(
-                            color: Colors.white,
+                            border: Border.all(color: kTinGrey),
                             borderRadius: BorderRadius.circular(10)),
                         child: DropdownButton(
                           // Initial Value
+                          isDense: true,
                           isExpanded: true,
                           value: dropdownCar,
                           onChanged: (String? newValue) {
                             setState(() {
                               dropdownCar = newValue!;
+                              amount = (int.parse(tripNumber) * int.parse(feesPerCar[newValue]!)).toString();
                             });
                           },
 
@@ -381,9 +435,12 @@ class _PaymentPageState extends State<PaymentPage> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         const Text("Class fees"),
-                        Text(!isAndroid
+                        Text(
+                          !isAndroid
                               ? "${feesPerItems[dropdownvalue]}"
-                              : "${feesPerCar[dropdownCar]}", style: const TextStyle(fontWeight: FontWeight.bold),)
+                              : "${feesPerCar[dropdownCar]}",
+                          style: const TextStyle(fontWeight: FontWeight.bold),
+                        )
                       ],
                     ),
                     const SizedBox(
@@ -393,19 +450,29 @@ class _PaymentPageState extends State<PaymentPage> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         const Text("trips"),
-                        Text(_tripsController.text, style: const TextStyle(fontWeight: FontWeight.bold),)
+                        Text(
+                          tripNumber,
+                          style: const TextStyle(fontWeight: FontWeight.bold),
+                        )
                       ],
                     ),
-                    const SizedBox(height: 10,),
+                    const SizedBox(
+                      height: 10,
+                    ),
                     const MySeparator(color: Colors.grey),
-                    const SizedBox(height: 10,),
+                    const SizedBox(
+                      height: 10,
+                    ),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         const Text("total"),
-                        Text(!isAndroid
-                              ? "${feesPerItems[dropdownvalue]}"
-                              : "${feesPerCar[dropdownCar]}", style: const TextStyle(fontWeight: FontWeight.bold),)
+                        Text(
+                          !isAndroid
+                              ? amount
+                              : amount,
+                          style: const TextStyle(fontWeight: FontWeight.bold),
+                        )
                       ],
                     ),
                   ],
