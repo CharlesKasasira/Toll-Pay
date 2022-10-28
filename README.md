@@ -8,7 +8,7 @@ Table A: Group Members
 | 1 | Kasasira Charles Derrick | Google Maps & Weath API |
 | 2 | Lukyamuzi Akram | Generate QR |
 | 3 | Nakuwanda Hellen Bridget | Authentication |
-| 4 | Langalafa Gideon Ohure | User Interface Inital Screen |
+| 4 | Langalafa Gideon Ohure | User Interface, User flows |
 | 5 | Tangaya Daphine Damalie | Mobile Payment Integration |
 
 
